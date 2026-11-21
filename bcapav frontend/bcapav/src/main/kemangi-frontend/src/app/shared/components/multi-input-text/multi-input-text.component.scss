@@ -1,0 +1,75 @@
+.multi-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px 8px 4px 8px;
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  cursor: text;
+  min-height: 48px;
+  position: relative;
+}
+
+.multi-input-container input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 150px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.multi-input-container input::placeholder {
+  color: #c2c2c2;
+  opacity: 1;
+}
+
+.multi-input-container:focus-within {
+  border-color: #00b5f0;
+}
+
+.chip {
+  max-width: 169px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  padding: 0px 16px;
+  border-radius: 24px;
+  font-size: 16px;
+  border: 1px solid #dddddd;
+  height: 36px;
+}
+
+.chip span {
+  margin-left: 6px;
+  cursor: pointer;
+  // font-weight: bold;
+}
+
+.chip span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.multi-input-container.disabled {
+  background-color: #f6f6f6;
+  border-color: #ddd !important;
+}
+
+.clear-all-btn-multi-input {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: none;
+  border: none;
+  position: absolute;
+  top: 8px;
+  right: 0;
+}

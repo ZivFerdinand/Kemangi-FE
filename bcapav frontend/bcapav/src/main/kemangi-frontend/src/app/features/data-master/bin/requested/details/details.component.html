@@ -1,0 +1,15 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (details().requestType === "UPDATE") {
+    <app-edit-bin-approval
+      [pageType]="pageType"
+      [details]="details()"
+      [prevDetails]="prevDetails()"
+      [back]="back.bind(this)"
+    />
+  } @else {
+    <app-default-bin-view-approval
+      [details]="details()"
+      [back]="back.bind(this)"
+    />
+  }
+</app-content-layout>

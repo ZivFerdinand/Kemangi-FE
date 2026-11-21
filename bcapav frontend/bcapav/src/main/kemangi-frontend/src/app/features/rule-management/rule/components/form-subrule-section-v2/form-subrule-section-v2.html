@@ -1,0 +1,643 @@
+@let s = subruleForm;
+
+<section class="card p-3 no-border datagroup-form mb-24">
+  <div class="fw-semibold section-title mb-24">Parameter</div>
+
+  @if(mode==='DELETE'){
+  <app-detail-rule-tab
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="handleTabChange($event)"
+  ></app-detail-rule-tab
+  >} @else {
+  <app-sub-rule-tab
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="handleTabChange($event)"
+    [addTabFn]="addSubruleForm.bind(this)"
+    [cloneTabFn]="cloneSubruleForm.bind(this)"
+    [deleteTabFn]="removeSubruleForm.bind(this)"
+  ></app-sub-rule-tab
+  >}
+
+  <div
+    class="d-flex flex-wrap justify-content-between data-group-form-field--container"
+    style="align-items: stretch"
+  >
+    <div class="form-item form-group-custom mb-24">
+      <label for="name" class="disabled">Sub Rule Name</label>
+      <input
+        id="name"
+        type="text"
+        class="form-control pr-5"
+        placeholder="Sub Rule Name"
+        [value]="s.subruleName"
+        disabled
+      />
+    </div>
+
+    <div class="form-item form-group-custom mb-24">
+      <label for="eventType" class="disabled">Event Type</label>
+
+      <div class="ng-select-custom">
+        <ng-select
+          [items]="dropdownParameterType"
+          bindValue="parameterType"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Event Type"
+          [ngModel]="s.eventType"
+          [ngModelOptions]="{ standalone: true }"
+          disabled="true"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterType }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterType }}</span>
+              <img
+                [class.d-none]="
+                      s.eventType !== item.parameterType
+                    "
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- // -->
+
+  @if(tableData.length>0){
+  <div class="table-auto-action-title">Table Parameter</div>
+  <app-table
+    [columns]="columnsTableDisplay"
+    [data]="tableData"
+    [showPageInfo]="false"
+    [showNoData]="true"
+    [pagination]="false"
+    [cellTemplates]="{
+          no: noTpl,
+        }"
+    [squared]="true"
+  />
+  }
+
+  <!-- === -->
+
+  @if(mode!=='DELETE'){
+  <div class="d-flex justify-content-start" style="margin-top: 8px">
+    <button
+      type="button"
+      class="btn-type-1 btn-light-blue me-3 fw-bold"
+      (click)="open(content)"
+    >
+      {{ (s.parameters.length) > 0 ? 'Edit Parameter' : 'Add Parameter' }}
+    </button>
+  </div>
+  }
+
+  <!-- -- -->
+  @if(mode==='DELETE'){
+  <div
+    class="w-100 d-flex align-items-center form-group-custom"
+    [class.mb-24]="s.hasPipeline"
+    style="margin-top: 56px"
+  >
+    <img
+      [src]="s.hasPipeline?'assets/img/ic-checkbox-gray-checked.svg'
+          :'assets/img/ic-checkbox-gray-unchecked.svg'"
+      alt="alert"
+      width="18"
+      height="18"
+    />
+
+    <div style="margin-left: 8px">Pipeline</div>
+  </div>
+  } @else {
+  <div
+    class="form-check d-flex align-items-center form-group-custom mb-24"
+    style="margin-top: 56px"
+    [class.mb-24]="s.hasPipeline"
+  >
+    <input
+      id="pipeline"
+      class="form-check-input custom-checkbox"
+      type="checkbox"
+      [checked]="s.hasPipeline"
+      (change)="updateSubruleForm('hasPipeline', $event.target.checked)"
+    />
+
+    <label class="form-check-label" for="pipeline">Pipeline</label>
+  </div>
+  }
+
+  <app-form-pipeline-section
+    [mode]="mode"
+    [hasPipeline]="subruleForm.hasPipeline"
+    [subruleForm]="subruleForm"
+    [dropdownFunction]="dropdownFunction"
+    [dropdownOperator]="dropdownOperator"
+    [dropdownPipelineType]="dropdownPipelineType"
+    [dropdownPipeline]="dropdownPipeline"
+    [dropdownRule]="dropdownRule"
+    [dropdownHistorical]="dropdownHistorical"
+    [dataVar]="dataVar"
+    (getDropdownPipeline)="emitDropdownPipeline($event)"
+    (updateSubruleForm)="updatePipelineDetail($event)"
+    (getVarListAndSubrule)="updatePipelineAndSetToVar($event)"
+  />
+</section>
+
+<ng-container>
+  <app-form-auto-action-section-v2
+    [mode]="mode"
+    [dropdownMbNotif]="dropdownMbNotif"
+    [dropdownAb]="dropdownAb"
+    [initialData]="subrulesForm"
+    [productType]="productType"
+    (saveSubrule)="updateAutoAction($event)"
+  />
+</ng-container>
+
+<ng-template #noTpl let-i="index">
+  <div class="d-flex align-items-center" style="height: 34px">{{ i + 1 }}</div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div class="fw-semibold">Parameter</div>
+    </div>
+    <div class="mb-24">
+      <div class="form-group form-group-custom mb-24">
+        <label for="name">Event Type</label>
+
+        <div class="ng-select-custom">
+          <ng-select
+            #typesSelect2
+            [items]="dropdownParameterType"
+            bindLabel="parameterType"
+            bindValue="parameterType"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Event Type"
+            (change)="updateSubruleForm('eventType', $event?.parameterType)"
+            [ngModel]="subruleTempForm.eventType"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.parameterType }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <div class="d-flex align-items-center">
+                  <span style="margin-right: 10px"
+                    >{{ item.parameterType }}</span
+                  >
+                  <div
+                    placement="start"
+                    tooltipClass="custom-tooltip"
+                    placement="end"
+                    ngbTooltip="loading"
+                    [ngbTooltip]="item.parameterTypeName"
+                    container="body"
+                  >
+                    <img src="assets/img/ic-info.svg" alt="info" />
+                  </div>
+                </div>
+
+                <img
+                  [class.d-none]="
+                         subruleTempForm.eventType !== item.parameterType
+                        "
+                  src="assets/img/ic-check-black.svg"
+                  alt="selected"
+                />
+              </div>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+      </div>
+
+      @if (subruleTempForm.eventType){
+      <app-table
+        [columns]="columnsTableModal"
+        [data]="subruleTempForm.parameters"
+        [showPageInfo]="false"
+        [showNoData]="true"
+        [pagination]="false"
+        [cellTemplates]="{
+          no: noTpl,
+          action: deleteParamTpl,
+          function: functionParameterTpl,
+          parameter1: paramParameter1Tpl,
+          parameter2: paramParameter2Tpl,
+          operator: operatorParameterTpl,
+          value: valueParameterTpl,
+          dataGroup: dataGroupParameterTpl
+        }"
+        [squared]="true"
+      />
+
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue fw-bold"
+        (click)="addSubruleParameterTempForm()"
+      >
+        Add Parameter
+      </button>
+      }
+    </div>
+    <div class="d-flex align-items-center justify-content-end">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue fw-bold"
+        style="margin-right: 11px"
+        (click)="cancelSubruleTempForm()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue fw-bold"
+        [disabled]="isInvalid()"
+        (click)="saveSubruleTempForm()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #functionParameterTpl let-row>
+  <div class="ng-select-parameter">
+    <ng-select
+      class="function-dropdown"
+      [items]="dropdownFunctionTypeF"
+      bindLabel="functionName"
+      bindValue="functionName"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Function"
+      (change)="
+        updateSubruleParameterTempForm(
+          'functionName',
+          $event,
+          row.uiId
+        )
+      "
+      [(ngModel)]="row.functionName"
+      [appendTo]="'.modal-content'"
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.functionName }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.functionName }}</span>
+          <img
+            [class.d-none]="row.functionName !== item.functionName"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #paramParameter1Tpl let-row>
+  <div class="ng-select-parameter">
+    <ng-select
+      class="parameter-dropdown"
+      [items]="dropdownParameter"
+      bindLabel="parameterValue"
+      bindValue="parameterValue"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Parameter"
+      (change)="
+        updateSubruleParameterTempForm(
+          'parameter1',
+          $event,
+          row.uiId
+        )
+      "
+      [(ngModel)]="row.parameter1"
+      appendTo="body"
+      #param1Model="ngModel"
+      required
+      [class.is-invalid]="
+                  param1Model?.invalid &&
+                  ( param1Model?.dirty ||
+                    param1Model?.touched)
+                "
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.parameterValue }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.parameterValue}}</span>
+          <img
+            [class.d-none]="row.parameter1 !== item.parameterValue"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+  @if(param1Model.invalid && param1Model.touched){
+  <div class="invalid-input">Parameter 1 is required</div>
+  }
+</ng-template>
+
+<ng-template #paramParameter2Tpl let-row>
+  <div class="ng-select-parameter">
+    <ng-select
+      class="parameter-dropdown"
+      [items]="dropdownParameter"
+      bindLabel="parameterValue"
+      bindValue="parameterValue"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Parameter"
+      (change)="
+        updateSubruleParameterTempForm(
+          'parameter2',
+          $event,
+          row.uiId
+        )
+      "
+      [disabled]="!row?.parameter1 || !row?.isMultiParam"
+      [(ngModel)]="row.parameter2"
+      [appendTo]="'.modal-content'"
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.parameterValue }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.parameterValue }}</span>
+          <img
+            [class.d-none]="row.parameter2 !== item.parameterValue"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #operatorParameterTpl let-row>
+  <div class="ng-select-parameter">
+    <ng-select
+      class="operator-dropdown"
+      [items]="dropdownOperator"
+      bindLabel="operatorName"
+      bindValue="operatorName"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Operator"
+      (change)="
+        updateSubruleParameterTempForm(
+          'operator',
+          $event,
+          row.uiId
+        )
+      "
+      [(ngModel)]="row.operator"
+      [appendTo]="'.modal-content'"
+      #operatorModel="ngModel"
+      required
+      [class.is-invalid]="
+                  operatorModel?.invalid &&
+                  ( operatorModel?.dirty ||
+                    operatorModel?.touched)
+                "
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.operatorName }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.operatorName }}</span>
+          <img
+            [class.d-none]="row.operator !== item.operatorName"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+  @if(operatorModel.invalid && operatorModel.touched){
+  <div class="invalid-input">Operator is required</div>
+  }
+</ng-template>
+
+<ng-template #valueParameterTpl let-row>
+  @if(row.dataGroupId !== '' && row.dataGroupId !== null){
+  <div class="ng-select-parameter">
+    <input
+      class="input-value"
+      type="text"
+      [(ngModel)]="row.dataGroupValue"
+      name="value-{{ row.uiId }}"
+      placeholder="Value"
+      [disabled]="true"
+    />
+  </div>
+  } @else{
+  <ng-container
+    *ngTemplateOutlet="nonDataGroupValueTpl ; context: { row: row }"
+  ></ng-container>
+  }
+</ng-template>
+
+<ng-template #nonDataGroupValueTpl let-row="row">
+  @if (row.returnType === 'Boolean') {
+  <ng-container
+    *ngTemplateOutlet="booleanValueTpl ; context: { row: row }"
+  ></ng-container>
+  } @else{
+  <ng-container
+    *ngTemplateOutlet="stringValueTpl ; context: { row: row }"
+  ></ng-container>
+  }
+</ng-template>
+
+<ng-template #booleanValueTpl let-row="row">
+  <div class="ng-select-parameter">
+    <ng-select
+      [items]="enumBoolean"
+      bindLabel="name"
+      bindValue="id"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Value"
+      (change)="updateSubruleParameterTempForm('value', $event?.id, row.uiId)"
+      [(ngModel)]="row.value"
+      [appendTo]="'.modal-content'"
+      [disabled]="row.dataGroupId !== '' && row.dataGroupId != null"
+      [required]="row.dataGroupId ==='' || row.dataGroupId === null"
+      #valueModel="ngModel"
+      [class.is-invalid]="
+                  valueModel?.invalid &&
+                  ( valueModel?.dirty ||
+                    valueModel?.touched)
+                "
+    >
+      <ng-template ng-label-tmp let-item="item"> {{ item.name }} </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.name }}</span>
+          <img
+            [class.d-none]="row.value !== item.value"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+  @if (valueModel.invalid && valueModel.touched) {
+  <div class="invalid-input">Value is required</div>
+  }
+</ng-template>
+
+<ng-template #stringValueTpl let-row="row">
+  <div class="ng-select-parameter">
+    <input
+      class="input-value"
+      type="text"
+      [(ngModel)]="row.value"
+      name="value-{{ row.uiId }}"
+      [placeholder]="(row.returnType === 'Integer' || row.returnType === 'Numerical')?'Value (e.g: 12345)':'Value (e.g: abcd)'"
+      (change)="updateSubruleParameterTempForm('value', $event.target.value, row.uiId)"
+      [disabled]="row.dataGroupId !== '' && row.dataGroupId != null"
+      [required]="!row.dataGroupId"
+      #valueModel="ngModel"
+      [class.is-invalid]="
+                  valueModel?.invalid &&
+                  ( valueModel?.dirty ||
+                    valueModel?.touched)
+                "
+      (input)="onFilterInput($event, row, 'value', (row.returnType === 'Integer' || row.returnType === 'Numerical')?'0-9.,':'')"
+    />
+    @if(valueModel.invalid&&valueModel.touched){
+    <div class="invalid-input">Value is required</div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #dataGroupParameterTpl let-row>
+  <div class="ng-select-parameter">
+    <ng-select
+      class="data-group-dropdown"
+      [items]="dropdownDataGroup"
+      bindLabel="dataGroupName"
+      bindValue="dataGroupId"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Data Group"
+      (change)="
+        updateSubruleParameterTempForm(
+          'dataGroupId',
+          $event,
+          row.uiId
+        )
+      "
+      [(ngModel)]="row.dataGroupId"
+      [disabled]="row.value !== '' && row.value != null"
+      [appendTo]="'.modal-content'"
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.dataGroupName }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.dataGroupName }}</span>
+          <img
+            [class.d-none]="row.dataGroupId !== item.dataGroupId"
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+      <ng-template ng-clearbutton-tmp>
+        <span class="d-none"></span>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #deleteParamTpl let-row>
+  <div class="d-flex align-items-center" style="height: 34px">
+    <button
+      type="button"
+      class="action-buttons__item"
+      (click)="removeSubruleParameterTempForm(row.uiId)"
+    >
+      <img src="/assets/img/ic-garbage-blue.svg" alt="delete" />
+    </button>
+  </div>
+</ng-template>

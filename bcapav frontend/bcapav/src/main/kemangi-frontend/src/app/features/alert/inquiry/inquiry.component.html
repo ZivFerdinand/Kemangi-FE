@@ -1,0 +1,561 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="'Inquiry'">
+  <div class=" justify-content-between" style="display: flex; flex-direction: row;">
+    <div class="btn-group mt-0">
+      <a (click)="toggleDropdown()" class="p-0 btn d-flex align-items-center">
+        <div class="justify-content-center align-items-center filter-btn" style="display: flex; flex-direction: row;">
+          <img src="/assets/img/ic-filter.svg" alt="filter">
+          Filter
+        </div>
+      </a>
+      <div class="card card--filter" style="max-width: 850px;" [style.display]="isDropdownOpen ? 'block' : 'none'">
+        <form [formGroup]="inquiryForm" class="justify-content-center">
+          <div style="width: 50%;">
+            <label for="report-type">Product</label>
+            <div class="ng-select-custom">
+              <ng-select [items]="apiProductList" bindLabel="label" bindValue="value" [multiple]="false"
+                [searchable]="false" placeholder="Choose" formControlName="formInquiryType" clearable="false" [ngClass]="{
+                    'is-invalid-field': 
+                      !getFormControl('formInquiryType')?.value && (getFormControl('formInquiryType')?.touched || getFormControl('formInquiryType')?.dirty)
+                  }">
+                <!-- DROPDOWN OPTION -->
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="d-flex w-100 justify-content-between align-items-center">
+                    <span>{{ item.label }}</span>
+                    <img *ngIf="getFormControl('formInquiryType')?.value === item.value"
+                      src="assets/img/ic-check-black.svg" alt="selected" />
+                  </div>
+                </ng-template>
+              </ng-select>
+              <span class="custom-arrow">
+                <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+              </span>
+            </div>
+            <div
+              *ngIf="!getFormControl('formInquiryType')?.value  && (getFormControl('formInquiryType')?.touched || getFormControl('formInquiryType')?.dirty)">
+              <label class="text-danger">Product is required</label>
+            </div>
+          </div>
+
+          <div *ngIf="formControls['formInquiryType'].value" class="justify-content-between"
+            style="display: flex; flex-direction: row;">
+            <div class="d-flex flex-column seperate-field-sel">
+              <label>All Field</label>
+              <div class="cust-border-field">
+                <input type="text" formControlName="formAllFieldsSearchControl" placeholder="Search"
+                  class="form-control search-field" />
+                <div class="handle-user-item">
+                  <div *ngFor="let data of filteredAllFieldList()" (click)="toggleAllFieldList(data)"
+                    [class.selected]="selectedAllFieldList.includes(data)"
+                    class="user-item d-flex align-items-center justify-content-between">
+                    <span>{{ data }}</span>
+                    <span *ngIf="selectedAllFieldList.includes(data)">
+                      <img src="assets/img/ic-check.svg" alt="Selected"
+                        style="width:20px; height:20px; filter: invert(1);">
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-column align-items-center justify-content-center">
+
+              <button class="btn btn-primary arrow-btn" [disabled]="selectedAllFieldList.length === 0"
+                (click)="addFieldToSelected()"><img src="assets/img/ic-field-arrow-r.svg" alt="Selected"
+                  style="width:20px; height:20px;"></button>
+              <button class="btn btn-primary arrow-btn mt-1" [disabled]="selectedSelFieldList.length === 0"
+                (click)="removeFieldFromSelected()"><img src="assets/img/ic-field-arrow-l.svg" alt="Selected"
+                  style="width:20px; height:20px;"></button>
+              <button class="btn btn-primary field-reset-btn mt-4" (click)="resetFieldList()">Reset</button>
+
+            </div>
+
+            <div class="d-flex flex-column seperate-field-sel">
+              <label>Selected Field</label>
+              <div class="cust-border-field">
+                <div class="handle-user-item-right" [ngClass]="{'is-invalid-field': (selectedFieldList.length === 0)}">
+                  <div *ngFor="let data of selectedFieldList" (click)="toggleSelFieldList(data)"
+                    [class.selected]="selectedSelFieldList.includes(data)"
+                    class="user-item d-flex align-items-center justify-content-between">
+                    <span>{{ data }}</span>
+                    <span *ngIf="selectedSelFieldList.includes(data)">
+                      <img src="assets/img/ic-check.svg" alt="Selected"
+                        style="width:20px; height:20px; filter: invert(1);">
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(selectedFieldList.length === 0)">
+                <label class="text-danger">{{ 'Selected field is required' }}</label>
+              </div>
+            </div>
+
+
+            <div class="d-flex flex-column align-items-center justify-content-center">
+
+              <button class="btn btn-primary arrow-btn" [disabled]="selectedSelFieldList.length === 0"
+                (click)="moveUp()"><img src="assets/img/ic-arrow-up.svg" alt="Selected"
+                  style="width:20px; height:20px;"></button>
+              <button class="btn btn-primary arrow-btn mt-1" [disabled]="selectedSelFieldList.length === 0"
+                (click)="moveDown()"><img src="assets/img/ic-arrow-down.svg" alt="Selected"
+                  style="width:20px; height:20px;"></button>
+
+            </div>
+          </div>
+
+          <div *ngIf="formControls['formInquiryType'].value" style="width: 100%;">
+            <label for="end-date" class="label-medium">Field Value</label>
+            <div class="d-flex flex-row justify-content-start">
+              <div class="input-wrapper input-wrapper-left">
+                <input class="form-control emp-field" type="text" readonly value="OCCUREDON">
+              </div>
+              <div style="max-width: 226px;">
+                <div class="input-wrapper input-wrapper-right">
+                  <img src="assets/img/ic-calendar.png" class="input-icon" alt="">
+
+                  <div class="customDatePicker">
+                    <!-- Hidden datepicker input -->
+                    <input class="form-control input-border" ngbDatepicker #occuredOnDatepicker="ngbDatepicker"
+                      [autoClose]="'outside'" (dateSelect)="onOccuredOnDateSelection($event)" [displayMonths]="1"
+                      outsideDays="visible" [startDate]="fromDate || undefined" [maxDate]="maxDate || undefined"
+                      [minDate]="minDate || undefined" [container]="'body'" [dayTemplate]="tDate"
+                      [positionTarget]="occuredOnDateInputGroup" hidden />
+
+                    <!-- Visible input group -->
+                    <div #occuredOnDateInputGroup class="input-group" style="cursor: pointer"
+                      (click)="setCurrentDatepicker('occuredon'); occuredOnDatepicker.toggle()">
+                      <input id="occuredOnDateInput" class="form-control input-border event-disabled-no-fade"
+                        placeholder="dd-mmm-yyyy to dd-mmm-yyyy" readonly [value]="displayOccuredOnDate()"
+                        (click)="setInputFormTouched('dateRange')" [ngClass]="{
+                            'is-invalid-field': occuredOnTouched && ((inquiryForm.errors?.['occuredOnTimeFormatInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnIncomplete']) ||
+                                          (inquiryForm.errors?.['occuredOnOrderInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnMaxDaysInvalid']))
+                          }" />
+                      <div class="input-group-append align-items-center">
+                        <button class="btn-date text-center" type="button">
+                          <span class="icon" style="top: 0 !important; transform: 0 !important;">
+                            <img style="margin: auto" alt="calendar" src="assets/img/ic-calendar.svg" />
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="inquiryForm.errors && occuredOnTouched">
+                  <label class="text-danger" *ngIf="inquiryForm.errors['occuredOnIncomplete']">
+                    Both dates and both times must be filled!
+                  </label>
+                  <label class="text-danger" *ngIf="inquiryForm.errors['occuredOnTimeFormatInvalid']">
+                    Time must be in HH:mm:ss format!
+                  </label>
+                  <label class="text-danger" *ngIf="inquiryForm.errors['occuredOnOrderInvalid']">
+                    End date/time must be after start date/time!
+                  </label>
+                  <label class="text-danger" *ngIf="inquiryForm.errors['occuredOnMaxDaysInvalid']">
+                    Max range is three days!
+                  </label>
+                </div>
+              </div>
+              <div class="input-wrapper input-wrapper-right">
+                <img src="assets/img/ic-clock.svg" class="input-icon input-icon-cst" alt="">
+                <input type="text" class="form-control input-time" placeholder="HH:mm:ss"
+                  formControlName="formOccuredOnTimeFrom" [ngClass]="{
+                      'is-invalid-field': occuredOnTouched && ((inquiryForm.errors?.['occuredOnTimeFormatInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnIncomplete']) ||
+                                          (inquiryForm.errors?.['occuredOnOrderInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnMaxDaysInvalid']))
+                    }">
+              </div>
+              <div class="time-dash">-</div>
+              <div class="input-wrapper input-wrapper-right">
+                <img src="assets/img/ic-clock.svg" class="input-icon input-icon-cst" alt="">
+                <input type="text" class="form-control input-time" placeholder="HH:mm:ss"
+                  formControlName="formOccuredOnTimeTo" [ngClass]="{
+                      'is-invalid-field': occuredOnTouched && ((inquiryForm.errors?.['occuredOnTimeFormatInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnIncomplete']) ||
+                                          (inquiryForm.errors?.['occuredOnOrderInvalid']) ||
+                                          (inquiryForm.errors?.['occuredOnMaxDaysInvalid']))
+                    }">
+              </div>
+            </div>
+
+
+            <div class="d-flex flex-row justify-content-start" style="margin-top: 8px;">
+              <div class="input-wrapper input-wrapper-left">
+                <input class="form-control emp-field" type="text" readonly value="RULEID">
+              </div>
+              <div>
+                <div class="input-wrapper-rule"
+                  (click)="openModal($event, modalChooseRuleId); setInputFormTouched('ruleId')" tabindex="0" [ngClass]="{
+                      'is-invalid-field': (selectedIds.length === 0) && ruleIdTouched && (selectedModelIds.length === 0)
+                    }">
+                  <ng-container *ngFor="let item of selectedIds">
+                    <span class="tag-chip" (click)="$event.stopPropagation()">
+                      {{ item }}
+                      <span class="remove-chip" (click)="removeItem(item, $event)">
+                        <img src="./assets/img/ic-times-gray.svg" alt="del" />
+                      </span>
+                    </span>
+                  </ng-container>
+                  <input type="text" class="form-control chip-dummy-input" [class.has-chip]="selectedIds.length > 0"
+                    [placeholder]="selectedIds.length === 0 ? 'Select RuleID' : ''" readonly tabindex="-1"
+                    style="height: 48px !important" />
+                  <img src="assets/img/ic-add.svg" class="input-rule" alt="">
+                </div>
+                <div *ngIf="(selectedIds.length === 0) && ruleIdTouched && (selectedModelIds.length === 0)">
+                  <label class="text-danger">{{ 'RULEID, MODEL_ID, or both are required' }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-row justify-content-start" style="margin-top: 8px;"
+              *ngIf="getFormControl('formInquiryType')?.value === 'KBB (Fin)' || getFormControl('formInquiryType')?.value === 'myBCA'">
+              <div class="input-wrapper input-wrapper-left">
+                <input class="form-control emp-field" type="text" readonly value="MODEL_ID">
+              </div>
+              <div>
+                <div class="input-wrapper-rule"
+                  (click)="openModal($event, modalChooseModelId); setInputFormTouched('modelId')" tabindex="0"
+                  [ngClass]="{
+                      'is-invalid-field': (selectedModelIds.length === 0) && modelIdTouched && (selectedIds.length === 0)
+                    }">
+                  <ng-container *ngFor="let item of selectedModelIds">
+                    <span class="tag-chip" (click)="$event.stopPropagation()">
+                      {{ item }}
+                      <span class="remove-chip" (click)="removeModelItem(item, $event)">
+                        <img src="./assets/img/ic-times-gray.svg" alt="del" />
+                      </span>
+                    </span>
+                  </ng-container>
+                  <input type="text" class="form-control chip-dummy-input"
+                    [class.has-chip]="selectedModelIds.length > 0"
+                    [placeholder]="selectedModelIds.length === 0 ? 'Select MODEL_ID' : ''" readonly tabindex="-1"
+                    style="height: 48px !important" />
+                  <img src="assets/img/ic-add.svg" class="input-rule" alt="">
+                </div>
+                <div *ngIf="(selectedModelIds.length === 0) && modelIdTouched && (selectedIds.length === 0)">
+                  <label class="text-danger">{{ 'RULEID, MODEL_ID, or both are required' }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="formControls['formInquiryType'].value" style="width: 100%; margin-top: 8px;">
+              <!-- Dynamic Filters Area -->
+              <div formArrayName="formAdditionalFilters">
+                <div *ngFor="let filter of filters.controls; let i = index" [formGroupName]="i" class="mb-2">
+                  <div class="d-flex flex-row" style="align-items: flex-start; justify-content: start;">
+                    <div>
+                      <div class="input-wrapper input-wrapper-left" style="height: 48px !important;">
+                        <ng-container *ngIf="!filter.get('value')?.value">
+                          <div class="ng-select-custom">
+                            <ng-select [items]="availableFieldsPerIndex[i]" bindLabel="value" bindValue="value"
+                              placeholder="Choose field" formControlName="value"
+                              [ngClass]="{'is-invalid-field': filter.get('value')?.invalid && filters.at(i).get('value')?.touched}"
+                              (change)="onFieldSelected(i)" [searchable]="true" [clearable]="false"
+                              style="width: 300px;">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                  <span>{{ item.value }}</span>
+                                </div>
+                              </ng-template>
+                            </ng-select>
+                            <span class="custom-arrow">
+                              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                            </span>
+                          </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="filter.get('value')?.value">
+                          <input class="form-control emp-field" type="text" readonly
+                            [value]="filter.get('value')?.value" [ngClass]="{
+                                'is-invalid-field': filter.get('value')?.invalid && filters.at(i).get('value')?.touched
+                              }">
+                        </ng-container>
+                      </div>
+                      <div *ngIf="filter.get('value')?.invalid && filters.at(i).get('value')?.touched">
+                        <label class="text-danger">Field is required</label>
+                      </div>
+                    </div>
+
+                    <ng-container *ngIf="filter.get('value')?.value">
+                      <div>
+                        <div *ngIf="filter.get('selectionFilter')?.value === 'Freetext'"
+                          class="input-wrapper input-wrapper-right">
+                          <input class="form-control" formControlName="filterValue" placeholder="Enter value"
+                            style="max-width: 200px; padding: 0 17px; height: 48px;" [ngClass]="{
+                                    'is-invalid-field': filter.get('filterValue')?.invalid && filter.get('filterValue')?.touched
+                                  }" />
+
+                        </div>
+                        <div *ngIf="filter.get('filterValue')?.invalid && filter.get('filterValue')?.touched">
+                          <label class="text-danger">{{ filter.get('value')?.value }} is required</label>
+                        </div>
+                      </div>
+
+                      <div *ngIf="filter.get('selectionFilter')?.value === 'Range'"
+                        class="d-flex flex-row justify-content-start">
+                        <div style="max-width: 155px;">
+                          <div class="input-wrapper input-wrapper-right input-wrapper-time">
+                            <input type="number" class="form-control" placeholder="From" formControlName="timeFrom"
+                              style="padding-right: 17px !important; max-width: 150px;"
+                              [ngClass]="{'is-invalid-field': (filter.errors?.['rangeIncomplete'] || filter.errors?.['rangeNotNumeric']) && (filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)}">
+                          </div>
+                          <div
+                            *ngIf="filter.invalid && (filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)">
+                            <label class="text-danger" *ngIf="filter.errors?.['rangeIncomplete']">
+                              Both values must be filled for {{ filter.get('value')?.value }}!
+                            </label>
+                            <label class="text-danger" *ngIf="filter.errors?.['rangeNotNumeric']">
+                              Both values must be numeric for {{ filter.get('value')?.value }}!
+                            </label>
+                            <label class="text-danger" *ngIf="filter.errors?.['rangeInvalidOrder']">
+                              'To' value must be greater than 'From' value for {{ filter.get('value')?.value }}!
+                            </label>
+                          </div>
+                        </div>
+                        <div class="time-dash">-</div>
+                        <div class="input-wrapper input-wrapper-right input-wrapper-time">
+                          <input type="number" class="form-control " placeholder="To" formControlName="timeTo"
+                            style="padding-right: 17px !important; max-width: 150px;"
+                            [ngClass]="{'is-invalid-field': (filter.errors?.['rangeIncomplete'] || filter.errors?.['rangeNotNumeric'] || filter.errors?.['rangeInvalidOrder']) && (filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)}">
+                        </div>
+                      </div>
+                      <div *ngIf="filter.get('selectionFilter')?.value === 'Date'"
+                        class="d-flex flex-row justify-content-start">
+                        <!-- Date range picker -->
+                        <div style="max-width: 226px;">
+                          <div class="input-wrapper input-wrapper-right">
+                            <img src="assets/img/ic-calendar.png" class="input-icon" alt="">
+
+                            <div class="customDatePicker">
+                              <!-- Hidden datepicker input for each filter -->
+                              <input class="form-control input-border" ngbDatepicker #dynamicDatepicker="ngbDatepicker"
+                                [autoClose]="'outside'" (dateSelect)="onDynamicDateSelection($event, i)"
+                                [displayMonths]="1" outsideDays="visible" [startDate]="dynamicFromDate[i]"
+                                [maxDate]="maxDate" [container]="'body'" [positionTarget]="dynamicDateInputGroup"
+                                [dayTemplate]="tDate" hidden />
+
+                              <!-- Visible input group for each filter -->
+                              <div #dynamicDateInputGroup class="input-group" style="cursor: pointer"
+                                (click)="setCurrentDatepicker('dynamic', i); dynamicDatepicker.toggle()">
+                                <input class="form-control input-border event-disabled-no-fade"
+                                  placeholder="dd-mmm-yyyy to dd-mmm-yyyy" readonly
+                                  (click)="setInputFormTouchedDynamic(i)" [value]="displayDynamicDate(i)"
+                                  [ngClass]="{'is-invalid-field': (filter.errors?.['dateTimeRangeIncomplete'] || filter.errors?.['timeFormatInvalid'] || filter.errors?.['timeOrderInvalid']) && (filter.get('filterValue')?.touched || filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)}" />
+                                <div class="input-group-append align-items-center">
+                                  <button class="btn-date text-center" type="button">
+                                    <span class="icon">
+                                      <img style="margin: auto" alt="calendar" src="assets/img/ic-calendar.svg" />
+                                    </span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            *ngIf="filter.invalid && (filter.get('filterValue')?.touched || filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)">
+                            <label class="text-danger" *ngIf="filter.errors?.['dateTimeRangeIncomplete']">
+                              Date and both times must be filled or empty!
+                            </label>
+                            <label class="text-danger" *ngIf="filter.errors?.['timeFormatInvalid']">
+                              Time must be in HH:mm:ss format!
+                            </label>
+                            <label class="text-danger" *ngIf="filter.errors?.['timeOrderInvalid']">
+                              End time must be greater than start time!
+                            </label>
+                          </div>
+
+                        </div>
+                        <div class="input-wrapper input-wrapper-right input-wrapper-time">
+                          <img src="assets/img/ic-clock.svg" class="input-icon input-icon-cst" alt="">
+                          <input type="text" formControlName="timeFrom" placeholder="HH:mm:ss"
+                            (input)="filters.at(i).updateValueAndValidity()" class="form-control input-time"
+                            [ngClass]="{'is-invalid-field': (filter.errors?.['dateTimeRangeIncomplete'] || filter.errors?.['timeFormatInvalid'] || filter.errors?.['timeOrderInvalid']) && (filter.get('filterValue')?.touched || filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)}">
+                        </div>
+                        <div class="time-dash">-</div>
+                        <div class="input-wrapper input-wrapper-right input-wrapper-time">
+                          <img src="assets/img/ic-clock.svg" class="input-icon input-icon-cst" alt="">
+                          <input type="text" formControlName="timeTo" placeholder="HH:mm:ss"
+                            (input)="filters.at(i).updateValueAndValidity()" class="form-control input-time"
+                            [ngClass]="{'is-invalid-field': (filter.errors?.['dateTimeRangeIncomplete'] || filter.errors?.['timeFormatInvalid'] || filter.errors?.['timeOrderInvalid']) && (filter.get('filterValue')?.touched || filter.get('timeFrom')?.touched || filter.get('timeTo')?.touched)}">
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <button class="btn btn-link p-0 align-self-center ml-2 remove-filter-button"
+                      (click)="removeFilterAt(i)" type="button">
+                      <img src="/assets/img/ic-trash.svg" alt="Remove Filter">
+                    </button>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+
+            <button class="btn mt-2 mb-2 btn-filter" type="button" (click)="addEmptyFilter()">+ Add Field Value</button>
+          </div>
+
+
+
+          <div class="submit-area mt-2" *ngIf="formControls['formInquiryType'].value">
+            <button class="btn btn-primary secondary-btn" (click)="resetInquiry()">Reset All</button>
+            <button class="btn btn-primary main-btn" (click)="applyInquiry()">
+              Generate
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="isSubmitted">
+      <button class="btn btn-primary main-btn" (click)="downloadInquiry()"
+        [disabled]="!canDownload || dataList.length === 0">
+        <span class="icon">
+          <img alt="ic-dwnld" src="assets/img/ic-dwnld.svg">
+        </span>
+        Download
+      </button>
+    </div>
+  </div>
+
+
+
+  <div class="report-area mt-0" style="position: relative;">
+
+    <div class="watermark-container"></div>
+    <div class="report-right">
+      <div class="table-area" *ngIf="isSubmitted">
+        <div class="result-desc-area" style="margin-bottom: 70px;">
+          <div style="display: block;">Filtered By</div>
+          <div class="filter-summary-scroll">
+            <table class="filter-summary-table">
+              <tbody>
+                <ng-container *ngFor="let row of filterSummaryRows">
+                  <tr style="border: none !important;">
+                    <ng-container *ngFor="let pair of row">
+                      <td class="filter-summary-pair">
+                        <div class="filter-pair-flex">
+                          <span class="filter-summary-label" [title]="pair.label">{{ pair.label }}</span>
+                          <span class="filter-summary-value" [title]="pair.value">{{ ': ' + pair.value }}</span>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <!-- Fill to 3 pairs per row -->
+                    <ng-container *ngFor="let empty of [].constructor(3 - row.length)">
+                      <td class="filter-summary-pair"></td>
+                    </ng-container>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="color: #555555; margin-bottom: 20px;">
+          Please download to see all data
+        </div>
+        <div class="table-scroll">
+          <table summary="table finch" id="users-table">
+            <thead>
+              <tr style="background-color: #144E83;">
+                <th scope="col" class="text-center first-th">No</th>
+                <th *ngFor="let key of columnKeys; let i = index" [class.last-th]="i === columnKeys.length - 1">
+                  {{ key }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of dataList; let i= index">
+                <td class="text-center">{{ i + 1 || "-" }}</td>
+                <td *ngFor="let key of columnKeys">{{ data[key] }}</td>
+              </tr>
+              <tr *ngIf="dataList.length == 0">
+                <td colspan="7" class=" text-center not-available"> No data available </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</app-content-layout>
+
+<ng-template #modalChooseRuleId let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 style="font-weight: bold;">Please Select Rule ID</h5>
+  </div>
+  <div class="modal-body d-flex flex-column justify-content-center align-items-center" style="overflow-y: auto;">
+
+    <div class="table-responsive-modal" style="max-height: 100%; overflow-y: auto; width: 100%;">
+      <table class="bottom-border-table" cellpadding="8" cellspacing="0">
+        <thead style="background-color: #144E83;">
+          <tr>
+            <th><input type="checkbox" [(ngModel)]="allSelected" (change)="selectAllRules()" /></th>
+            <th>Rule ID</th>
+            <th>Rule Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rule of ruleList">
+            <td>
+              <input type="checkbox" [(ngModel)]="rule.selected" />
+            </td>
+            <td>{{ rule.id }}</td>
+            <td>{{ rule.ruleDesc }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-end">
+    <button class="btn btn-primary secondary-btn font-weight-bold" (click)="c('close')">Back</button>
+    <button class="btn btn-primary main-btn font-weight-bold" (click)="onSelectRuleIds(c)">Select</button>
+  </div>
+</ng-template>
+
+<ng-template #modalChooseModelId let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 style="font-weight: bold;">Please Select Model ID</h5>
+  </div>
+  <div class="modal-body d-flex flex-column justify-content-center align-items-center" style="overflow-y: auto;">
+
+    <div class="table-responsive-modal" style="max-height: 100%; overflow-y: auto; width: 100%;">
+      <table class="bottom-border-table" cellpadding="8" cellspacing="0">
+        <thead style="background-color: #144E83;">
+          <tr>
+            <th><input type="checkbox" [(ngModel)]="allSelectedModelAlert" (change)="selectAllModels()" /></th>
+            <th>MODEL_ID</th>
+            <th>Model Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let model of modelAlertList">
+            <td>
+              <input type="checkbox" [(ngModel)]="model.selected" />
+            </td>
+            <td>{{ model.id }}</td>
+            <td>{{ model.modelDesc }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-end">
+    <button class="btn btn-primary secondary-btn font-weight-bold" (click)="c('close')">Back</button>
+    <button class="btn btn-primary main-btn font-weight-bold" (click)="onSelectModelIds(c)">Select</button>
+  </div>
+</ng-template>
+
+<ng-template #tDate let-date let-focused="focused">
+  <span class="custom-day" [class.focused]="focused"
+    [class.range]="isRange(date, currentDatepickerType, currentDynamicIndex)"
+    [class.faded]="isHovered(date, currentDatepickerType, currentDynamicIndex) || isInside(date, currentDatepickerType, currentDynamicIndex)"
+    [class.outside-day]="outsideDay(date, currentDatepickerType, currentDynamicIndex)"
+    (mouseenter)="setHoveredDate(date, currentDatepickerType, currentDynamicIndex)"
+    (mouseleave)="setHoveredDate(null, currentDatepickerType, currentDynamicIndex)">
+    {{ date.day }}
+  </span>
+</ng-template>

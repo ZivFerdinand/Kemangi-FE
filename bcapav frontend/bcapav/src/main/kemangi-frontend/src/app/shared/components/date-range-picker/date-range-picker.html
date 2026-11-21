@@ -1,0 +1,57 @@
+<div class="drp-wrapper" [class.drp-disabled]="disabled">
+  <button
+    type="button"
+    class="drp-toggle"
+    [class.drp-invalid]="required && isTouched && !fromDate"
+    [disabled]="disabled"
+    (click)="toggle()"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-disabled]="disabled"
+  >
+    <span [class.drp-placeholder]="!fromDate">{{ displayLabel }}</span>
+
+    <span class="drp-toggle-icon">
+      <img
+        style="margin: auto"
+        alt="calendar"
+        src="assets/img/ic-calendar.svg"
+      />
+    </span>
+  </button>
+
+  @if (isOpen && !disabled) {
+  <div class="drp-popup">
+    <ngb-datepicker
+      #dp
+      [displayMonths]="displayMonths"
+      [outsideDays]="outsideDays"
+      [minDate]="$any(minDate)"
+      [maxDate]="$any(maxDate)"
+      [startDate]="$any(fromDate)"
+      [dayTemplate]="t"
+      (dateSelect)="onDateSelection($event)"
+    />
+  </div>
+  }
+</div>
+
+<ng-template
+  #t
+  let-date
+  let-focused="focused"
+  let-currentMonth="currentMonth"
+  let-dayDisabled="disabled"
+>
+  <span
+    class="custom-day"
+    [class.focused]="focused"
+    [class.outside]="date.month !== currentMonth"
+    [class.range]="isRange(date) && date.month === currentMonth"
+    [class.faded]="(isHovered(date) || isInside(date)) && date.month === currentMonth"
+    [class.disabled]="dayDisabled || disabled"
+    (mouseenter)="!(dayDisabled || disabled) && (hoveredDate = date)"
+    (mouseleave)="hoveredDate = null"
+  >
+    {{ date.day }}
+  </span>
+</ng-template>

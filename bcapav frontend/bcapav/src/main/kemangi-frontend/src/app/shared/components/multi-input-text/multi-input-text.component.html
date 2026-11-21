@@ -1,0 +1,28 @@
+<div class="multi-input-container" [class.disabled]="disabled">
+  <div class="chip" *ngFor="let data of value">
+    <span class="chip-label">{{ data }}</span>
+
+    <span *ngIf="!disabled" (click)="removeValue(data)">
+      <img src="/assets/img/ic-times-gray.svg" alt="clear" />
+    </span>
+  </div>
+
+  <input
+    type="text"
+    [(ngModel)]="inputValue"
+    (keydown)="handleKeydown($event)"
+    [disabled]="disabled"
+    (blur)="onTouched()"
+    [placeholder]="value.length === 0 ? placeholder : ''"
+  />
+
+  @if (value.length > 0) {
+    <button
+      type="button"
+      (click)="clearAll()"
+      class="clear-all-btn-multi-input"
+    >
+      <img src="/assets/img/ic-times-gray.svg" alt="clear-all" />
+    </button>
+  }
+</div>

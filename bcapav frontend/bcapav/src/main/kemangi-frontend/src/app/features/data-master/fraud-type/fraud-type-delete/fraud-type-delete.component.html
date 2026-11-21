@@ -1,0 +1,81 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <form [formGroup]="fraudTypeForm">
+    <section class="card no-border card-pavo-default-type-ii mb-24">
+      <div class="mb-24">
+        <app-toggle-switch formControlName="activeStatus"></app-toggle-switch>
+      </div>
+
+      <div class="d-flex mb-3">
+        <div class="d-flex flex-column me-40" style="width: 360px">
+          <div class="form-item">
+            <label for="fraudType">Fraud Type</label>
+            <input
+              id="fraudType"
+              type="text"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['fraudType']?.invalid &&
+                (f['fraudType']?.dirty || f['fraudType']?.touched)
+              "
+              formControlName="fraudType"
+              placeholder="Fraud Type"
+            />
+            @if (
+              f["fraudType"]?.invalid &&
+              (f["fraudType"]?.dirty || f["fraudType"]?.touched)
+            ) {
+              <div>
+                @if (f["fraudType"]?.errors?.["required"]) {
+                  <div class="invalid-input">Fraud Type is required</div>
+                }
+                @if (f["fraudType"]?.errors?.["maxlength"]) {
+                  <div class="invalid-input">
+                    Max
+                    {{ f["fraudType"]?.errors?.["maxlength"].requiredLength }}
+                    characters allowed
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="d-flex flex-column" style="width: 800px">
+          <div class="form-item">
+            <label for="description">Description</label>
+            <textarea
+              #autoDescTA
+              id="description"
+              class="form-control pr-5"
+              formControlName="description"
+              rows="1"
+              (input)="autogrow(autoDescTA)"
+              placeholder="Description"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="d-flex align-items-center justify-content-end btn-section">
+      <button
+        type="button"
+        class="btn-type-1 btn-white-outlined me-3"
+        (click)="back()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="
+          f['activeStatus'].value
+            ? handleDeleteImmediately()
+            : handleDeleteConfirmation()
+        "
+        [disabled]="fraudTypeForm.invalid"
+      >
+        Submit
+      </button>
+    </section>
+  </form>
+</app-content-layout>

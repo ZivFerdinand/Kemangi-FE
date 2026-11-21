@@ -1,0 +1,335 @@
+.alert-queue-priority-row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.alert-queue-priority-box {
+  border: 1px solid #465066;
+  border-radius: 10px;
+  padding: 18px 18px 24px 18px;
+}
+
+.alert-queue-priority-box.priority-high {
+  border-color: #dd1205;
+  background: #ffdada;
+}
+.alert-queue-priority-box.priority-medium {
+  border-color: #ffa822;
+  background: #ffeed3;
+}
+.alert-queue-priority-box.priority-low {
+  border-color: #ffc107;
+  background: #fffbde;
+}
+
+.btn-add-priority {
+  margin: 0 auto;
+  padding: 12px 24px;
+  width: 224px;
+  height: 48px;
+  color: #005caa;
+  background: transparent;
+  border: none;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.btn-add-priority img {
+  margin-right: 8px;
+}
+
+h3.alert-queue-label {
+  color: #393939;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+h4.alert-queue-label {
+  color: #144e83;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+h5.alert-queue-label {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
+  margin-bottom: 18px;
+}
+
+h5.alert-queue-label.priority-high {
+  color: #930c03;
+}
+h5.alert-queue-label.priority-medium {
+  color: #aa7017;
+}
+h5.alert-queue-label.priority-low {
+  color: #b18500;
+}
+
+h6.alert-queue-label {
+  color: #393939;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 100%;
+  margin-bottom: 12px;
+}
+
+.rule-model-section.left {
+  width: calc(500px / 1760px * 100%);
+}
+
+.rule-model-section.right {
+  width: calc(1244px / 1760px * 100%);
+}
+
+.card-pavo-default-type-vi.alert-queue-priority,
+.card-pavo-default-type-vi.alert-queue-list {
+  border-color: #868e96;
+}
+
+.alert-queue-sub-priority-box {
+  background: #ffffff;
+  border: 1px solid #868e96;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+// .alert-queue-sub-priority-box:last-of-type {
+//   margin-bottom: 0px;
+// }
+
+.alert-queue-sub-priority-box--item {
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: 24px 1fr 42px;
+
+  // display: flex;
+  // align-items: center;
+  border: 1px solid #e9ecef;
+}
+
+.alert-queue-sub-priority-box--item.type-ii {
+  grid-template-columns: 24px 1fr 18px;
+}
+
+.alert-queue-sub-priority-box--item .icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.alert-queue-sub-priority-box--item .icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.alert-queue-sub-priority-box--item .label {
+  margin-left: 8px;
+  height: 24px;
+  font-size: 16px;
+  color: #121212;
+  min-width: 0;
+  // max-width: calc(100% - 24px - 8px - 42px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.action-buttons {
+  width: 42px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+}
+
+.action-buttons.type-ii {
+  width: 18px;
+}
+
+.action-buttons button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+}
+
+.action-buttons button.delete {
+  width: 20px;
+  height: 20px;
+}
+
+.action-buttons button.menu {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-delete-priority {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+}
+
+.alert-queue-info {
+  font-size: 14px;
+  color: #868e96;
+}
+
+.alert-queue-unassigned-box {
+  .header {
+    border-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #e6f3ff;
+    padding: 12px 18px 18px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header__content {
+      display: flex;
+      align-items: center;
+
+      .header__counter {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #ffffff;
+        color: #00b5f0;
+        width: 30px;
+        height: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+
+        &.font-size-extend {
+          font-size: 0.8rem;
+        }
+      }
+
+      .header__label {
+        color: #005caa;
+        font-weight: 700;
+        font-size: 16px;
+        margin: 0 0 0 10px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    .header__tabs {
+      width: 55%;
+      max-width: 208px;
+      min-width: 0;
+    }
+  }
+}
+
+.alert-queue-unassigned-box .body {
+  background: white;
+  border: 1px solid #c2c2c2;
+  border-radius: 8px;
+  // height: 40px;
+  margin-top: -6px;
+  padding: 5.5px 8px 12px 8px;
+}
+
+.alert-queue-list-box {
+  height: calc(468px - 12px - 48px - 5.5px);
+  overflow-y: auto;
+}
+
+#alertQueueListBox {
+  ::ng-deep {
+    .accordion-button:focus {
+      box-shadow: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+      box-shadow: none;
+    }
+
+    .accordion-body {
+      padding: 0;
+    }
+  }
+
+  ::ng-deep .accordion-item {
+    border: none;
+  }
+
+  ::ng-deep .accordion-button {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    padding: 7px 10px;
+    border: none;
+  }
+
+  ::ng-deep .accordion-button:not(.collapsed) {
+    background-color: transparent;
+  }
+
+  ::ng-deep .accordion-button::after {
+    margin-left: 0;
+    margin-right: 10px;
+    background-image: url(/assets/img/ic-small-arrow-down.svg);
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.alert-queue-search-box {
+  height: 48px;
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  margin-bottom: 5.5px;
+  overflow: hidden;
+  display: flex;
+
+  input {
+    height: 100%;
+    width: calc(100% - 24px - 16px);
+    border: none;
+    box-shadow: none;
+    padding: 12px 0px 12px 16px;
+  }
+
+  input:focus-visible {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: #c2c2c2;
+    opacity: 1;
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    margin-right: 12px;
+  }
+}
+
+.item-hidden {
+  display: none;
+}

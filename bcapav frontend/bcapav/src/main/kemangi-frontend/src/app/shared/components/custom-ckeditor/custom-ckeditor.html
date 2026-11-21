@@ -1,0 +1,303 @@
+<div class="editor-toolbar-container">
+  <!-- Undo / Redo -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('undo')"
+    title="Undo"
+  >
+    <img src="/assets/img/toolbar-undo.svg" alt="Undo" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('redo')"
+    title="Redo"
+  >
+    <img src="/assets/img/toolbar-redo.svg" alt="Redo" />
+  </button>
+
+  <!-- Text styles -->
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('bold')"
+    type="button"
+    (click)="executeCommand('bold')"
+    title="Bold"
+  >
+    <img src="/assets/img/toolbar-bold.svg" alt="Bold" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('italic')"
+    type="button"
+    (click)="executeCommand('italic')"
+    title="Italic"
+  >
+    <img src="/assets/img/toolbar-italic.svg" alt="Italic" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('underline')"
+    type="button"
+    (click)="executeCommand('underline')"
+    title="Underline"
+  >
+    <img src="/assets/img/toolbar-underline.svg" alt="Underline" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('strikethrough')"
+    type="button"
+    (click)="executeCommand('strikethrough')"
+    title="Strikethrough"
+  >
+    <img src="/assets/img/toolbar-strikethrough.svg" alt="Strikethrough" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('subscript')"
+    type="button"
+    (click)="executeCommand('subscript')"
+    title="Subscript"
+  >
+    <img src="/assets/img/toolbar-subscript.svg" alt="Subscript" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    [class.active]="isActive('superscript')"
+    type="button"
+    (click)="executeCommand('superscript')"
+    title="Superscript"
+  >
+    <img src="/assets/img/toolbar-superscript.svg" alt="Superscript" />
+  </button>
+
+  <!-- Alignment -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('alignment','left')"
+    title="Align Left"
+  >
+    <img src="/assets/img/toolbar-align-left.svg" alt="Align Left" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('alignment','center')"
+    title="Align Center"
+  >
+    <img src="/assets/img/toolbar-align-center.svg" alt="Align Center" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('alignment','right')"
+    title="Align Right"
+  >
+    <img src="/assets/img/toolbar-align-right.svg" alt="Align Right" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('alignment','justify')"
+    title="Justify"
+  >
+    <img src="/assets/img/toolbar-align-justify.svg" alt="Justify" />
+  </button>
+
+  <!-- Indent -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('indent')"
+    title="Increase Indent"
+  >
+    <img src="/assets/img/toolbar-increase-indent.svg" alt="Increase Indent" />
+  </button>
+
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('outdent')"
+    title="Decrease Indent"
+  >
+    <img src="/assets/img/toolbar-decrease-indent.svg" alt="Decrease Indent" />
+  </button>
+
+  <!-- Heading -->
+  <div class="ng-select-font-family" style="margin-right: 10px">
+    <ng-select
+      [items]="headingOptions"
+      bindLabel="label"
+      bindValue="value"
+      [multiple]="false"
+      placeholder="Style"
+      (change)="onHeadingChange($event.value)"
+    >
+      <ng-template ng-label-tmp let-item="item"> {{ item.label }} </ng-template>
+
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.label }}</span>
+        </div>
+      </ng-template>
+    </ng-select>
+
+    <span class="custom-arrow">
+      <img src="/assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+
+  <!-- Font family -->
+  <div class="ng-select-font-family">
+    <ng-select
+      [items]="fontFamilies"
+      bindLabel="label"
+      bindValue="value"
+      [multiple]="false"
+      placeholder="Font Family"
+      (change)="onFontChange($event.value)"
+    >
+      <ng-template ng-label-tmp let-item="item"> {{ item.label }} </ng-template>
+
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.label }}</span>
+        </div>
+      </ng-template>
+    </ng-select>
+
+    <span class="custom-arrow">
+      <img src="/assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+
+  <!-- Font size -->
+  <div class="ng-select-font-size">
+    <ng-select
+      [items]="fontSizes"
+      bindLabel="label"
+      bindValue="value"
+      [multiple]="false"
+      placeholder="12"
+      (change)="onFontSizeChange($event.value)"
+    >
+      <ng-template ng-label-tmp let-item="item"> {{ item.label }} </ng-template>
+
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.label }}</span>
+        </div>
+      </ng-template>
+    </ng-select>
+
+    <span class="custom-arrow">
+      <img src="/assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+
+  <!-- Font color -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="fontColorInput.click()"
+    title="Font Color"
+  >
+    <img src="/assets/img/toolbar-font-color.svg" alt="Font Color" />
+  </button>
+
+  <!-- Background color -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="bgColorInput.click()"
+    title="Font Background Color"
+  >
+    <img
+      src="/assets/img/toolbar-font-background-color.svg"
+      alt="Font Background Color"
+    />
+  </button>
+
+  <!-- Image upload -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="openImageUpload()"
+    title="Upload image"
+  >
+    <img src="/assets/img/toolbar-upload-image.svg" alt="Upload image" />
+  </button>
+
+  <!-- Horizontal line -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('horizontalLine')"
+    title="Horizontal line"
+  >
+    <img src="/assets/img/toolbar-horizontal-line.svg" alt="Horizontal line" />
+  </button>
+
+  <!-- Remove format -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('removeFormat')"
+    title="Remove format"
+  >
+    <img src="/assets/img/toolbar-remove-format.svg" alt="Remove Format" />
+  </button>
+
+  <!-- Code -->
+  <button
+    class="editor-toolbar-btn"
+    type="button"
+    (click)="executeCommand('code')"
+    [class.active]="isActive('code')"
+    title="Code"
+  >
+    <img src="/assets/img/toolbar-code.svg" alt="Code" />
+  </button>
+</div>
+
+<input
+  #imageInput
+  type="file"
+  accept="image/*"
+  hidden
+  (change)="uploadImage($event)"
+/>
+
+<input
+  #fontColorInput
+  type="color"
+  hidden
+  (input)="executeCommand('fontColor', $any($event.target).value)"
+/>
+
+<input
+  #bgColorInput
+  type="color"
+  hidden
+  (input)="executeCommand('fontBackgroundColor', $any($event.target).value)"
+/>
+
+<!-- Editor -->
+<ckeditor
+  [editor]="Editor"
+  [config]="config()"
+  (change)="handleChange($event)"
+  (ready)="onReady($event)"
+></ckeditor>

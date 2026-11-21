@@ -1,0 +1,123 @@
+.base-details.base-details--type-i {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.base-details__left.base-details--draft {
+  width: 770px;
+}
+
+.base-details__left {
+  flex: 1;
+  min-width: 43.18%;
+  max-width: 760px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.base-details__left .base-details__column {
+  flex: 1;
+  min-width: 47.36%;
+  max-width: 360px;
+}
+
+.base-details__left.base-details--draft .base-details__column {
+  min-width: 360px;
+  width: 360px;
+}
+
+.base-details__item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0 0 24px 0;
+}
+
+.base-details__item.base-details--draft {
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 0 0 8px 0;
+}
+
+.base-details__item:last-of-type {
+  margin: 0;
+}
+
+.base-details__left
+  .base-details__column
+  .base-details__item
+  .base-details__label,
+.base-details__right
+  .base-details__column
+  .base-details__item
+  .base-details__label {
+  width: 150px;
+  font-size: 14px;
+  color: #555555;
+  line-height: 20px;
+  margin: 0px 0px 4px 0px;
+}
+
+.base-details__left
+  .base-details__column
+  .base-details__item
+  .base-details__value,
+.base-details__right
+  .base-details__column
+  .base-details__item
+  .base-details__value {
+  width: calc(100%);
+  color: #121212;
+  word-break: normal;
+  line-height: 48px;
+}
+
+.base-details__right {
+  flex: 1;
+  min-width: 43.63%;
+  max-width: 768px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-left: 40px;
+}
+
+.base-details__right .base-details__column {
+  flex: 1;
+  min-width: 46.87%;
+  max-width: 360px;
+}
+
+.dummy-toggle-switch {
+  height: 33.5px;
+  margin-bottom: 16px;
+}
+
+.attachment-link {
+  display: block;
+  text-decoration: none;
+  font-weight: 700;
+  color: #005caa;
+  margin: 0 0 8px 0;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  line-height: 1.2;
+}
+
+.base-details__label.base-details--draft {
+  width: 150px !important;
+}
+
+.base-details__value.base-details--draft {
+  width: calc(100% - 150px) !important;
+  line-height: 24px !important;
+}

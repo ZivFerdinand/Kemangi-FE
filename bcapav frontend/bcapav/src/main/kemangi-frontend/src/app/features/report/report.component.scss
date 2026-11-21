@@ -1,0 +1,268 @@
+.report-area{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 63vh;
+    border-radius: 10px ;
+    margin-top: 10px !important;
+    justify-content: space-between !important;
+}
+
+h3 {
+    color: #144E83;
+    font-weight: 700;
+}
+label {
+    font-size: small;
+    margin-top: 5px !important;
+}
+th {
+  font-weight: normal !important;
+}
+::ng-deep .is-invalid-field .ng-select-container {
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+input.is-invalid-field{
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.report-left {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    height: 100%;
+    background-color: white;
+    width: 32.5%;
+}
+.report-right {
+    padding: 20px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+
+}
+td {
+    width: 50px;
+    padding: 10px !important;
+    border-bottom: solid 1px #00335E;
+}
+th {
+    padding: 10px !important;
+    color: white;
+}
+thead {
+    
+    border-radius: 5px;
+}
+table {
+    width: 100%;
+}
+.table-area {
+    width: 100%;
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+select.form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+.result-desc-area {
+    display: flex;
+    flex-direction: row;
+    height: 100px !important;
+    width: 100%;
+    
+}
+.result-desc-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around !important;
+    width: 100%;
+}
+select.form-control {
+    appearance: auto; /* or remove appearance: none; */
+}
+.btn {
+    border-radius: 24px;
+    padding: 12px 24px;
+    border: none;
+
+}
+.main-btn {
+    margin-left: 10px;
+    background-color: #144E83;
+    color: white;
+}
+.secondary-btn {
+    background-color: #E6F3FF;
+    color: #005CAA;
+
+}
+.submit-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+
+}
+
+.btn-date {
+    width: 25px !important;
+    background: none;
+    box-shadow: none;
+    border: none;
+    align-items: center;
+    padding: none !important;
+}
+.icon {
+    
+    align-items: center;
+    margin:auto;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.input-wrapper input {
+  padding-right: 32px; /* space for the icon */
+  height: 32px;
+}
+
+.dropdown-menu {
+    padding: 20px !important;
+    top: 51px;
+    min-width: 450px;
+    z-index: 500;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.filter-btn {
+    min-width: 120px;
+    min-height: 50px;
+    border: solid 1px #005CAA;
+    color: #005CAA !important;
+    background-color: white;
+    border-radius: 24px;
+}
+.span-like-table {
+    font-weight: bold !important; min-width: 165px !important; display: inline-block;
+}
+.span-like-table-right {
+    min-width: 100px !important; 
+}
+
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+
+.custom-day.outside-day {
+  background-color: #bad3da !important;
+  opacity: 1 !important;
+  color: #99b4bc !important;
+  box-shadow: none !important;
+}
+.customDatepicker .ngb-dp-header {
+  width: 230px;
+}
+
+.customDatepicker .ngb-dp-month {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu.show {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu {
+  will-change: unset !important;
+  transform: none !important;
+}
+.ngb-dp-popup, .ngb-datepicker-popup {
+  z-index: 9999 !important;
+}
+
+
+.ngb-dp-header {
+  display: block; /* JANGAN ADA INI */
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-group input {
+  flex: 1 1 auto;
+  padding-right: 40px;
+  border-radius: 24px 0 0 24px;
+}
+
+.input-group-append {
+  display: flex;
+  align-items: center;
+}
+
+.btn-date {
+  width: 40px !important;
+  height: 40px !important;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  margin-left: -1px;
+  border-radius: 0 24px 24px 0;
+}
+
+.icon img {
+  width: 20px;
+  height: 20px;
+  // display: block;
+  margin: auto;
+}
+

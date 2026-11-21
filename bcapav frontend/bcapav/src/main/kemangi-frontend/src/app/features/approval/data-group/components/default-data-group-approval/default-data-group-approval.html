@@ -1,0 +1,220 @@
+<section class="card p-3 no-border datagroup-info mb-24">
+  <div class="mb-24">
+    <app-toggle-switch
+      [(ngModel)]="details.active_status"
+      [disabled]="true"
+    ></app-toggle-switch>
+  </div>
+
+  <div
+    class="d-flex flex-wrap align-items-start justify-content-between data-group-form-field--container"
+    style="align-items: stretch"
+  >
+    <div class="form-group-custom d-flex flex-column justify-content-between">
+      <div class="form-group d-flex justify-content-between mb-2">
+        <label for="requested_by">Requested By</label>
+        <p class="data-group-info">{{ details?.requester_name || "-" }}</p>
+      </div>
+
+      <div class="form-group d-flex justify-content-between mb-2">
+        <label for="data_group_id">Data Group ID</label>
+        <p class="data-group-info">{{ details?.data_group_id || "-" }}</p>
+      </div>
+
+      <div
+        class="form-group d-flex justify-content-between"
+        [class.mb-3]="pageType==='requested list'"
+      >
+        <label for="description">Description</label>
+        <p class="data-group-info">{{ details?.description || "-" }}</p>
+      </div>
+
+      @if(pageType==='requested list'){
+      <div class="d-flex align-items-center ps-0">
+        <img
+          width="18"
+          height="18"
+          [src]="
+              details.dynamic_watch_list
+                ? './assets/img/ic-checkbox-gray-checked.svg'
+                : './assets/img/ic-checkbox-gray-unchecked.svg'
+            "
+          alt="checked all"
+        />
+
+        <label class="form-check-label" for="dynamic_watchlist"
+          >Dynamic Watchlist</label
+        >
+      </div>
+      }
+    </div>
+    <div class="form-group-custom d-flex flex-column justify-content-between">
+      <div class="form-group d-flex justify-content-between mb-2">
+        <label for="requested_dt">Requested Date</label>
+        <p class="data-group-info">
+          {{ details?.request_date ? (details?.request_date | date :
+          "dd-MMM-yyyy") : "-" }}
+        </p>
+      </div>
+
+      <div class="form-group d-flex justify-content-between mb-2">
+        <label for="data_group_name">Data Group Name</label>
+        <p class="data-group-info">{{ details?.name || "-" }}</p>
+      </div>
+
+      @if(pageType==='requested list'){
+      <div class="form-group d-flex justify-content-between">
+        <label for="pending_status">Status</label>
+        <div class="data-group-info">
+          <div class="approval-status-wrapper">
+            <div
+              class="approval-status-label"
+              [class.approval-status-label--approved]="
+                  details?.approval_status === 'APPROVED'
+                "
+              [class.approval-status-label--rejected]="
+                  details?.approval_status === 'REJECTED'
+                "
+              [class.approval-status-label--pending]="
+                  details?.approval_status === 'PENDING'
+                "
+            >
+              {{ (details?.approval_status || "-") | capitalize }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      }
+
+      <!-- //// -->
+
+      @if(pageType!=='requested list'){
+      <div class="d-flex align-items-center ps-0">
+        <img
+          width="18"
+          height="18"
+          [src]="
+              details.dynamic_watch_list
+                ? './assets/img/ic-checkbox-gray-checked.svg'
+                : './assets/img/ic-checkbox-gray-unchecked.svg'
+            "
+          alt="checked all"
+        />
+
+        <label class="form-check-label" for="dynamic_watch_list"
+          >Dynamic Watchlist</label
+        >
+      </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section
+  class="card p-3 no-border datagroup-info"
+  [class.mb-24]="details?.request_type==='DELETE'"
+>
+  <div class="mb-24 fw-semibold fs-7-5">Detail Value</div>
+  <div class="p-3">
+    <div class="table-value__wrapper">
+      <div class="table-value__header">
+        <div class="table-value__header-row">
+          <div class="table-value__header-cell" style="width: 70px">No</div>
+          <div
+            class="table-value__header-cell"
+            style="width: calc(100% - 70px)"
+          >
+            Value
+            <div class="sort-btn-group">
+              <button type="button" class="sort-btn" (click)="onSort('asc')">
+                <img src="assets/img/ic-up.svg" />
+              </button>
+              <button type="button" class="sort-btn" (click)="onSort('dsc')">
+                <img src="assets/img/ic-down.svg" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-value__body">
+        @if(details?.detail_values?.length === 0){
+        <tr>
+          <td colspan="2" class="text-center">No data available</td>
+        </tr>
+        }
+
+        <!-- //--// -->
+
+        @if(details?.detail_values?.length > 0){ @for (item of
+        details?.detail_values; track item; let i = $index) {
+        <div class="table-value__body-row">
+          <div class="table-value__body-cell" style="width: 70px">
+            {{ i + 1 }}
+          </div>
+
+          <div class="table-value__body-cell" style="width: calc(100% - 70px)">
+            {{ item ?? "-"}}
+          </div>
+        </div>
+        } }
+      </div>
+    </div>
+  </div>
+</section>
+
+@if(details?.request_type==='DELETE'){
+<section class="card p-3 no-border datagroup-info">
+  <div class="mb-24 fw-semibold fs-7-5">Rule Relations</div>
+  <div class="p-3">
+    <app-table
+      [columns]="ruleRelationColumns"
+      [data]="ruleRelation"
+      [pageInfo]="pageInfo"
+      [pageParams]="pageParams"
+      [cellTemplates]="{
+          no: noTpl,
+          active_status: activeStatTpl
+        }"
+      (pageChange)="pageChange"
+      (sort)="sort"
+      [showPageInfo]="true"
+    />
+  </div>
+</section>
+}
+
+<section class="d-flex align-items-center justify-content-end btn-section">
+  <button type="button" class="btn-type-1 btn-white-outlined" (click)="back()">
+    Back
+  </button>
+  @if(pageType==='task list'){
+  <button type="button" class="btn-type-1 btn-reject ms-3" (click)="reject()">
+    Reject
+  </button>
+  <button type="button" class="btn-type-1 btn-approve ms-3" (click)="approve()">
+    Approve
+  </button>
+  }
+</section>
+
+<ng-template #noTableOneTpl let-row let-i="index"> {{ i + 1 }} </ng-template>
+
+<ng-template #valueTpl let-row let-i="index"> {{ row }} </ng-template>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageParams.page - 1) * pageParams.limit + i + 1 }}
+</ng-template>
+
+<ng-template #activeStatTpl let-row>
+  <div class="active-status-wrapper">
+    @if (row.active_status === true) {
+    <div class="active-status-label type-1 active-status-label--on">Active</div>
+    } @else {
+    <div class="active-status-label type-1 active-status-label--off">
+      Inactive
+    </div>
+    }
+  </div>
+</ng-template>

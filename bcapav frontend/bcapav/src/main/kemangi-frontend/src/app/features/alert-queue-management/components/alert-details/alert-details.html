@@ -1,0 +1,203 @@
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div class="approval-details approval-details--type-i">
+    <div class="approval-details__left">
+      <div class="approval-details__column approval-details__column--left">
+        <div style="margin-bottom: 16px">
+          <app-toggle-switch
+            [(ngModel)]="data.activeStatus"
+            [disabled]="true"
+          ></app-toggle-switch>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Queue Name</div>
+          <div
+            class="approval-details__value"
+            [class.highlight]="
+              (data.name !== prevData.name) &&
+             ref !== 'before' &&
+           prevData.name !== '' && data.requestType==='UPDATE'
+             "
+          >
+            {{data.name||'-'}}
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Queue Description</div>
+          <div
+            class="approval-details__value"
+            [class.highlight]="
+              (data.description !== prevData.description) &&
+             ref !== 'before' &&
+           prevData.description !== '' && data.requestType==='UPDATE'
+             "
+          >
+            {{data.description||'-'}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approval-details__divider"></div>
+
+    <ng-container
+      [ngTemplateOutlet]="type==='current'?detailCurrent:type==='requested'?detailRequested:detailTask"
+      [ngTemplateOutletContext]="{ detail: data }"
+    ></ng-container>
+  </div>
+</section>
+
+<ng-template #detailCurrent let-detail="detail">
+  <div class="approval-details__right">
+    <div class="approval-details__column approval-details__column--left">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Created By</div>
+        <div class="approval-details__value">{{detail.createdByName||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested By</div>
+        <div class="approval-details__value">{{detail.requesterName||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 By</div>
+        <div class="approval-details__value">{{detail.approver1Name||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 By</div>
+        <div class="approval-details__value">{{detail.approver2Name||'-'}}</div>
+      </div>
+    </div>
+    <div class="approval-details__column approval-details__column--right">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Created Date</div>
+        <div class="approval-details__value">
+          {{(detail.createdDt| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested Date</div>
+        <div class="approval-details__value">
+          {{(detail.requestDate| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 Date</div>
+        <div class="approval-details__value">
+          {{(detail.approval1Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 Date</div>
+        <div class="approval-details__value">
+          {{(detail.approval2Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #detailRequested let-detail="detail">
+  <div class="approval-details__right">
+    <div class="approval-details__column approval-details__column--left">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested By</div>
+        <div class="approval-details__value">{{detail.requesterName||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 By</div>
+        <div class="approval-details__value">{{detail.approver1Name||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 By</div>
+        <div class="approval-details__value">{{detail.approver2Name||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Status</div>
+        <div class="approval-details__value">
+          <div
+            class="approval-status-label"
+            [class.approval-status-label--approved]="
+                  detail.approvalStatus === 'APPROVED'
+                "
+            [class.approval-status-label--rejected]="
+                  detail.approvalStatus === 'REJECTED'
+                "
+            [class.approval-status-label--pending]="
+                  detail.approvalStatus === 'PENDING'
+                "
+          >
+            {{ (detail.approvalStatus || "-") | capitalize }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="approval-details__column approval-details__column--right">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested Date</div>
+        <div class="approval-details__value">
+          {{(detail.requestDate| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 Date</div>
+        <div class="approval-details__value">
+          {{(detail.approval1Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 Date</div>
+        <div class="approval-details__value">
+          {{(detail.approval2Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Rejection Notes</div>
+        <div class="approval-details__value">{{detail.rejectionNote||'-'}}</div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #detailTask let-detail="detail">
+  <div class="approval-details__right">
+    <div class="approval-details__column approval-details__column--left">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested By</div>
+        <div class="approval-details__value">{{detail.requesterName||'-'}}</div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 By</div>
+        <div class="approval-details__value">{{detail.approver1Name||'-'}}</div>
+      </div>
+    </div>
+    <div class="approval-details__column approval-details__column--right">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested Date</div>
+        <div class="approval-details__value">
+          {{(detail.requestDate| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 Date</div>
+        <div class="approval-details__value">
+          {{(detail.approval1Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

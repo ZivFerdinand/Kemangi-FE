@@ -1,0 +1,301 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div
+    class="d-flex align-items-center justify-content-between mb-24 position-relative"
+  >
+    <app-data-group-current-filter
+      [users]="users"
+      [dataGroups]="dataGroups"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="!createPermission"
+      (click)="navigateTo('/home/rule-management/data-group/create')"
+      tooltipClass="custom-tooltip"
+      placement="start"
+      [ngbTooltip]="!createPermission ? `You don't have permission` : null"
+    >
+      <img src="/assets/img/ic-plus.svg" alt="add" /> Create New Data Group
+    </button>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          dataGroupId: dataGroupIdTpl,
+          name: name,
+          description: descTpl,
+          ruleCount: ruleCountTpl,
+          lastUpdatedByName: lastUpdatedByNameTpl,
+          lastApproval1Name: lastApproval1NameTpl,
+          lastApproval2Name: lastApproval2NameTpl,
+          lastUpdatedDt: lastUpdatedDtTpl,
+          lastApproval1Dt: lastApproval1DtTpl,
+          lastApproval2Dt: lastApproval2DtTpl,
+          activeStatus: activeStatusTpl,
+          action: actionBtnsTpl,
+          dynamicWatchList: dynamicWatchListTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #dataGroupIdTpl let-row>
+  <div class="truncate">{{ row.dataGroupId ? row.dataGroupId : "-" }}</div>
+</ng-template>
+
+<ng-template #name let-row>
+  <div class="truncate">{{ row.name ? row.name : "-" }}</div>
+</ng-template>
+
+<ng-template #lastUpdatedByNameTpl let-row>
+  <div class="truncate">
+    {{ row.lastUpdatedByName ? row.lastUpdatedByName : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval1NameTpl let-row>
+  <div class="truncate">
+    {{ row.lastApproval1Name ? row.lastApproval1Name : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval2NameTpl let-row>
+  <div class="truncate">
+    {{ row.lastApproval2Name ? row.lastApproval2Name : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastUpdatedDtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastUpdatedDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval1DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval1Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval2DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval2Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #activeStatusTpl let-row>
+  <div
+    class="active-status-label"
+    [class.active-status-label--on]="row?.activeStatus"
+    [class.active-status-label--off]="!row?.activeStatus"
+  >
+    {{ row?.activeStatus ? "On" : "Off" }}
+  </div>
+</ng-template>
+
+<ng-template #noTplRule let-row let-i="index">
+  {{ (pageQueryRuleRelations.page - 1) * pageQueryRuleRelations.limit + i + 1 }}
+</ng-template>
+
+<ng-template #descTpl let-row>
+  <div class="truncate">
+    {{ row.description || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #ruleCountTpl let-row>
+  <button
+    type="button"
+    class="rule-relation"
+    (click)="open(content, row?.dataGroupId)"
+  >
+    {{ row?.ruleCount }}
+  </button>
+</ng-template>
+
+<ng-template #dynamicWatchListTpl let-row>
+  @if (row?.dynamicWatchList) {
+    <img src="./assets/img/ic-checkbox-dark-gray-checked.svg" alt="dynamic" />
+  } @else {
+    <div></div>
+  }
+</ng-template>
+
+<ng-template #actionBtnsTpl let-row>
+  <div class="action-buttons">
+    <a
+      [routerLink]="['/home/rule-management/data-group', row?.id]"
+      class="action-buttons__item me-2"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+
+    <!-- --//-- -->
+
+    @if (editPermission) {
+      @if (row.hasPendingRequest || row.hasPendingRuleRelation) {
+        <div
+          class="action-buttons__item me-2"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Data Group has a pending request'
+              : row?.hasPendingRuleRelation
+                ? 'Data Group has a pending rule approval'
+                : 'Loading ...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/rule-management/data-group', row?.id, 'edit']"
+          [queryParams]="{ from: 'current' }"
+          class="action-buttons__item me-2"
+        >
+          <img src="./assets/img/ic-pen-blue.svg" alt="edit" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item me-2"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+      </div>
+    }
+
+    <!-- --//-- -->
+
+    @if (deletePermission) {
+      @if (
+        row.hasPendingRequest ||
+        row.hasPendingRuleRelation ||
+        row.hasActiveRuleRelation
+      ) {
+        <div
+          class="action-buttons__item"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Data Group has a pending request'
+              : row?.hasPendingRuleRelation
+                ? 'Data Group has a pending rule approval'
+                : row.hasActiveRuleRelation
+                  ? 'Data Group has relation to other(s) rule. Cannot be edited'
+                  : 'Loading ...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/rule-management/data-group', row?.id, 'delete']"
+          class="action-buttons__item"
+        >
+          <img src="./assets/img/ic-garbage-blue.svg" alt="delete" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #activeStatNewTpl let-row>
+  <div class="active-status-wrapper" style="min-width: 81px">
+    <div
+      class="active-status-label"
+      [class.active-status-label--on]="row.activeStatus"
+      [class.active-status-label--off]="!row.activeStatus"
+    >
+      {{ row.activeStatus ? "Active" : "Inactive" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div>Data Group Name:</div>
+      <div class="ms-3">{{ dataGroupNameRelation }}</div>
+    </div>
+    <div class="p-3">
+      <app-table
+        [columns]="columnsRuleRelation"
+        [data]="tableDataRuleRelations"
+        [pageInfo]="pageInfoRuleRelations"
+        [pageParams]="pageQueryRuleRelations"
+        [cellTemplates]="{
+          no: noTplRule,
+          activeStatus: activeStatNewTpl,
+        }"
+        (pageChange)="handlePageRuleRelationChange($event)"
+        (sort)="handleSortChangeRuleRelations($event.direction, $event.key)"
+        (limitChange)="handleLimitChangeRuleRelations($event)"
+        [showLimitSize]="true"
+      ></app-table>
+    </div>
+  </div>
+</ng-template>

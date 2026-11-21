@@ -1,0 +1,60 @@
+<div
+  class="d-flex align-items-center justify-content-between"
+  [style.margin-top.px]="25"
+>
+  <div class="page-info">
+    Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ pageInfo.totalElements
+    }} entries
+  </div>
+
+  <div class="d-flex align-items-center">
+    <ngb-pagination
+      class="table-pagination"
+      [collectionSize]="pageInfo?.totalElements"
+      [(page)]="pageParams.page"
+      [pageSize]="pageParams.limit"
+      [maxSize]="5"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange($event)"
+    >
+      >
+
+      <ng-template ngbPaginationFirst>
+        <img
+          src="assets/img/ic-chevron-double-left.svg"
+          alt="first"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationPrevious>
+        <img
+          src="assets/img/ic-chevron-left.svg"
+          alt="prev"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationNext>
+        <img
+          src="assets/img/ic-chevron-right.svg"
+          alt="next"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationLast>
+        <img
+          src="assets/img/ic-chevron-double-right.svg"
+          alt="last"
+          width="16"
+          height="16"
+        /> </ng-template
+    ></ngb-pagination>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+export const FRAUD_TYPE_TASK_LIST_PAGE_QUERY_INIT = {
+  limit: 10,
+  page: 1,
+  sort: 'requestDate',
+  sortDir: 'asc',
+  taskList: true,
+  fraudTypeId: [],
+  fraudType: '',
+  description: '',
+  requesterId: [],
+  requestDateFrom: '',
+  requestDateTo: '',
+  requestType: '',
+  approvalStatus: 'PENDING',
+  approverId: [],
+  approvalDateFrom: '',
+  approvalDateTo: '',
+};
+
+export const FRAUD_TYPE_APPROVAL_LIST_DISPLAY_STRUCT = [
+  { label: 'Fraud Type', value: null },
+  { label: 'Description', value: null },
+  { label: 'Requested By', value: null },
+  { label: 'Requested Date', value: null },
+  { label: 'Reviewed By', value: null },
+  { label: 'Reviewed Date', value: null },
+  { label: 'Action Type', value: null },
+  { label: 'Approval Status', value: null },
+];
+
+export const FRAUD_TYPE_APPROVAL_LIST_FILTER_DEFAULT = {
+  fraudType: '',
+  description: '',
+  requesterId: null,
+  approverId: null,
+  requestDateFrom: '',
+  requestDateTo: '',
+  approvalDateFrom: '',
+  approvalDateTo: '',
+  requestType: '',
+  approvalStatus: '',
+};
+
+export const FRAUD_TYPE_APPROVAL_DETAILS_DEFAULT = {
+  activeStatus: false,
+  apprId: '',
+  approvalDate: '',
+  approvalStatus: '',
+  approverId: '',
+  approverName: '',
+  description: '',
+  fraudType: '',
+  fraudTypeId: '',
+  lastApprId: '',
+  rejectionNote: '',
+  requestDate: '',
+  requestType: '',
+  requesterId: '',
+  requesterName: '',
+};
+
+export const FRAUD_TYPE_APPROVAL_PAGE_QUERY_FILTER_INIT = {
+  fraudType: '',
+  description: '',
+  requesterId: [],
+  approverId: [],
+  requestDateFrom: '',
+  requestDateTo: '',
+  approvalDateFrom: '',
+  approvalDateTo: '',
+  requestType: '',
+  approvalStatus: '',
+};
+
+export const FRAUD_TYPE_APPROVAL_LIST_FILTER_DISPLAY_TEMP_INIT = {
+  fraudType: null,
+  description: null,
+  requestedBy: null,
+  approvedBy: null,
+  requestDateFrom: null,
+  requestDateTo: null,
+  approvalDateFrom: null,
+  approvalDateTo: null,
+  approvalStatus: null,
+  requestType: null,
+};
+
+export const FRAUD_TYPE_REQUESTED_LIST_PAGE_QUERY_INIT = {
+  limit: 10,
+  page: 1,
+  sort: '',
+  sortDir: '',
+  taskList: false,
+  fraudTypeId: [],
+  fraudType: '',
+  description: '',
+  requesterId: [],
+  requestDateFrom: '',
+  requestDateTo: '',
+  requestType: '',
+  approvalStatus: '',
+  approverId: [],
+  approvalDateFrom: '',
+  approvalDateTo: '',
+};

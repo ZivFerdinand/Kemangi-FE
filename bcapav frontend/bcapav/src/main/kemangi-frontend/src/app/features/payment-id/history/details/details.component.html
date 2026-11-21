@@ -1,0 +1,128 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-payment-id-details-info [data]="details"></app-payment-id-details-info>
+  <div class="card no-border payment-id-products">
+    @if (details?.productList.includes("Account")) {
+      <payment-details-product
+        [failedCount]="details?.actionAccountFailedCount ?? 0"
+        [name]="productAccount.name"
+        [columns]="productAccount.columns"
+        [tableData]="productAccount.tableData"
+        [pageInfo]="productAccount.pageInfo"
+        (handleData)="handleProduct('account', $event)"
+      ></payment-details-product>
+    }
+
+    <!-- === -->
+
+    @if (
+      details?.productList.includes("Credit Card") ||
+      details?.productList.includes("Credit")
+    ) {
+      <payment-details-product
+        [failedCount]="details?.actionCreditCardFailedCount ?? 0"
+        [name]="productCC.name"
+        [columns]="productCC.columns"
+        [tableData]="productCC.tableData"
+        [pageInfo]="productCC.pageInfo"
+        (handleData)="handleProduct('cc', $event)"
+      ></payment-details-product>
+    }
+
+    <!-- === -->
+
+    @if (details?.productList.includes("Sakuku")) {
+      <payment-details-product
+        [failedCount]="details?.actionSakukuFailedCount ?? 0"
+        [name]="productSakuku.name"
+        [columns]="productSakuku.columns"
+        [tableData]="productSakuku.tableData"
+        [pageInfo]="productSakuku.pageInfo"
+        (handleData)="handleProduct('sakuku', $event)"
+      ></payment-details-product>
+    }
+    <div></div>
+    <div class="full-width">
+      <div class="history-header mb-24">
+        <h2 class="history-title">History</h2>
+      </div>
+      <div>
+        <app-table
+          [columns]="columnsHistory"
+          [data]="dataHistory"
+          [showPageInfo]="true"
+          [cellTemplates]="{
+            status: statusTpl,
+            product: productTpl,
+          }"
+        />
+      </div>
+    </div>
+  </div>
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>
+
+<ng-template #statusTpl let-row let-i="index">
+  <div class="approval-status-wrapper">
+    <div
+      class="approval-status-label"
+      [class.approval-status-label--approved]="row.status === 'Success'"
+      [class.approval-status-label--rejected]="row.status === 'Failed'"
+    >
+      {{ row.status }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #productTpl let-row let-i="index">
+  <div class="action-buttons justify-content-center">
+    <button
+      type="button"
+      class="action-buttons__item"
+      (click)="open(content, row.id)"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex justify-content-end">
+      <button type="button" (click)="close()">X</button>
+    </div>
+
+    <div class="d-flex align-items-center" style="margin-bottom: 8px">
+      <h3 class="m-0">Detail Product</h3>
+    </div>
+    <div>
+      <app-table
+        [columns]="columnsDetailProduct"
+        [data]="dataProductList"
+        [cellTemplates]="{
+          actionStatus: actionStatusTpl,
+        }"
+        [showPageInfo]="true"
+      ></app-table>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #actionStatusTpl let-row let-i="index">
+  <div class="approval-status-wrapper">
+    <div
+      class="approval-status-label"
+      [class.approval-status-label--approved]="row.actionStatus === 'Success'"
+      [class.approval-status-label--rejected]="row.actionStatus === 'Failed'"
+    >
+      {{ row.actionStatus }}
+    </div>
+  </div>
+</ng-template>

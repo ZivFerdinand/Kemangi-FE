@@ -1,0 +1,158 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <section class="card no-border card-pavo-default-type-ii">
+    <div
+      class="d-flex flex-column flex-wrap justify-content-between"
+      style="align-items: stretch"
+    >
+      <div class="mb-24">
+        <app-toggle-switch
+          [(ngModel)]="details().activeStatus"
+        ></app-toggle-switch>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">Template ID</label>
+        <div class="data_info email-tpl-info">
+          {{ details().templateId === "" ? "-" : details().templateId }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">Template Type</label>
+        <div class="data_info email-tpl-info">
+          {{ details().templateType === "" ? "-" : details().templateType }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-center"
+        style="margin-bottom: 8px"
+      >
+        <label for="note" class="mb-0 data_label">Template Name</label>
+        <div class="data_info email-tpl-info">
+          {{ details().templateName === "" ? "-" : details().templateName }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">Product</label>
+        <div class="data_info email-tpl-info">
+          {{ details().productType === "" ? "-" : details().productType }}
+        </div>
+      </div>
+
+      <div class="form-item d-flex align-items-start">
+        <label for="description" class="mb-0 data_label">Event Type</label>
+        <div class="data_info email-tpl-info">
+          {{ details().eventType === "" ? "-" : details().eventType }}
+        </div>
+      </div>
+
+      <div class="email-template-details-separator"></div>
+
+      <div
+        class="fw-bold email-template-details--subtitle"
+        style="margin-bottom: 8px"
+      >
+        Template Detail
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">To</label>
+        <div class="data_info email-tpl-info">
+          {{ details().emailTo?.length === 0 ? "-" : details().emailTo }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">CC</label>
+        <div class="data_info email-tpl-info">
+          {{ details().emailCc?.length === 0 ? "-" : details().emailCc }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">BCC</label>
+        <div class="data_info email-tpl-info">
+          {{ details().emailBcc?.length === 0 ? "-" : details().emailBcc }}
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="description" class="mb-0 data_label">Subject</label>
+        <div class="data_info email-tpl-info">
+          {{ details().emailSubject === "" ? "-" : details().emailSubject }}
+        </div>
+      </div>
+
+      <div class="form-item d-flex align-items-start">
+        <label for="description" class="mb-0 data_label">Body Email</label>
+
+        <div class="data_info email-tpl-info">
+          @if (details().emailBody === "") {
+            <div>-</div>
+          } @else {
+            <div [innerHTML]="details().emailBody"></div>
+          }
+        </div>
+      </div>
+
+      <div
+        class="form-item d-flex align-items-start"
+        style="margin-bottom: 8px"
+      >
+        <label for="parameter" class="mb-0 data_label">Parameter</label>
+        <div class="data_info email-tpl-info">
+          {{
+            details().listParameters?.length
+              ? details().listParameters?.join("&&")
+              : "-"
+          }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined me-3"
+      (click)="back()"
+    >
+      Back
+    </button>
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      (click)="
+        details().activeStatus
+          ? handleDeleteImmediately()
+          : handleDeleteConfirmation()
+      "
+    >
+      Submit
+    </button>
+  </section>
+</app-content-layout>

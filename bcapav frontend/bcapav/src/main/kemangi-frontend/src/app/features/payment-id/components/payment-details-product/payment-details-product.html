@@ -1,0 +1,46 @@
+<div ngbAccordion class="payment-id-product">
+  <div ngbAccordionItem [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        {{name||'lorem ipsum'}}
+        <span
+          class="label"
+          [class.success]="failedCount===0"
+          [class.failed]="failedCount>0"
+        >
+          {{ failedCount>0?'Failed':'Success'}}
+        </span>
+      </button>
+    </h2>
+
+    <div ngbAccordionCollapse>
+      <div ngbAccordionBody>
+        <ng-template>
+          <app-payment-id-sticky-table
+            [showPageSize]="false"
+            [showPageInfo]="true"
+            [columns]="columns"
+            [data]="tableData"
+            [pageInfo]="pageInfo"
+            [pageQuery]="pageQuery"
+            [initialPinnedLeft]="columnsPinned"
+            [cellTemplates]="{
+              status:statusTpl
+            }"
+            (pageChange)="handlePageChange($event)"
+          />
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #statusTpl let-row let-i="index">
+  <div
+    class="status-label"
+    [class.success]="row.status==='Success'||row.status==='SUCCESS'"
+    [class.failed]="row.status==='Failed'"
+  >
+    {{row.status}}
+  </div>
+</ng-template>

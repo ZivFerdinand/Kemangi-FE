@@ -1,0 +1,167 @@
+#ruleTable {
+  table-layout: auto;
+  width: max-content;
+  min-width: 100%;
+  margin-bottom: 0;
+}
+
+#ruleTable th,
+#ruleTable td {
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+  font-size: 14px;
+  color: #555555;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+#ruleTable thead {
+  width: 100%;
+}
+
+#ruleTable thead tr {
+  // background-color: #144e83;
+  border-bottom-color: #ffffff;
+  // height: 52px;
+  // width: 100% !important;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+}
+
+#ruleTable thead tr th {
+  background-color: #144e83;
+  border-bottom-color: #ffffff;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  // height: 100%;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  padding: 16px 12px;
+}
+
+// #ruleTable thead tr th:first-child {
+//   // border-top-left-radius: 6px;
+//   // border-bottom-left-radius: 6px;
+// }
+
+// #ruleTable thead tr th:last-child {
+//   // border-top-right-radius: 6px;
+//   // border-bottom-right-radius: 6px;
+// }
+
+#ruleTable tbody tr td {
+  border-bottom-color: #144e83;
+  padding: 16px 12px;
+}
+
+#ruleTable tbody tr.row-highlight td {
+  background-color: #ffeed3;
+}
+
+#ruleTable tbody tr td.custom-padding-i {
+  padding: 0;
+}
+
+#ruleTable tbody tr td.custom-style-i {
+  padding: 0;
+  vertical-align: top;
+}
+
+#ruleTable tbody tr td:has(.highlight) {
+  background-color: #ffeed3;
+}
+
+::ng-deep .pagination {
+  margin: auto;
+}
+
+::ng-deep .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .table-pagination .pagination .page-item.active .page-link {
+  background-color: #005caa;
+  color: white;
+  border: none;
+}
+
+::ng-deep .table-pagination .page-link {
+  color: #226a69;
+  border-radius: 8px;
+  padding: 6px 12px;
+  border: none;
+  font-size: 14px;
+}
+
+::ng-deep .table-pagination .page-link:hover {
+  background-color: #005caa;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+::ng-deep .disabled > .page-link,
+.page-link.disabled {
+  pointer-events: none;
+  background-color: #ffffff;
+  border: none;
+}
+
+#pageSize {
+  height: 40px;
+}
+
+.form-select {
+  border: 1px solid#c4c4c4;
+}
+
+.form-select:focus {
+  box-shadow: none;
+  border: 1px solid#c4c4c4;
+}
+
+.sort-icon {
+  margin-left: 6px;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.page-info {
+  font-size: 14px;
+  line-height: 20px;
+  color: #868e96;
+}
+
+.group-header {
+  background-color: #00335e !important;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.child-first {
+  border-left: 1px solid #ffffff;
+}
+
+.child-last {
+  border-right: 1px solid #ffffff;
+}

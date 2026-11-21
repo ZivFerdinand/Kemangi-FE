@@ -1,0 +1,1950 @@
+@let pTf = pipelineTempForm.pipelineType;
+<!-- == -->
+@let pfoc = pipelineForm.pipelineCustomData;
+<!-- == -->
+@let pf = pipelineForm;
+<!-- == -->
+@let pfD = pf.pipelineDetails;
+
+<div [class.d-none]="!hasPipeline" class="card p-3 border-pipeline">
+  <div class="fw-semibold section-title mb-24">Pipeline Summary</div>
+
+  <div>
+    @if (mode==='DELETE'){
+    <app-detail-rule-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-detail-rule-tab
+    >} @else{<app-sub-rule-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+      [addTabFn]="addPipeline.bind(this)"
+      [deleteTabFn]="removePipeline.bind(this)"
+      [cloneTabFn]="clonePipeline.bind(this)"
+    ></app-sub-rule-tab
+    >}
+  </div>
+  <div [class.mb-24]="mode!=='DELETE'&&pf.pipelineType!=='CUSTOM'">
+    @if(pipelineForm.skipIfExists){
+    <div class="skip-if-exist-form">
+      SKIP IF EXIST: <span>{{pipelineForm.varName||'-'}}</span>
+    </div>
+    }
+
+    <!-- // -->
+
+    @if(tableData.length > 0) {
+    <app-pipeline-table-v2
+      [columns]="columnsTable"
+      [data]="tableData"
+      [cellTemplates]="{
+          no: noTpl,
+          function:functionDTpl,
+          parameter:parameterDTpl,
+          parameterValue:parameterValueDTpl,
+          operator:operatorDTpl,
+          value:valueDTpl,
+          setToVar:setToVarDTpl,
+          fieldEventType:fieldEventTypeDTpl,
+          pipelineOutcome1:outcome1DTpl,
+          pipelineOutcome2:outcome2DTpl,
+          empty:emptyTpl,
+          field:fieldDTpl
+        }"
+      [showPageInfo]="false"
+      [pagination]="false"
+    />
+    }
+  </div>
+
+  @if(mode!=='DELETE'){
+  <div class="d-flex justify-content-start" [class.mb-24]="pfoc">
+    <button
+      type="button"
+      class="btn-type-1 btn-light-blue me-3 btn-pipeline-action fw-bold"
+      (click)="open(contentPipeline)"
+    >
+      {{ (pfD.length > 0)||(pfoc) ? 'Edit Pipeline' : 'Add Pipeline' }}
+    </button>
+  </div>
+
+  }
+
+  <!-- // -->
+
+  @if(pfoc){
+  <ng-container *ngTemplateOutlet="pipelineCustomSummary"></ng-container>
+  }
+</div>
+
+<ng-template #contentPipeline let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div class="fw-semibold">Pipeline</div>
+    </div>
+    <div class="mb-24">
+      <div class="d-flex justify-content-start align-items-stretch mb-24">
+        <div class="form-item form-group-custom">
+          <label for="name">Type</label>
+
+          <div class="ng-select-custom">
+            <ng-select
+              #selectPipelineType
+              [items]="dropdownPipelineType"
+              bindLabel="pipelineType"
+              bindValue="pipelineType"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Type"
+              (change)="updatePipeline('pipelineType', $event?.pipelineType)"
+              [ngModel]="pipelineTempForm.pipelineType"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.pipelineType }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <div class="d-flex align-items-center">
+                    <span style="margin-right: 10px"
+                      >{{ item.pipelineType }}</span
+                    >
+                    <div
+                      placement="start"
+                      tooltipClass="custom-tooltip"
+                      placement="end"
+                      ngbTooltip="loading"
+                      [ngbTooltip]="item.description"
+                      container="body"
+                    >
+                      <img src="assets/img/ic-info.svg" alt="info" />
+                    </div>
+                  </div>
+
+                  <img
+                    [class.d-none]="
+                        pipelineTempForm.pipelineType !== item.pipelineType
+                        "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        @if(pTf!=='CUSTOM'){
+        <div
+          class="form-group-custom d-flex skip-if-exists-container"
+          [class.align-items-center]="!pipelineTempForm.skipIfExists && !varNameModel.invalid"
+          [class.align-items-start]="pipelineTempForm.skipIfExists && varNameModel.invalid &&
+            varNameModel.touched"
+          style="margin-left: 50px"
+        >
+          <div class="d-flex align-items-center skip-if-exists-checkbox">
+            <input
+              id="skipIfExist"
+              class="form-check-input custom-checkbox"
+              type="checkbox"
+              style="margin-top: 0px"
+              [checked]="pipelineTempForm.skipIfExists"
+              (change)="updatePipeline('skipIfExists', $event.target.checked)"
+              [disabled]="dropdownSetToVarPipeline.length===0"
+            />
+
+            <label
+              class="form-check-label"
+              for="skipIfExist"
+              style="width: 92px; font-size: 14px; margin-right: 8px"
+              >SKIP IF EXIST:</label
+            >
+          </div>
+
+          <div class="form-item form-group-custom">
+            <div class="ng-select-custom">
+              <ng-select
+                #selectSetToVar
+                [items]="dropdownSetToVarPipeline"
+                bindLabel="label"
+                bindValue="value"
+                [multiple]="false"
+                [hideSelected]="false"
+                searchPlaceholder="Choose..."
+                placeholder="VAR Name"
+                (change)="updatePipeline('varName', $event?.value)"
+                [(ngModel)]="pipelineTempForm.varName"
+                [ngModelOptions]="{ standalone: true }"
+                [disabled]="!pipelineTempForm.skipIfExists"
+                [required]="pipelineTempForm.skipIfExists?true:false"
+                #varNameModel="ngModel"
+                [class.is-invalid]="
+                  pipelineTempForm.skipIfExists &&
+                  varNameModel?.invalid &&
+                  ( varNameModel?.dirty ||
+                    varNameModel?.touched)
+                "
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  {{ item.label }}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  <div
+                    class="d-flex w-100 justify-content-between align-items-center"
+                  >
+                    <span>{{ item.label }}</span>
+                    <img
+                      [class.d-none]="
+                    pipelineTempForm.varName !== item.value
+                  "
+                      src="assets/img/ic-check-black.svg"
+                      alt="selected"
+                    />
+                  </div>
+                </ng-template>
+              </ng-select>
+              <span class="custom-arrow">
+                <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+              </span>
+            </div>
+            @if( pipelineTempForm.skipIfExists && varNameModel.invalid &&
+            varNameModel.touched){
+            <div class="invalid-input">VAR Name is required</div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- // -->
+
+      @if (pTf&&pTf!=='CUSTOM') {
+
+      <app-pipeline-table-v2
+        [columns]="columnsTableModal"
+        [data]="pipelineDetailsForm"
+        [cellTemplates]="{
+          no: noTpl,
+          function:functionTpl,
+          parameter:parameterTpl,
+          parameterValue:parameterValueTpl,
+          operator:operatorTpl,
+          outcome1:outcome1Tpl,
+          outcome2:outcome2Tpl,
+          value:valueTpl,
+          setToVar:setToVarTpl,
+          fieldEventType:fieldEventTypeTpl,
+          pipelineOutcome1:outcome1Tpl,
+          pipelineOutcome2:outcome2Tpl,
+          empty:emptyTpl,
+          field:fieldTpl
+        }"
+        [showPageInfo]="false"
+        [pagination]="false"
+      ></app-pipeline-table-v2>
+
+      <button
+        style="margin-top: 8px"
+        type="button"
+        class="btn-type-1 btn-light-blue fw-bold"
+        (click)="addPipelineDetail()"
+      >
+        Add
+      </button>
+      }
+
+      <!-- -=- -->
+
+      @if (pTf==='CUSTOM') {
+      <ng-container *ngTemplateOutlet="pipelineCustomFillForm"></ng-container>
+      }
+
+      <!-- <ng-container *ngTemplateOutlet="pipelineCustomFillForm"></ng-container> -->
+    </div>
+    <div class="d-flex align-items-center justify-content-end">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue fw-bold"
+        style="margin-right: 11px"
+        (click)="cancel()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue fw-bold"
+        [disabled]="isInvalid()"
+        (click)="submit()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noTpl let-row let-i="index"> {{ i + 1 }} </ng-template>
+
+<ng-template #functionTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div
+      class="pipeline-table-multi-item__item"
+      [class.flex-column]="pTf!=='GETHISTORICAL'"
+      [class.align-items-start]="pTf!=='GETHISTORICAL'"
+    >
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="pTf==='AGGREGATION'?dropdownsFunctionTypeB:dropdownFunctions"
+          bindLabel="functionName"
+          bindValue="functionName"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Function"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.function"
+          (change)="updatePipelineDetail('function', $event, row.uiId)"
+          #functionModel="ngModel"
+          [required]="pTf!=='GETHISTORICAL'"
+          [class.is-invalid]="
+                  functionModel?.invalid &&
+                  ( functionModel?.dirty ||
+                    functionModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.functionName }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.functionName }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+
+      @if(pTf!=='GETHISTORICAL'&&functionModel.invalid &&
+      functionModel.touched){
+      <div class="invalid-input">Function is required</div>
+      }
+
+      <!-- == -->
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #parameterTpl let-row let-i="index">
+  @if(pTf==='AGGREGATION' ){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Group By</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+
+  }
+  <!-- === -->
+
+  @else if(pTf==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Balance Timing/Position</div>
+    <div class="pipeline-table-multi-item__item">Account Number</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Historical Table</div>
+    <div class="pipeline-table-multi-item__item">Group Key</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Operations</div>
+    <div class="pipeline-table-multi-item__item">Key</div>
+    <div class="pipeline-table-multi-item__item">Value</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Previous Context</div>
+    <div class="pipeline-table-multi-item__item">Details of Data</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Field Event Type</div>
+    <div class="pipeline-table-multi-item__item">Operation</div>
+    <div class="pipeline-table-multi-item__item">Data Group</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #parameterValueTpl let-row let-i="index">
+  @if(pTf==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          bindValue="parameterValue"
+          [multiple]="true"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Group By"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.groupBy"
+          (ngModelChange)="updatePipelineDetail('groupBy', $event, row.uiId)"
+          #groupByModel="ngModel"
+          [required]="false"
+          [class.is-invalid]="
+                  groupByModel?.invalid &&
+                  ( groupByModel?.dirty ||
+                    groupByModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span class="ng-value-label"> {{ item?.parameterValue }} </span>
+            <span
+              class="ng-value-icon right"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+            /></span>
+          </ng-template>
+          <!-- <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template> -->
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+              <img
+                [class.d-none]="!row.groupBy.includes(item.parameterValue)"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(groupByModel.invalid && groupByModel.touched){
+      <div class="invalid-input">Group By is required</div>
+      }
+    </div>
+
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <div class="ng-select-parameter">
+        <input
+          class="input-value"
+          type="number"
+          placeholder="Time Value"
+          min="0"
+          [(ngModel)]="row.period"
+          (change)="updatePipelineDetail('period', $event, row.uiId)"
+          #periodModel="ngModel"
+          [class.is-invalid]="
+                  periodModel?.invalid &&
+                  ( periodModel?.dirty ||
+                    periodModel?.touched)
+                "
+          required
+        />
+
+        @if(periodModel.invalid && periodModel.touched){
+        <div class="invalid-input">Time Value is required</div>
+        }
+      </div>
+
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="timeUnits"
+            bindLabel="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Time Unit"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.unit"
+            (change)="updatePipelineDetail('unit', $event, row.uiId)"
+            #unitModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  unitModel?.invalid &&
+                  ( unitModel?.dirty ||
+                    unitModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(unitModel.invalid && unitModel.touched){
+        <div class="invalid-input">Time Unit is required</div>
+        }
+      </div>
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="ttlTypes"
+            bindLabel="label"
+            bindValue="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Type"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.ttlType"
+            (change)="updatePipelineDetail('ttlType', $event, row.uiId)"
+            #ttlTypeModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  ttlTypeModel?.invalid &&
+                  ( ttlTypeModel?.dirty ||
+                    ttlTypeModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(ttlTypeModel.invalid && ttlTypeModel.touched){
+        <div class="invalid-input">TTL Type is required</div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+  <!-- === -->
+
+  @else if(pTf==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="balanceTimings"
+          bindLabel="value"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Balance Timing/Position"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.CONTEXT"
+          (change)="updatePipelineDetail('context', $event.value, row.uiId)"
+          #balanceTimingModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  balanceTimingModel?.invalid &&
+                  ( balanceTimingModel?.dirty ||
+                    balanceTimingModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.label }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.label }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(balanceTimingModel.invalid && balanceTimingModel.touched){
+      <div class="invalid-input">Balance Timing/Position is required</div>
+      }
+    </div>
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Account Number"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.ACCOUNTNUMBER"
+          (change)="updatePipelineDetail('accountnumber', $event.parameterValue, row.uiId)"
+          #accountNumberModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  accountNumberModel?.invalid &&
+                  ( accountNumberModel?.dirty ||
+                    accountNumberModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(accountNumberModel.invalid && accountNumberModel.touched){
+      <div class="invalid-input">Account Number is required</div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownHistorical"
+          bindLabel="tableHistorical"
+          bindValue="tableHistorical"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Historical Table"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.CONTEXT"
+          (change)="updatePipelineDetail('context', $event.tableHistorical, row.uiId)"
+          #historicalTableModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  historicalTableModel?.invalid &&
+                  ( historicalTableModel?.dirty ||
+                    historicalTableModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.tableHistorical }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.tableHistorical }}</span>
+              <img
+                [class.d-none]="row.criteria.CONTEXT !== item.tableHistorical"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(historicalTableModel.invalid && historicalTableModel.touched){
+      <div class="invalid-input">Historical Table is required</div>
+      }
+    </div>
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Group Key"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.KEY"
+          (change)="updatePipelineDetail('key', $event.parameterValue, row.uiId)"
+          #groupKeyModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  groupKeyModel?.invalid &&
+                  ( groupKeyModel?.dirty ||
+                    groupKeyModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(groupKeyModel.invalid && groupKeyModel.touched){
+      <div class="invalid-input">Group Key is required</div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownRule"
+          bindLabel="ruleId"
+          bindValue="ruleId"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Previous Context"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.PREVIOUSCONTEXT"
+          (change)="updatePipelineDetail('previousContext', $event.ruleId, row.uiId)"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.ruleId }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.ruleId}}</span>
+              <img
+                [class.d-none]="row.criteria.PREVIOUSCONTEXT !== item.ruleId"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          bindValue="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Details of Data"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.CONTEXT"
+          (change)="updatePipelineDetail('context', $event.parameterValue, row.uiId)"
+          #dodModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  dodModel?.invalid &&
+                  ( dodModel?.dirty ||
+                    dodModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+              <img
+                [class.d-none]="row.criteria.CONTEXT !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(dodModel.invalid && dodModel.touched){
+      <div class="invalid-input">Details of Data is required</div>
+      }
+    </div>
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <div class="ng-select-parameter">
+        <input
+          class="input-value"
+          type="number"
+          placeholder="Time Value"
+          min="0"
+          [(ngModel)]="row.period"
+          (change)="updatePipelineDetail('period', $event, row.uiId)"
+          #periodModel="ngModel"
+          [class.is-invalid]="
+                  periodModel?.invalid &&
+                  ( periodModel?.dirty ||
+                    periodModel?.touched)
+                "
+          required
+        />
+
+        @if(periodModel.invalid && periodModel.touched){
+        <div class="invalid-input">Time Value is required</div>
+        }
+      </div>
+
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="timeUnits"
+            bindLabel="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Time Unit"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.unit"
+            (change)="updatePipelineDetail('unit', $event, row.uiId)"
+            #unitModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  unitModel?.invalid &&
+                  ( unitModel?.dirty ||
+                    unitModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(unitModel.invalid && unitModel.touched){
+        <div class="invalid-input">Time Unit is required</div>
+        }
+      </div>
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="ttlTypes"
+            bindLabel="label"
+            bindValue="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Type"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.ttlType"
+            (change)="updatePipelineDetail('ttlType', $event, row.uiId)"
+            #ttlTypeModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  ttlTypeModel?.invalid &&
+                  ( ttlTypeModel?.dirty ||
+                    ttlTypeModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(ttlTypeModel.invalid && ttlTypeModel.touched){
+        <div class="invalid-input">TTL Type is required</div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='WATCHLIST'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          bindValue="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Field Event Type"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.VALUE"
+          (change)="updatePipelineDetail('criteriaValue', $event.parameterValue, row.uiId)"
+          #eventTypeModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  eventTypeModel?.invalid &&
+                  ( eventTypeModel?.dirty ||
+                    eventTypeModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(eventTypeModel.invalid && eventTypeModel.touched){
+      <div class="invalid-input">Field Event Type is required</div>
+      }
+    </div>
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="valueOperations2"
+          bindLabel="value"
+          bindValue="value"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Operation"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.OPERATION"
+          (change)="updatePipelineDetail('operation', $event.value, row.uiId)"
+          #operationModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  operationModel?.invalid &&
+                  ( operationModel?.dirty ||
+                    operationModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.label }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.label }}</span>
+              <img
+                [class.d-none]="row.criteria.OPERATION !== item.value"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(operationModel.invalid && operationModel.touched){
+      <div class="invalid-input">Operation is required</div>
+      }
+    </div>
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownDataGroup"
+          bindLabel="dataGroupName"
+          bindValue="dataGroupId"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Data Group"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.GROUP"
+          (change)="updatePipelineDetail('group', $event.dataGroupId, row.uiId)"
+          #dataGroupModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  dataGroupModel?.invalid &&
+                  ( dataGroupModel?.dirty ||
+                    dataGroupModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.dataGroupName }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.dataGroupName}}</span>
+              <img
+                [class.d-none]="row.criteria.GROUP !== item.dataGroupId"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(dataGroupModel.invalid && dataGroupModel.touched){
+      <div class="invalid-input">Data Group is required</div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="valueOperations"
+          bindLabel="label"
+          bindValue="value"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Operation"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.criteria.OPERATION"
+          (change)="updatePipelineDetail('operation', $event.value, row.uiId)"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.label }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.label }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+    <div class="pipeline-table-multi-item__item">
+      <app-custom-select-type-a
+        placeholder="Key"
+        (valueChange)="onSelect($event,'key',row.uiId)"
+        [options]="dropdownEventTypeGroupedOptions"
+        [required]="false"
+        [(ngModel)]="row.criteria.KEY"
+        style="width: 100%"
+      ></app-custom-select-type-a>
+    </div>
+    <div class="pipeline-table-multi-item__item">
+      <app-custom-select-type-a
+        placeholder="Value"
+        (valueChange)="onSelect($event,'criteriaValue',row.uiId)"
+        [options]="dropdownEventTypeGroupedOptions"
+        [required]="false"
+        [(ngModel)]="row.criteria.VALUE"
+        style="width: 100%"
+        [disabled]="row.criteria.OPERATION!=='PUT'"
+      ></app-custom-select-type-a>
+    </div>
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <div class="ng-select-parameter">
+        <input
+          class="input-value"
+          type="number"
+          placeholder="Time Value"
+          min="0"
+          [(ngModel)]="row.period"
+          (change)="updatePipelineDetail('period', $event, row.uiId)"
+          #periodModel="ngModel"
+          [class.is-invalid]="
+                  periodModel?.invalid &&
+                  ( periodModel?.dirty ||
+                    periodModel?.touched)
+                "
+          required
+        />
+
+        @if(periodModel.invalid && periodModel.touched){
+        <div class="invalid-input">Time Value is required</div>
+        }
+      </div>
+
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="timeUnits"
+            bindLabel="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Time Unit"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.unit"
+            (change)="updatePipelineDetail('unit', $event, row.uiId)"
+            #unitModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  unitModel?.invalid &&
+                  ( unitModel?.dirty ||
+                    unitModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(unitModel.invalid && unitModel.touched){
+        <div class="invalid-input">Time Unit is required</div>
+        }
+      </div>
+      <div class="d-flex flex-column align-items-start">
+        <div class="ng-select-parameter" style="margin-left: 24px">
+          <ng-select
+            [items]="ttlTypes"
+            bindLabel="label"
+            bindValue="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Type"
+            [appendTo]="'.modal-content'"
+            [ngModel]="row.ttlType"
+            (change)="updatePipelineDetail('ttlType', $event, row.uiId)"
+            #ttlTypeModel="ngModel"
+            [required]="true"
+            [class.is-invalid]="
+                  ttlTypeModel?.invalid &&
+                  ( ttlTypeModel?.dirty ||
+                    ttlTypeModel?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <!-- <img
+                [class.d-none]="row.parameterValue !== item.parameterValue"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              /> -->
+              </div>
+            </ng-template>
+            <ng-template ng-clearbutton-tmp>
+              <span class="d-none"></span>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if(ttlTypeModel.invalid && ttlTypeModel.touched){
+        <div class="invalid-input">TTL Type is required</div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #valueTpl let-row let-i="index">
+  @if(pTf==='AGGREGATION'
+  ||pTf==='GETBALANCE'||pTf==='NULL'||pTf==='GETHISTORICAL'||pTf==='REALTIMEHISTORICAL'
+  ){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item w-100">
+      <div class="ng-select-parameter w-100">
+        <input
+          class="input-value w-100"
+          type="text"
+          placeholder="Value"
+          [(ngModel)]="row.value"
+          (change)="updatePipelineDetail('value', $event, row.uiId)"
+          #valueModel="ngModel"
+          [class.is-invalid]="
+                  valueModel?.invalid &&
+                  ( valueModel?.dirty ||
+                    valueModel?.touched)
+                "
+          required
+        />
+        @if(valueModel.invalid && valueModel.touched){
+        <div class="invalid-input">Value is required</div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ==== -->
+
+  @else if(pTf==='JOURNEY' || pTf==='WATCHLIST'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="enumBoolean"
+          bindLabel="name"
+          bindValue="id"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Value"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.value"
+          (change)="updatePipelineDetail('boolvalue', $event, row.uiId)"
+          #boolValueModel="ngModel"
+          [required]="true"
+          [class.is-invalid]="
+                  boolValueModel?.invalid &&
+                  ( boolValueModel?.dirty ||
+                    boolValueModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.name }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.name }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(boolValueModel.invalid && boolValueModel.touched){
+      <div class="invalid-input">Value is required</div>
+      }
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #operatorTpl let-row let-i="index">
+  @if(pTf!=='' && pTf !== null){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownOperator"
+          bindLabel="operatorName"
+          bindValue="operatorName"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Operator"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.operator"
+          (change)="updatePipelineDetail('operator', $event, row.uiId)"
+          #operatorModel="ngModel"
+          required
+          [class.is-invalid]="
+                  operatorModel?.invalid &&
+                  ( operatorModel?.dirty ||
+                    operatorModel?.touched)
+                "
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.operatorName }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.operatorName }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+
+      @if(operatorModel.invalid && operatorModel.touched){
+      <div class="invalid-input">Operator is required</div>
+      }
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome1Tpl let-row let-i="index">
+  @if(pTf==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">BALANCE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="row.historicalFieldOptions"
+          bindLabel="fieldHistorical"
+          bindValue="fieldHistorical"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Pipeline Outcome 1"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.outcome"
+          #outcome1Model="ngModel"
+          required
+          [class.is-invalid]="
+                  outcome1Model?.invalid &&
+                  ( outcome1Model?.dirty ||
+                    outcome1Model?.touched)
+                "
+          (change)="updatePipelineDetail('outcome', $event, row.uiId)"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.fieldHistorical }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.fieldHistorical }}</span>
+              <img
+                [class.d-none]="row.outcome!== item.fieldHistorical"
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+      @if(outcome1Model.invalid && outcome1Model.touched){
+      <div class="invalid-input">Pipeline Outcome 1 is required</div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALUE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pTf==='WATCHLIST') {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VERDICT</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome2Tpl let-row let-i="index">
+  @if(pTf==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="row.historicalFieldOptions"
+          bindLabel="fieldHistorical"
+          bindValue="fieldHistorical"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Pipeline Outcome 2"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.outcomeExtra"
+          [disabled]="!row.outcome || !row.isMultiParam"
+          (change)="updatePipelineDetail('outcomeExtra', $event.fieldHistorical, row.uiId)"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.fieldHistorical }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.fieldHistorical }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #setToVarTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      <div class="d-flex align-items-center">
+        <div class="ng-select-parameter">
+          <input
+            class="input-value"
+            type="text"
+            placeholder="SET TO VAR"
+            [(ngModel)]="row.varName"
+            (change)="updatePipelineDetail('varName', $event, row.uiId)"
+            #varNameModel="ngModel"
+            [class.is-invalid]="
+                  varNameModel?.invalid &&
+                  ( varNameModel?.dirty ||
+                    varNameModel?.touched)
+                "
+            [required]="pTf==='GETHISTORICAL'"
+            (input)="onInput(row.uiId,row.varName)"
+          />
+
+          @if(varNameModel.invalid && varNameModel.touched){
+          <div class="invalid-input">SET TO VAR is required</div>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="action-buttons__item"
+          (click)="removePipelineDetail(row.uiId)"
+          style="margin-left: 34px"
+        >
+          <img src="/assets/img/ic-garbage-dark-gray.svg" alt="delete" />
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #fieldEventTypeTpl let-row let-i="index">
+  @if(pTf==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item flex-column align-items-start">
+      <div class="ng-select-parameter w-100">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          bindValue="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Event"
+          [appendTo]="'.modal-content'"
+          [ngModel]="row.eventType"
+          (change)="updatePipelineDetail('eventType', $event.parameterValue, row.uiId)"
+          #eventTypeModel="ngModel"
+          [class.is-invalid]="
+                  eventTypeModel?.invalid &&
+                  ( eventTypeModel?.dirty ||
+                    eventTypeModel?.touched)
+                "
+          required
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue }}</span>
+            </div>
+          </ng-template>
+          <ng-template ng-clearbutton-tmp>
+            <span class="d-none"></span>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+
+      @if(eventTypeModel.invalid && eventTypeModel.touched){
+      <div class="invalid-input">Event Type is required</div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="d-flex justify-content-between">
+    <div class="pipeline-table-multi-item-wrapper">
+      <div class="pipeline-table-multi-item__item">
+        <app-custom-select-type-a
+          placeholder="Field Event"
+          (valueChange)="onSelect($event,'eventType',row.uiId)"
+          [options]="dropdownEventTypeGroupedOptions"
+          [required]="true"
+          [errorMessage]="'Field Event Type is required'"
+          [(ngModel)]="row.eventType"
+          style="width: 176px"
+        ></app-custom-select-type-a>
+      </div>
+    </div>
+
+    <div class="pipeline-table-multi-item-wrapper">
+      <div class="pipeline-table-multi-item__item">
+        <app-custom-select-type-a
+          placeholder="Field Event"
+          (valueChange)="onSelect($event,'eventTypeExtra',row.uiId)"
+          [options]="dropdownEventTypeGroupedOptions"
+          [required]="true"
+          [errorMessage]="'Field Event Type is required'"
+          [(ngModel)]="row.eventTypeExtra"
+          style="width: 176px"
+          [disabled]="row.functionFormulaArg==='single'"
+        ></app-custom-select-type-a>
+      </div>
+    </div>
+  </div>
+
+  }
+</ng-template>
+
+<ng-template #emptyTpl let-row let-i="index">
+  <div style="width: 250px; height: 100%"></div>
+</ng-template>
+
+<ng-template #fieldTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALIDJOURNEY</div>
+  </div>
+</ng-template>
+
+<!-- ===== -->
+
+<ng-template #functionDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item__item">{{row.function}}</div>
+</ng-template>
+
+<ng-template #parameterDTpl let-row let-i="index">
+  @if(pipelineForm.pipelineType ==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Group By</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Balance Timing/Position</div>
+    <div class="pipeline-table-multi-item__item">Account Number</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Historical Table</div>
+    <div class="pipeline-table-multi-item__item">Group Key</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Operations</div>
+    <div class="pipeline-table-multi-item__item">Key</div>
+    <div class="pipeline-table-multi-item__item">Value</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Previous Context</div>
+    <div class="pipeline-table-multi-item__item">Details of Data</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Field Event Type</div>
+    <div class="pipeline-table-multi-item__item">Operation</div>
+    <div class="pipeline-table-multi-item__item">Data Group</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #parameterValueDTpl let-row let-i="index">
+  @if(pipelineForm.pipelineType==='AGGREGATION'){
+  <div class="pipeline-table-multi-item__item">{{row.groupBy}}</div>
+  <div class="pipeline-table-multi-item__item justify-content-between">
+    <span style="width: 120px">{{row.period}}</span>
+    <span style="width: 120px">{{row.unit}}</span>
+    <span style="width: 120px">{{row.ttlType}}</span>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.ACCOUNTNUMBER}}
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+    <div class="pipeline-table-multi-item__item">{{row.criteria.KEY}}</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.PREVIOUSCONTEXT}}
+    </div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <span style="width: 120px">{{row.period}}</span>
+      <span style="width: 120px">{{row.unit}}</span>
+      <span style="width: 120px">{{row.ttlType}}</span>
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.OPERATION}}
+    </div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.KEY}}</div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.VALUE}}</div>
+
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <span style="width: 120px">{{row.period}}</span>
+      <span style="width: 120px">{{row.unit}}</span>
+      <span style="width: 120px">{{row.ttlType}}</span>
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.VALUE}}</div>
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.OPERATION}}
+    </div>
+    <div class="pipeline-table-multi-item__item">{{row.criteria.GROUP}}</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #valueDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item w-100">{{row.value}}</div>
+  </div>
+</ng-template>
+
+<ng-template #operatorDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.operator}}</div>
+  </div>
+</ng-template>
+
+<ng-template #setToVarDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.varName}}</div>
+  </div>
+</ng-template>
+
+<ng-template #fieldDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALIDJOURNEY</div>
+  </div>
+</ng-template>
+
+<ng-template #fieldEventTypeDTpl let-row let-i="index">
+  @if(pipelineForm.pipelineType==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.eventType || '-'}}</div>
+  </div>
+
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="d-flex justify-content-between">
+    <div class="pipeline-table-multi-item-wrapper" style="width: 45%">
+      <div class="pipeline-table-multi-item__item">{{row.eventType || ''}}</div>
+    </div>
+    <div class="pipeline-table-multi-item-wrapper" style="width: 45%">
+      <div class="pipeline-table-multi-item__item">
+        {{row.eventTypeExtra || ''}}
+      </div>
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome1DTpl let-row let-i="index">
+  @if(pipelineForm.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">BALANCE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(pipelineForm.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALUE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.outcome}}</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome2DTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.outcomeExtra}}</div>
+  </div>
+</ng-template>
+
+<ng-template #pipelineCustomFillForm>
+  <textarea
+    #customTA
+    id="rule_desc_long"
+    class="form-control pr-5 pipeline-custom"
+    rows="1"
+    (input)="autogrow(customTA)"
+    placeholder=""
+    [(ngModel)]="pipelineTempForm.pipelineCustomData"
+  ></textarea>
+  @if(pipelineCustomDataError){
+  <div class="invalid-input">{{pipelineCustomDataError}}</div>
+  }
+</ng-template>
+
+<ng-template #pipelineCustomSummary>
+  <div class="mb-24 pipeline-summary-title">CUSTOM</div>
+
+  <div class="card pipeline-custom-summary">
+    <div class="content">
+      <pre>{{displayPipelineCustomData||''}}</pre>
+    </div>
+  </div>
+</ng-template>

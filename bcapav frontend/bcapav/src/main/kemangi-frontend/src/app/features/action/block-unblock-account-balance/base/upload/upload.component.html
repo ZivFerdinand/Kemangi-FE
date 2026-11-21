@@ -1,0 +1,203 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+      [isDisabledFn]="checkMenu"
+    ></app-custom-tab>
+  </div>
+
+  <section class="card no-border card-pavo-default-type-i mb-24">
+    <form [formGroup]="uploadForm">
+      <div class="form-item mb-3" style="width: 360px">
+        <label for="">Account Type:</label>
+        <div class="ng-select-custom">
+          <ng-select
+            [items]="accountTypes"
+            bindLabel="name"
+            bindValue="id"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Account Type"
+            formControlName="accountType"
+            [class.is-invalid]="
+              f['accountType']?.invalid &&
+              (f['accountType']?.dirty || f['accountType']?.touched)
+            "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.name }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <div class="d-flex align-items-center">
+                  <span style="margin-right: 10px">{{ item.name }}</span>
+                  <img
+                    [class.d-none]="
+                      uploadForm.get('accountType')?.value !== item.id
+                    "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+        @if (
+          f["accountType"]?.invalid &&
+          (f["accountType"]?.dirty || f["accountType"]?.touched)
+        ) {
+          <div class="invalid-input">
+            {{ errorMessageAccountType }}
+          </div>
+        }
+      </div>
+      <div class="form-item mb-3">
+        <label for="" style="margin-bottom: 16px">Action:</label>
+        <div class="d-flex">
+          <label class="custom-radio">
+            <input
+              type="radio"
+              name="option"
+              value="BLOCK"
+              formControlName="action"
+              [class.invalid]="
+                f['action']?.invalid &&
+                (f['action']?.dirty || f['action']?.touched)
+              "
+              (change)="toggleRadio()"
+            />
+            <span class="radio"></span>
+            Block Account Balance
+          </label>
+
+          <label class="custom-radio" style="margin-left: 24px">
+            <input
+              type="radio"
+              name="option"
+              value="UNBLOCK"
+              formControlName="action"
+              [class.invalid]="
+                f['action']?.invalid &&
+                (f['action']?.dirty || f['action']?.touched)
+              "
+              (change)="toggleRadio()"
+            />
+            <span class="radio"></span>
+            Unblock Account Balance
+          </label>
+        </div>
+
+        @if (
+          f["action"]?.invalid && (f["action"]?.dirty || f["action"]?.touched)
+        ) {
+          <div class="invalid-input">
+            {{ errorMessageAction }}
+          </div>
+        }
+      </div>
+
+      <div class="form-item mb-3">
+        <label for="download">Download Template</label>
+        <button
+          type="button"
+          class="block-btn download-type"
+          (click)="handleDownload()"
+        >
+          Download Template
+          <img
+            style="margin-left: 8px"
+            src="/assets/img/ic-download-ii-blue.svg"
+            alt="download"
+          />
+        </button>
+      </div>
+
+      <div class="form-item mb-3">
+        <label for="upload">Upload File</label>
+
+        <input
+          type="file"
+          #fileInput
+          hidden
+          (change)="onFileSelected($event)"
+          accept=".pdf,.xls,.xlsx"
+        />
+
+        <button
+          type="button"
+          class="block-btn upload-type"
+          (click)="fileInput.click()"
+          [disabled]="selectedFile"
+        >
+          Upload File
+          <img
+            style="margin-left: 8px"
+            src="/assets/img/ic-upload-ii-white.svg"
+            alt="upload"
+          />
+        </button>
+
+        <!-- @if (errorMessageUpload) {
+          <div class="invalid-input">
+            {{ errorMessageUpload }}
+          </div>
+        } -->
+
+        @if (selectedFile) {
+          <div
+            class="d-flex flex-column"
+            style="margin-top: 12px; width: 300px"
+          >
+            @if (selectedFile) {
+              <app-badge-uploaded-doc
+                [originalName]="selectedFile.name"
+                [extension]="'.' + selectedFile.name.split('.')[1]"
+                [generatedName]="selectedFile.name"
+                (clearFile)="clearFile()"
+                (downloadFile)="downloadSelectedFile()"
+                [type]="'type-ii'"
+              />
+            }
+          </div>
+        }
+
+        <div class="upload-msg" [class.invalid]="errorMessageUpload">
+          {{
+            errorMessageUpload
+              ? errorMessageUpload
+              : "Max 5.000 records per file"
+          }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn-type-1 btn-white-outlined me-3"
+          [disabled]="!isFilled()"
+          (click)="handleDiscard()"
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          class="btn-type-5 btn-dark-blue"
+          [disabled]="uploadForm.invalid"
+          (click)="submit()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </section>
+</app-content-layout>

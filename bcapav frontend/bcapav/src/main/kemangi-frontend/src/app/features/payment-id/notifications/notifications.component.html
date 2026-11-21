@@ -1,0 +1,28 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+  <div class="mb-24 d-flex">
+    <div class="search-box">
+      <input type="text" class="form-control pr-5" placeholder="Search here" />
+      <button type="button" class="search-btn">
+        <img src="/assets/img/ic-find.svg" alt="find" />
+      </button>
+    </div>
+    <app-payment-id-notification-filter></app-payment-id-notification-filter>
+  </div>
+  <div class="card no-border card-pavo-default-type-iii squared">
+    <app-payment-id-notification></app-payment-id-notification>
+    <app-payment-id-notification></app-payment-id-notification>
+    <app-payment-id-notification></app-payment-id-notification>
+    <app-payment-id-pagination
+      [pageInfo]="pageInfo"
+      [pageParams]="pageQuery"
+      [data]="[]"
+    ></app-payment-id-pagination>
+  </div>
+</app-content-layout>

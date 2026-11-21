@@ -1,0 +1,49 @@
+::ng-deep .pagination {
+  margin: auto;
+}
+
+::ng-deep .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .table-pagination .pagination .page-item.active .page-link {
+  background-color: #005caa;
+  color: white;
+  border: none;
+}
+
+::ng-deep .table-pagination .page-link {
+  color: #226a69;
+  border-radius: 8px;
+  padding: 6px 12px;
+  border: none;
+  font-size: 14px;
+}
+
+::ng-deep .table-pagination .page-link:hover {
+  background-color: #005caa;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+::ng-deep .disabled > .page-link,
+.page-link.disabled {
+  pointer-events: none;
+  background-color: #ffffff;
+  border: none;
+}
+
+.page-info {
+  font-size: 14px;
+  line-height: 20px;
+  color: #868e96;
+}

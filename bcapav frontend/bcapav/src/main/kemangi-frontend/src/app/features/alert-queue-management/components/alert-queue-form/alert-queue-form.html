@@ -1,0 +1,184 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="card no-border card-pavo-default-type-ii mb-24">
+    @if(mode!=='DELETE'){
+    <div style="margin-bottom: 18px">
+      <app-toggle-switch formControlName="activeStatus"></app-toggle-switch>
+    </div>
+
+    <div class="d-flex align-items-start mb-3">
+      <div class="form-item form-group-custom">
+        <label for="queue_name">Queue Name</label>
+        <input
+          id="queue_name"
+          type="text"
+          class="form-control pr-5"
+          formControlName="name"
+          [class.is-invalid]="
+              f['name']?.invalid &&
+              (f['name']?.dirty || f['name']?.touched)
+            "
+          [disabled]="true"
+          placeholder="Queue Name"
+          (keydown)="onKeyDown($event, 'name')"
+        />
+        @if ( f["name"]?.invalid && (f["name"]?.dirty || f["name"]?.touched) ) {
+        <div>
+          @if (f["name"]?.errors?.["required"]) {
+          <div class="invalid-input">Queue Name is required</div>
+          } @if (f["name"]?.errors?.["maxlength"]) {
+          <div class="invalid-input">
+            Queue Name must not exceed 255 characters
+          </div>
+          }
+        </div>
+        }
+      </div>
+      <div class="form-item form-group-custom type-ii">
+        <label for="queue_desc">Queue Description</label>
+        <textarea
+          #autoDescTA
+          id="queue_desc"
+          class="form-control pr-5"
+          formControlName="description"
+          rows="1"
+          (input)="autogrow(autoDescTA)"
+          placeholder="Queue Description"
+          [class.is-invalid]="
+              f['description']?.invalid &&
+              (f['description']?.dirty || f['description']?.touched)
+            "
+          (keydown)="onKeyDown($event, 'description')"
+        ></textarea>
+        @if ( f["description"]?.invalid && (f["description"]?.dirty ||
+        f["description"]?.touched) ) {
+        <div>
+          @if (f["description"]?.errors?.["required"]) {
+          <div class="invalid-input">Queue Description is required</div>
+          } @if (f["description"]?.errors?.["maxlength"]) {
+          <div class="invalid-input">
+            Queue Description must not exceed 255 characters
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- == -->
+
+    @if(mode==='DELETE'){
+    <div class="approval-details approval-details--type-i">
+      <div class="approval-details__left">
+        <div class="approval-details__column approval-details__column--left">
+          <div style="margin-bottom: 16px">
+            <app-toggle-switch
+              formControlName="activeStatus"
+            ></app-toggle-switch>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Queue Name</div>
+            <div class="approval-details__value">
+              {{initialData?.name||'-'}}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Queue Description</div>
+            <div class="approval-details__value">
+              {{initialData?.description||'-'}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="approval-details__divider"></div>
+
+      <ng-container
+        [ngTemplateOutlet]="detailCurrent"
+        [ngTemplateOutletContext]="{ detail: initialData }"
+      ></ng-container>
+    </div>
+    }
+  </div>
+
+  <app-alert-queue-assign-to
+    [mode]="mode"
+    [initialData]="initialData?.assignTo"
+    (handleAssignToData)="getDataAssignTo($event)"
+  ></app-alert-queue-assign-to>
+
+  <app-rule-model-form
+    [mode]="mode"
+    [initialData]="initialData?.details"
+    (priorityBoxesChange)="getDataRuleModels($event)"
+  ></app-rule-model-form>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined me-3"
+      (click)="back()"
+    >
+      Back
+    </button>
+
+    <button
+      type="submit"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="form.invalid"
+    >
+      Submit
+    </button>
+  </section>
+</form>
+
+<ng-template #detailCurrent let-detail="detail">
+  <div class="approval-details__right">
+    <div class="approval-details__column approval-details__column--left">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested By</div>
+        <div class="approval-details__value">
+          {{detail.lastUpdatedByName||'-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 By</div>
+        <div class="approval-details__value">
+          {{detail.lastApproval1Name||'-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 By</div>
+        <div class="approval-details__value">
+          {{detail.lastApproval2Name||'-'}}
+        </div>
+      </div>
+    </div>
+    <div class="approval-details__column approval-details__column--right">
+      <div class="approval-details__item">
+        <div class="approval-details__label">Requested Date</div>
+        <div class="approval-details__value">
+          {{(detail.lastUpdatedDt| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 1 Date</div>
+        <div class="approval-details__value">
+          {{(detail.lastApproval1Dt| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+
+      <div class="approval-details__item">
+        <div class="approval-details__label">Review 2 Date</div>
+        <div class="approval-details__value">
+          {{(detail.lastApproval2Dt| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

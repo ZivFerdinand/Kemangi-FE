@@ -1,0 +1,108 @@
+.sub-rule-tab {
+  height: 48px;
+  min-width: 260px;
+  max-width: 100%;
+  background-color: #ffffff;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  //justify-content: space-between;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sub-rule-tab__track {
+  display: flex;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  cursor: grab;
+}
+
+.sub-rule-tab__track.active {
+  cursor: grabbing;
+}
+
+/* Style the entire scrollbar */
+.sub-rule-tab__track::-webkit-scrollbar {
+  width: 12px;
+  display: none;
+}
+
+/* Style the scrollbar track */
+.sub-rule-tab__track::-webkit-scrollbar-track {
+  background: purple;
+  display: none;
+}
+
+/* Style the draggable scrollbar handle */
+.sub-rule-tab__track::-webkit-scrollbar-thumb {
+  background: yellow;
+  border-radius: 6px;
+  display: none;
+}
+
+/* Style the scrollbar handle on hover */
+.sub-rule-tab__track::-webkit-scrollbar-thumb:hover {
+  background: red;
+  display: none;
+}
+
+.sub-rule-tab__tab-item {
+  min-width: 169px;
+  height: 48px;
+  padding: 7px 8px;
+  // font-size: 14px;
+  // line-height: 20px;
+  // font-weight: 600;
+  background-color: #ffffff;
+  // color: #00335e;
+  box-shadow: none;
+  border-bottom: 1px solid #dddddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sub-rule-tab__tab-item.active {
+  border-color: #144e83;
+}
+
+.custom-tab__tab-btn.disabled,
+.custom-tab__tab-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-add-sub-rule {
+  width: 40px;
+  height: 48px;
+  border: none;
+  border-bottom: 1px solid #dddddd;
+  box-shadow: none;
+  background-color: #ffffff;
+  padding: 6px 8px;
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  color: #00335e;
+  font-weight: 600;
+  align-items: center;
+}
+
+.btn-add-sub-rule:hover {
+  border-color: #144e83;
+}
+
+.sub-rule-tab__tab-item button {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.sub-rule-tab__tab-item-label {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  color: #00335e;
+  font-size: 14px;
+}

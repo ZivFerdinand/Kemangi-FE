@@ -1,0 +1,145 @@
+<section class="card p-3 no-border datagroup-form mb-24">
+  <div class="fw-semibold section-title mb-24">Auto Action</div>
+
+  <div class="mb-24">
+    <div class="table-auto-action-title">Table Parameter</div>
+    <app-table
+      [columns]="columns"
+      [data]="tableData"
+      [cellTemplates]="{
+          no: noTpl,
+        }"
+      [pageInfo]="tableInfo"
+      [pageParams]="tableQuery"
+      [showPageInfo]="true"
+      [pagination]="true"
+      [showNoData]="true"
+      (pageChange)="subrulePageChange($event)"
+      (sort)="handleSortChange($event.direction, $event.key)"
+      [squared]="true"
+    ></app-table>
+  </div>
+
+  @if(tableData.length>0){
+  <div class="d-flex justify-content-start">
+    <button
+      type="button"
+      class="btn-type-1 btn-light-blue fw-bold"
+      (click)="open(contentAutoAction)"
+    >
+      Detail Action
+    </button>
+  </div>
+  }
+</section>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (tableQuery.page - 1) * tableQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #contentAutoAction let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 30px">
+      <div class="fw-semibold">Auto Action</div>
+    </div>
+
+    <app-detail-rule-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    />
+
+    <div class="w-100 d-flex justify-content-start align-items-stretch mb-56">
+      @if(subruleData.autoAction && subruleData.autoAction.length>0){
+      <div style="width: 38.97%">
+        <div class="form-item mb-24">
+          <label>List Channel</label>
+        </div>
+
+        <!-- == -->
+
+        @if(selectedValues.length>0){
+        <div class="mb-64">
+          @for (item of selectedValues; let i = $index;track item) {
+
+          <div
+            class="action-type--selected"
+            [class.active]="channelActiveTab === item.label"
+          >
+            <p (click)="handleActionTypeActive(item.label)">
+              Channel {{i+1}} - {{item.label}}
+            </p>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-auto-action-separator"></div>
+
+      <div style="width: 55.14%">
+        @if (channelActiveTab==='EMAIL'){
+        <app-channel-type-email-details
+          [dropdownEmailTemplate]="dropdownEmailTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionData"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (channelActiveTab==='SMS'){
+        <app-channel-type-sms-details
+          [dropdownSmsTemplate]="dropdownSmsTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionData"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (channelActiveTab==='WA'){
+        <app-channel-type-wa-details
+          [dropdownWaTemplate]="dropdownWaTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionData"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (channelActiveTab==='MBCA'){
+        <app-channel-type-mbca-details
+          [dropdownMbNotif]="dropdownMbNotif"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionData"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (channelActiveTab==='AUTO BLOCK'){
+        <app-channel-type-auto-block-details
+          [dropdownAbTemplate]="dropdownAb"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionData"
+        />
+        }
+      </div>
+      } @else{
+      <div style="width: 100%; height: 400px"></div>
+      }
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button
+        type="button"
+        class="btn-type-1 fw-bold btn-light-blue"
+        style="margin-right: 11px"
+        (click)="close()"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</ng-template>

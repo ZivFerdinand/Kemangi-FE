@@ -1,0 +1,95 @@
+<div class="grid-table mb-24">
+  <div class="grid-row grid-header">
+    <div class="grid-cell">No</div>
+    <div class="grid-cell">User ID</div>
+    <div class="grid-cell">Username</div>
+    <div class="grid-cell">Role Name</div>
+    <div class="grid-cell grid-cell-center">
+      <div class="d-flex flex-column align-items-center">
+        <div style="margin-bottom: 4px">Checkbox</div>
+        <input
+          type="checkbox"
+          [checked]="allSelected"
+          (change)="toggleAll($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  @for (user of pagedUsers; track user.userId; let i = $index) {
+  <div class="grid-row">
+    <div class="grid-cell">{{ rowNumber(i) }}</div>
+    <div class="grid-cell">{{ user.userId }}</div>
+    <div class="grid-cell">{{ user.userName }}</div>
+    <div class="grid-cell">{{ user.roleName }}</div>
+    <div class="grid-cell grid-cell-center">
+      <input
+        type="checkbox"
+        [checked]="isSelected(user.userId)"
+        (change)="toggleRow(user.userId, $event)"
+      />
+    </div>
+  </div>
+  } @empty {
+  <div class="grid-row">
+    <div class="grid-cell grid-cell-empty">No data available</div>
+  </div>
+  }
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-24">
+  <div class="page-info">
+    Showing {{ totalElements === 0 ? 0 : startIndex + 1 }} to {{ endIndex }} of
+    {{ totalElements }} entries
+  </div>
+
+  <div class="d-flex align-items-center">
+    <ngb-pagination
+      class="table-pagination"
+      [collectionSize]="users.length"
+      [page]="currentPage"
+      [pageSize]="pageSize"
+      [maxSize]="5"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange($event)"
+    >
+      <ng-template ngbPaginationFirst>
+        <img
+          src="assets/img/ic-chevron-double-left.svg"
+          alt="first"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationPrevious>
+        <img
+          src="assets/img/ic-chevron-left.svg"
+          alt="prev"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationNext>
+        <img
+          src="assets/img/ic-chevron-right.svg"
+          alt="next"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationLast>
+        <img
+          src="assets/img/ic-chevron-double-right.svg"
+          alt="last"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+    </ngb-pagination>
+  </div>
+</div>

@@ -1,0 +1,445 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <section class="card no-border card-pavo-default-type-ii mb-24">
+    <div class="mb-24">
+      <app-toggle-switch
+        formControlName="activeStatus"
+        [styleType]="'type-i'"
+        [tooltipMessage]="
+            'Email Template has relation to active rule(s). Cannot be edited'
+          "
+      ></app-toggle-switch>
+    </div>
+
+    <div class="d-flex mb-3">
+      <div
+        class="d-flex flex-wrap align-items-start justify-content-between"
+        style="width: 760px"
+      >
+        @if (emailTemplateId !== "") {
+        <div class="form-item mb-24" style="width: 360px">
+          <label for="templateId" class="disabled">Template ID</label>
+          <input
+            id="templateId"
+            type="text"
+            class="form-control pr-5"
+            formControlName="templateId"
+            placeholder="Template ID"
+          />
+        </div>
+        }
+
+        <div class="form-item mb-24" style="width: 360px">
+          <label for="status">Template Type</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #templateTypeSelect
+              [items]="templateTypeList"
+              bindLabel="template_type"
+              bindValue="template_type"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Template Type"
+              formControlName="templateType"
+              [class.is-invalid]="
+                  f['templateType']?.invalid &&
+                  (f['templateType']?.dirty || f['templateType']?.touched)
+                "
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.template_type }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.template_type }}</span>
+                  <img
+                    [class.d-none]="
+                        f['templateType']?.value !== item.template_type
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+          @if ( f["templateType"]?.invalid && (f["templateType"]?.dirty ||
+          f["templateType"]?.touched) ) {
+          <div class="invalid-input">
+            @if (f["templateType"]?.errors?.["required"]) { Template Type is
+            required }
+          </div>
+          }
+        </div>
+
+        <div class="form-item mb-24" style="width: 360px">
+          <label for="templateName">Template Name</label>
+          <input
+            id="templateName"
+            type="text"
+            class="form-control pr-5"
+            [class.is-invalid]="
+                f['templateName']?.invalid &&
+                (f['templateName']?.dirty || f['templateName']?.touched)
+              "
+            (keydown)="onKeyDown($event, 'templateName')"
+            formControlName="templateName"
+            placeholder="Template Name"
+          />
+
+          @if ( f["templateName"]?.invalid && (f["templateName"]?.dirty ||
+          f["templateName"]?.touched) ) {
+          <div class="invalid-input">
+            @if (f["templateName"]?.errors?.["required"]) { Template Name is
+            required }
+          </div>
+          }
+        </div>
+
+        <div class="form-item" style="width: 360px">
+          <label for="status">Product</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #productSelect
+              [items]="productGroupList"
+              bindLabel="product_group"
+              bindValue="product_group"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Product"
+              formControlName="productType"
+              [class.is-invalid]="
+                  f['productType']?.invalid &&
+                  (f['productType']?.dirty || f['productType']?.touched)
+                "
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.product_group }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.product_group }}</span>
+                  <img
+                    [class.d-none]="
+                        f['productType']?.value !== item.product_group
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+          @if ( f["productType"]?.invalid && (f["productType"]?.dirty ||
+          f["productType"]?.touched) ) {
+          <div class="invalid-input">
+            @if (f["productType"]?.errors?.["required"]) { Product is required }
+          </div>
+          }
+        </div>
+
+        @if (eventTypeRequired) {
+        <div class="form-item" style="width: 360px">
+          <label for="status">Event Type</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #eventTypeSelect
+              [items]="eventTypeList"
+              bindLabel="parameter_type"
+              bindValue="parameter_type"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Event Type"
+              formControlName="eventType"
+              [class.is-invalid]="
+                    f['eventType']?.invalid &&
+                    (f['eventType']?.dirty || f['eventType']?.touched)
+                  "
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.parameter_type }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <div class="d-flex align-items-center">
+                    <span style="margin-right: 10px"
+                      >{{ item.parameter_type }}</span
+                    >
+                    <div
+                      placement="start"
+                      tooltipClass="custom-tooltip"
+                      placement="end"
+                      ngbTooltip="loading"
+                      [ngbTooltip]="item.parameter_type_name"
+                      container="body"
+                    >
+                      <img src="assets/img/ic-info.svg" alt="info" />
+                    </div>
+                  </div>
+
+                  <img
+                    [class.d-none]="
+                          f['eventType']?.value !== item.parameter_type
+                        "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+          @if ( f["eventType"]?.invalid && (f["eventType"]?.dirty ||
+          f["eventType"]?.touched) ) {
+          <div class="invalid-input">
+            @if (f["eventType"]?.errors?.["required"]) { Event Type is required
+            }
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="email-template-form-separator"></div>
+
+    <div class="email-template-form-subtitle fw-bold mb-24">
+      Template Detail
+    </div>
+
+    <div class="d-flex align-items-end mb-24">
+      <div class="d-flex flex-column me-40" style="width: 448px">
+        <div class="form-item">
+          <label for="templateName">Placeholder</label>
+          <div class="d-flex align-items-center">
+            <div class="ng-select-custom" style="width: 360px">
+              <ng-select
+                #placeholderSelect
+                [items]="placeholderList"
+                bindLabel="email_placeholder"
+                bindValue="email_placeholder"
+                [multiple]="false"
+                [hideSelected]="false"
+                searchPlaceholder="Choose..."
+                placeholder="Placeholder"
+                formControlName="placeholder"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  {{ item.email_placeholder }}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  <div
+                    class="d-flex w-100 justify-content-between align-items-center"
+                  >
+                    <span>{{ item.email_placeholder }}</span>
+                    <img
+                      [class.d-none]="
+                          f['placeholder']?.value !== item.email_placeholder
+                        "
+                      src="assets/img/ic-check-black.svg"
+                      alt="selected"
+                    />
+                  </div>
+                </ng-template>
+              </ng-select>
+              <span class="custom-arrow">
+                <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+              </span>
+            </div>
+
+            <button
+              type="button"
+              class="btn-type-4 btn-dark-blue-ii"
+              style="margin-left: 8px; font-size: 12px; font-weight: 700"
+              (click)="add()"
+            >
+              <img
+                src="/assets/img/ic-plus.svg"
+                alt="add"
+                width="16"
+                height="16"
+                style="margin-right: 4px"
+              />
+              Add
+            </button>
+          </div>
+
+          <!-- <div class="d-flex align-items-center">
+              <input
+                id="templateName"
+                type="text"
+                class="form-control pr-5"
+                formControlName="placeholder"
+                placeholder="Template Name"
+              />
+              <button
+                type="button"
+                class="btn-type-4 btn-dark-blue-ii"
+                style="margin-left: 8px; font-size: 12px; font-weight: 700"
+              >
+                <img
+                  src="/assets/img/ic-plus.svg"
+                  alt="add"
+                  width="16"
+                  height="16"
+                  style="margin-right: 4px"
+                />
+                Add
+              </button>
+            </div> -->
+
+          <div class="field-selected">
+            Selected Field: {{ selectedField.name ?? "" }}
+          </div>
+
+          @if (placeholderError !== "") {
+          <div class="invalid-input">{{ placeholderError }}</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex mb-24">
+      <div class="d-flex flex-column me-40" style="width: 360px">
+        <div class="form-item" (click)="changeField('Subject', 'emailSubject')">
+          <label for="subject">Subject</label>
+          <input
+            id="subject"
+            type="text"
+            class="form-control subject-email-template pr-5"
+            placeholder="Subject"
+            formControlName="emailSubject"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex mb-24">
+      <div class="d-flex flex-column me-40" style="width: 360px">
+        <div class="form-item" (click)="changeField('To', 'emailTo')">
+          <label for="to">To</label>
+          <app-multi-input-text
+            formControlName="emailTo"
+            [placeholder]="'To'"
+          />
+          @if ( f["emailTo"]?.invalid && (f["emailTo"]?.dirty ||
+          f["emailTo"]?.touched) ) { @if
+          (f["emailTo"]?.errors?.["mustContainEmail"]) {
+          <div class="invalid-input">To parameter is not valid</div>
+          } @if (f["emailTo"]?.errors?.["invalidEmailFormat"]) {
+          <div class="invalid-input">To is not valid</div>
+          } }
+        </div>
+      </div>
+
+      <div class="d-flex flex-column me-40" style="width: 360px">
+        <div class="form-item" (click)="changeField('CC', 'emailCc')">
+          <label for="cc">CC</label>
+          <app-multi-input-text
+            formControlName="emailCc"
+            [placeholder]="'CC'"
+          />
+          @if ( f["emailCc"]?.invalid && (f["emailCc"]?.dirty ||
+          f["emailCc"]?.touched) ) { @if
+          (f["emailCc"]?.errors?.["mustContainEmail"]) {
+          <div class="invalid-input">CC parameter is not valid</div>
+          } @if (f["emailCc"]?.errors?.["invalidEmailFormat"]) {
+          <div class="invalid-input">CC is not valid</div>
+          } }
+        </div>
+      </div>
+
+      <div class="d-flex flex-column" style="width: 360px">
+        <div class="form-item" (click)="changeField('BCC', 'emailBcc')">
+          <label for="bcc">BCC</label>
+          <app-multi-input-text
+            formControlName="emailBcc"
+            [placeholder]="'BCC'"
+          />
+
+          @if ( f["emailBcc"]?.invalid && (f["emailBcc"]?.dirty ||
+          f["emailBcc"]?.touched) ) { @if
+          (f["emailBcc"]?.errors?.["mustContainEmail"]) {
+          <div class="invalid-input">BCC parameter is not valid</div>
+          } @if (f["emailBcc"]?.errors?.["invalidEmailFormat"]) {
+          <div class="invalid-input">BCC is not valid</div>
+          } }
+        </div>
+      </div>
+    </div>
+
+    <app-custom-ckeditor
+      class="mb-24 custom-editor__container"
+      [class.is-invalid]="
+          f['emailBody']?.invalid &&
+          (f['emailBody']?.dirty || f['emailBody']?.touched)
+        "
+      formControlName="emailBody"
+      (click)="changeField('Body Email', 'emailBody')"
+      [uploadURL]="uploadURL"
+      (getImageData)="getImageData($event)"
+    ></app-custom-ckeditor>
+
+    @if ( f["emailBody"]?.invalid && (f["emailBody"]?.dirty ||
+    f["emailBody"]?.touched) ) { @if (f["emailBody"]?.errors?.["required"]) {
+    <div class="invalid-input" style="margin-top: -15px; margin-bottom: 10px">
+      Body Email is required
+    </div>
+    } } @if (eventTypeRequired) {
+    <div class="form-item" style="width: 360px">
+      <label for="parameter">Parameter</label>
+      <textarea
+        id="emailParameter"
+        class="form-control pr-5"
+        [class.is-invalid]="
+              !f['emailParameter']?.value &&
+              (f['emailParameter']?.dirty || f['emailParameter']?.touched)
+            "
+        formControlName="emailParameter"
+        rows="7"
+        placeholder="Parameter"
+        style="height: 76px"
+      ></textarea>
+      @if ( !f["emailParameter"].value && (f["emailParameter"]?.dirty ||
+      f["emailParameter"]?.touched) ) {
+      <div class="invalid-input">List Parameters is required</div>
+      }
+    </div>
+    }
+  </section>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined me-3"
+      (click)="back()"
+    >
+      Back
+    </button>
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="form.invalid"
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
+  </section>
+</form>

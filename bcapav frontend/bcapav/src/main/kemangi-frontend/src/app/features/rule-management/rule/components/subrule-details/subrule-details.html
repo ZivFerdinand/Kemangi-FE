@@ -1,0 +1,88 @@
+@let s = subruleData;
+
+<section class="card p-3 no-border datagroup-form mb-24">
+  <div class="fw-semibold section-title mb-24">Parameter</div>
+
+  <app-detail-rule-tab
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="handleTabChange($event)"
+  ></app-detail-rule-tab>
+
+  <div
+    class="d-flex flex-wrap justify-content-between data-group-form-field--container"
+    style="align-items: stretch"
+  >
+    <div class="form-item form-group-custom mb-24">
+      <label for="name" class="disabled">Sub Rule Name</label>
+      <div>{{s.subruleName}}</div>
+    </div>
+
+    <div class="form-item form-group-custom mb-24">
+      <label for="eventType" class="disabled">Event Type</label>
+      <div>{{s.eventType}}</div>
+    </div>
+  </div>
+
+  <!-- // -->
+
+  @if(tableData.length>0){
+  <div class="table-auto-action-title">Table Parameter</div>
+  <app-table
+    class="mb-24"
+    [columns]="columns"
+    [data]="tableData"
+    [pageParams]="tableQuery"
+    [pageInfo]="tableInfo"
+    [showPageInfo]="true"
+    [showNoData]="true"
+    [pagination]="true"
+    [cellTemplates]="{
+          no: noTpl,
+        }"
+    (pageChange)="subrulePageChange($event)"
+    [marginTopPageInfo]="16"
+    [squared]="true"
+  />
+  }
+
+  <!-- === -->
+
+  <div
+    class="d-flex align-items-center form-group-custom"
+    [class.mb-24]="s.hasPipeline"
+  >
+    <img
+      [src]="s.hasPipeline?'/assets/img/ic-checkbox-gray-checked.svg':'/assets/img/ic-checkbox-gray-unchecked.svg'"
+      alt="has-pipeline"
+    />
+
+    <label class="form-check-label" for="pipeline">Pipeline</label>
+  </div>
+
+  @if(s.hasPipeline&&((s.pipelines&&s.pipelines.length>0)||(s.pipelineCustom&&s.pipelineCustom.length>0))){
+  <app-pipeline-details
+    [dropdownHistorical]="dropdownHistorical"
+    [dropdownFunction]="dropdownFunction"
+    [hasPipeline]="subruleData.hasPipeline"
+    [requestType]="requestType"
+    [data]="subruleData"
+    [prevData]="prevSubrulesData"
+    [mode]="mode"
+  ></app-pipeline-details>
+  }
+</section>
+
+<ng-container>
+  <app-auto-action-details
+    [subrulesData]="subrulesData"
+    [prevSubrulesData]="prevSubrulesData"
+    [productType]="productType"
+    [requestType]="requestType"
+    [mode]="mode"
+  />
+</ng-container>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (tableQuery.page - 1) * tableQuery.limit + i + 1 }}
+</ng-template>

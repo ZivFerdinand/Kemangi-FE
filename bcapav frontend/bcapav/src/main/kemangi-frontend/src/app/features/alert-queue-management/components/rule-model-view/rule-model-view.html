@@ -1,0 +1,47 @@
+<div class="card no-border card-pavo-default-type-i">
+  <h3 class="alert-queue-label mb-24">Rule & Model</h3>
+  <div class="card card-pavo-default-type-vi alert-queue-priority">
+    <h4 class="alert-queue-label mb-3">Alert Queue</h4>
+    <div class="alert-queue-priority-row">
+      @for (item of modelsData; track item.priority) {
+      <div
+        class="alert-queue-priority-box"
+        [class.priority-high]="item.name==='High Priority'"
+        [class.priority-medium]="item.name==='Medium Priority'"
+        [class.priority-low]="item.name==='Low Priority'"
+      >
+        <h5
+          class="alert-queue-label"
+          [class.priority-high]="item.name==='High Priority'"
+          [class.priority-medium]="item.name==='Medium Priority'"
+          [class.priority-low]="item.name==='Low Priority'"
+        >
+          {{item.name}}
+        </h5>
+
+        @for (subItem of item.levels; track subItem.level){
+        <div class="alert-queue-sub-priority-box">
+          <h6 class="alert-queue-label">Priority {{subItem.level}}</h6>
+
+          @for (subSubItem of subItem.items;track subSubItem.id){
+          <div
+            class="alert-queue-sub-priority-box--item"
+            [class.highlight]="subSubItem.highlight"
+          >
+            <div class="icon">
+              <img
+                [src]="subSubItem.sourceName==='RULE'?'/assets/img/ic-alert-rule.svg':'/assets/img/ic-alert-threshold.svg'"
+                alt="icon"
+              />
+            </div>
+            <div class="label">{{subSubItem.name}}</div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      }
+    </div>
+  </div>
+</div>

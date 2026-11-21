@@ -1,0 +1,105 @@
+@let tC = templateContent; @let aD=autoActionData;
+
+<h5 class="mb-24 action-type-form-title">SMS</h5>
+
+<div class="form-item mb-24">
+  <label>Template ID</label>
+
+  <div class="channel-type--container">{{tC.smsTemplateId}}</div>
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Operation ID</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="Operation ID"
+    [value]="tC.smsOperationType"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Division</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="Division"
+    [value]="tC.smsDivision"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">To</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="To"
+    [value]="tC.recipient"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Content</label>
+
+  <textarea
+    #autoContent
+    id="content"
+    class="form-control pr-5"
+    rows="15"
+    placeholder="Content"
+    style="height: 288px"
+    disabled
+    [value]="tC.template"
+  ></textarea>
+
+  <div
+    class="d-flex align-items-center form-group-custom mb-24"
+    style="margin-top: 12px"
+  >
+    <img
+      [src]="aD.limitFlag?'/assets/img/ic-checkbox-gray-checked.svg':'/assets/img/ic-checkbox-gray-unchecked.svg'"
+      alt="has-pipeline"
+    />
+
+    <label class="form-check-label" for="limit">Limit</label>
+  </div>
+</div>
+
+@if(aD.limitFlag){
+<ng-container>
+  <div class="d-flex justify-content-between align-items-start mb-24">
+    <div class="form-item" style="width: 48%">
+      <label>Key</label>
+
+      <div class="channel-type--container">{{aD.key||''}}</div>
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Threshold</label>
+
+      <div class="channel-type--container">{{aD.threshold||''}}</div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-start">
+    <div class="form-item" style="width: 48%">
+      <label>Period</label>
+
+      <div class="channel-type--container">{{aD.period||''}}</div>
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Unit</label>
+
+      <div class="channel-type--container">{{aD.unit||''}}</div>
+    </div>
+  </div>
+</ng-container>
+
+}

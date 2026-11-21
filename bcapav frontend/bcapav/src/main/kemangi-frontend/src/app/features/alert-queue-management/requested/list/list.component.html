@@ -1,0 +1,223 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div
+    class="d-flex align-items-center justify-content-between mb-24 position-relative"
+  >
+    <app-alert-queue-requested-filter
+      [users]="users"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="!createPermission"
+      (click)="navigateTo('/home/alert-queue-management/create')"
+      tooltipClass="custom-tooltip"
+      placement="start"
+      [ngbTooltip]="!createPermission ? `You don't have permission` : null"
+    >
+      <img src="/assets/img/ic-plus.svg" alt="add" /> Create New Alert Queue
+    </button>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          queueId: queueIdTpl,
+          name: nameTpl,
+          description: descTpl,
+          assignTo: assignToTpl,
+          requesterName: requesterNameTpl,
+          approver1Name: approver1NameTpl,
+          approver2Name: approver2NameTpl,
+          requestDate: requestDateTpl,
+          approval1Date: approval1DateTpl,
+          approval2Date: approval2DateTpl,
+          rejectionNote: rejectionNoteTpl,
+          approvalStatus: approvalStatusTpl,
+          view: viewBtnTpl,
+          requestType: requestTypeTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #queueIdTpl let-row>
+  <div class="truncate">{{ row.queueId ? row.queueId : "-" }}</div>
+</ng-template>
+
+<ng-template #nameTpl let-row>
+  <div class="truncate">{{ row.name ? row.name : "-" }}</div>
+</ng-template>
+
+<ng-template #descTpl let-row>
+  <div class="truncate">
+    {{ row.description ? row.description : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approver1NameTpl let-row>
+  <div class="truncate">
+    {{ row.approver1Name || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approver2NameTpl let-row>
+  <div class="truncate">
+    {{ row.approver2Name || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requestDateTpl let-row>
+  <div class="truncate">
+    {{ (row.requestDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approval1DateTpl let-row>
+  <div class="truncate">
+    {{ (row.approval1Date | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approval2DateTpl let-row>
+  <div class="truncate">
+    {{ (row.approval2Date | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #rejectionNoteTpl let-row>
+  <div class="truncate">{{ row.rejectionNote || "-" }}</div>
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <a
+      [routerLink]="['/home/alert-queue-management/requested', row.apprId]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #approvalStatusTpl let-row>
+  <div class="approval-status-wrapper">
+    <div
+      class="approval-status-label mx-auto"
+      [class.approval-status-label--approved]="
+        row.approvalStatus === 'APPROVED'
+      "
+      [class.approval-status-label--rejected]="
+        row.approvalStatus === 'REJECTED'
+      "
+      [class.approval-status-label--pending]="row.approvalStatus === 'PENDING'"
+      [class.approval-status-label--draft]="row.approvalStatus === 'DRAFT'"
+    >
+      {{ row.approvalStatus ? (row.approvalStatus | capitalize) : "-" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #requestTypeTpl let-row>
+  {{
+    row.requestType === "CREATE"
+      ? "NEW"
+      : row.requestType === "UPDATE"
+        ? "EDIT"
+        : row.requestType
+  }}
+</ng-template>
+
+<ng-template #assignToTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <button
+      type="button"
+      class="action-buttons__item"
+      (click)="open(assignToContent, row.apprId)"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #assignToContent let-modal>
+  <div class="card no-border modal-assign-to-list-view">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div class="fw-semibold">Assign To</div>
+    </div>
+
+    <app-sticky-table
+      [showPageSize]="false"
+      [showPageInfo]="true"
+      [columns]="columnsAssignTo"
+      [data]="tableDataAssignTo"
+      [pageInfo]="pageInfoAssignTo"
+      [pageQuery]="pageQueryAssignTo"
+      [initialPinnedLeft]="columnsAssignToPinned"
+      [cellTemplates]="{
+        no: noTplI,
+      }"
+      (pageChange)="handlePageAssignToChange($event)"
+      (sortChange)="handleSortAssignToChange($event.direction, $event.key)"
+    />
+
+    <div class="d-flex justify-content-end" style="margin-top: 24px">
+      <button
+        type="button"
+        class="btn-type-6 btn-dark-blue fw-bold"
+        (click)="close()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noTplI let-row let-i="index">
+  {{ (pageQueryAssignTo.page - 1) * pageQueryAssignTo.limit + i + 1 }}
+</ng-template>

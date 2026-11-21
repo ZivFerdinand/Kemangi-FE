@@ -1,0 +1,80 @@
+.block-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  min-width: 168px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+.block-btn.download-type {
+  color: #005caa;
+  border: 0.7px solid #005caa;
+}
+
+.block-btn.upload-type {
+  background: #144e83;
+  border: 0.7px solid #144e83;
+  color: #ffffff;
+}
+
+.block-btn.upload-type:disabled {
+  background: #b9b9b9;
+  border: 0.7px solid #b9b9b9;
+  cursor: not-allowed;
+}
+
+.upload-msg {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #121212;
+}
+
+.upload-block-unblock-caution {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #495057;
+}
+
+.attachment-link {
+  display: block;
+  text-decoration: none;
+  font-weight: 600;
+  color: #005caa;
+  margin: 0 0 0px 0;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  width: 100%;
+  word-break: break-word;
+}
+
+.details__item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 0 0 10px 0;
+}
+
+.details__label {
+  width: 115px;
+  font-size: 14px;
+  color: #555555;
+  line-height: 20px;
+  margin: 2px 0;
+}
+
+.details__value {
+  flex: 1;
+  width: calc(100% - 150px - 4px);
+  margin-left: 4px;
+  color: #121212;
+  word-break: normal;
+}

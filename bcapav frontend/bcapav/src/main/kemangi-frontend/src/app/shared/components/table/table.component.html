@@ -1,0 +1,162 @@
+<div class="table-responsive">
+  <table class="table" id="pavoTable">
+    <thead [class.squared]="squared">
+      <tr>
+        @for (col of columns; track col.key) {
+          <th
+            [style.width]="col.width"
+            [class.text-center]="col.align === 'center'"
+            class="text-start"
+          >
+            <div
+              class="d-flex align-items-center"
+              [class.justify-content-center]="col.align === 'center'"
+            >
+              {{ col.label }}
+
+              @if (col.sortable) {
+                <div class="sort-btn-group">
+                  <button
+                    type="button"
+                    class="sort-btn"
+                    (click)="onSort('asc', col.key)"
+                  >
+                    <img src="assets/img/ic-up.svg" />
+                  </button>
+                  <button
+                    type="button"
+                    class="sort-btn"
+                    (click)="onSort('desc', col.key)"
+                  >
+                    <img src="assets/img/ic-down.svg" />
+                  </button>
+                </div>
+              }
+            </div>
+          </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @if (data.length === 0 && showNoData) {
+        <tr>
+          <td [attr.colspan]="columns.length" class="text-center">
+            No data available
+          </td>
+        </tr>
+      } @else {
+        @for (row of data; track row; let i = $index) {
+          <tr [class.row-changed]="row.statusChanged === 'changed'">
+            @for (col of columns; track col.key) {
+              <td
+                [style.width]="col.width"
+                [class.text-center]="col.align === 'center'"
+                class="text-start"
+                [ngClass]="getCellClass(row, col)"
+                [ngStyle]="getCellStyle(row, col)"
+              >
+                @if (cellTemplates[col.key]) {
+                  <ng-container
+                    *ngTemplateOutlet="
+                      cellTemplates[col.key];
+                      context: { $implicit: row, index: i }
+                    "
+                  ></ng-container>
+                } @else {
+                  {{ formatCellValue(row, col) }}
+                }
+              </td>
+            }
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+
+<div
+  class="d-flex align-items-center"
+  [class.justify-content-between]="showPageInfo"
+  [class.justify-content-end]="!showPageInfo"
+  [class.d-none]="!pagination"
+  [style.margin-top.px]="marginTopPageInfo"
+>
+  @if (showPageInfo && pageInfo) {
+    <div class="page-info">
+      Showing {{ startIndex + 1 }} to {{ endIndex }} of
+      {{ pageInfo.totalElements }} entries
+    </div>
+  }
+  <div class="d-flex align-items-center">
+    @if (showLimitSize) {
+      <div class="d-flex align-items-center" style="margin-right: 38px">
+        <label for="pageSize" style="margin-right: 10px; font-size: 14px"
+          >Show</label
+        >
+        <select
+          id="pageSize"
+          class="form-select"
+          aria-label="Default select example"
+          (change)="onLimitChange($event)"
+        >
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+        </select>
+      </div>
+    }
+
+    <!-- /// --->
+    @if (pageInfo && pageParams) {
+      <ngb-pagination
+        class="table-pagination"
+        [collectionSize]="pageInfo?.totalElements"
+        [(page)]="pageParams.page"
+        [pageSize]="pageParams.limit"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true"
+        (pageChange)="onPageChange($event)"
+      >
+        >
+
+        <ng-template ngbPaginationFirst>
+          <img
+            src="assets/img/ic-chevron-double-left.svg"
+            alt="first"
+            width="16"
+            height="16"
+          />
+        </ng-template>
+
+        <ng-template ngbPaginationPrevious>
+          <img
+            src="assets/img/ic-chevron-left.svg"
+            alt="prev"
+            width="16"
+            height="16"
+          />
+        </ng-template>
+
+        <ng-template ngbPaginationNext>
+          <img
+            src="assets/img/ic-chevron-right.svg"
+            alt="next"
+            width="16"
+            height="16"
+          />
+        </ng-template>
+
+        <ng-template ngbPaginationLast>
+          <img
+            src="assets/img/ic-chevron-double-right.svg"
+            alt="last"
+            width="16"
+            height="16"
+          /> </ng-template
+      ></ngb-pagination>
+    }
+  </div>
+</div>

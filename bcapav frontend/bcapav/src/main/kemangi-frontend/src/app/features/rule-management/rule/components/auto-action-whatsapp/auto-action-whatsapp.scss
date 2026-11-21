@@ -1,0 +1,27 @@
+.action-type-form-title {
+  font-size: 14px;
+  color: #393939;
+  font-weight: 600;
+}
+
+.form-check-label {
+  margin-bottom: 0 !important;
+}
+
+.rule-btn-upload {
+  display: block;
+  height: 32px;
+  border-radius: 16px;
+  box-shadow: none;
+  border: none;
+  background-color: #e6f3ff;
+  color: #005caa;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  padding: 8px 16px;
+}
+
+.rule-btn-upload:disabled {
+  opacity: 0.4;
+}

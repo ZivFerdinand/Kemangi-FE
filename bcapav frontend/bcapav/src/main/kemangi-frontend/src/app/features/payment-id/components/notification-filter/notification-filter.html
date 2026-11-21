@@ -1,0 +1,56 @@
+<div class="d-flex position-relative" [style.margin-left.px]="24">
+  <button
+    type="button"
+    class="btn-type-1 toggle-filter"
+    (click)="toggleFilter()"
+  >
+    <img src="/assets/img/ic-filter-blue.svg" alt="filter" />
+    <div class="name">Filter</div>
+  </button>
+
+  <form class="card card--small-filter" [class.d-none]="!showFilter">
+    <div class="filter-inputs">
+      <div class="filter-inputs-section">
+        <div class="form-item">
+          <label for="actionInput" class="label-medium"> Action </label>
+
+          <div class="d-flex mt-3">
+            <label class="custom-radio">
+              <input type="radio" name="option" value="BLOCK" />
+              <span class="radio"></span>
+              Block
+            </label>
+
+            <label class="custom-radio" style="margin-left: 24px">
+              <input
+                type="radio"
+                name="option"
+                value="UNBLOCK"
+                formControlName="action"
+              />
+              <span class="radio"></span>
+              Unblock
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue me-3"
+        (click)="resetFilter()"
+      >
+        Reset
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="submitFilter()"
+      >
+        Apply
+      </button>
+    </div>
+  </form>
+</div>

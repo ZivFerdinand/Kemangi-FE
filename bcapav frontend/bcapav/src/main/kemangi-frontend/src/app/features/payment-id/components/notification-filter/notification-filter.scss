@@ -1,0 +1,38 @@
+.custom-radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.custom-radio input {
+  display: none;
+}
+
+.radio {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #555555;
+  border-radius: 50%;
+  position: relative;
+}
+
+.custom-radio input.invalid + .radio {
+  border: 2px solid #dd1205;
+}
+
+.custom-radio input:checked + .radio {
+  border-color: #555555;
+}
+
+.custom-radio input:checked + .radio::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #555555;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

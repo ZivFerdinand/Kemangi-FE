@@ -1,0 +1,112 @@
+.alert-queue-priority-row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.alert-queue-priority-box {
+  border: 1px solid #465066;
+  border-radius: 10px;
+  padding: 18px 18px 24px 18px;
+}
+
+.alert-queue-priority-box.priority-high {
+  border-color: #dd1205;
+  background: #ffdada;
+}
+.alert-queue-priority-box.priority-medium {
+  border-color: #ffa822;
+  background: #ffeed3;
+}
+.alert-queue-priority-box.priority-low {
+  border-color: #ffc107;
+  background: #fffbde;
+}
+
+h3.alert-queue-label {
+  color: #393939;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+h4.alert-queue-label {
+  color: #144e83;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+h5.alert-queue-label {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
+  margin-bottom: 18px;
+}
+
+h5.alert-queue-label.priority-high {
+  color: #930c03;
+}
+h5.alert-queue-label.priority-medium {
+  color: #aa7017;
+}
+h5.alert-queue-label.priority-low {
+  color: #b18500;
+}
+
+h6.alert-queue-label {
+  color: #393939;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 100%;
+  margin-bottom: 12px;
+}
+
+.card-pavo-default-type-vi.alert-queue-priority {
+  border-color: #868e96;
+}
+
+.alert-queue-sub-priority-box {
+  background: #ffffff;
+  border: 1px solid #868e96;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.alert-queue-sub-priority-box:last-of-type {
+  margin-bottom: 0px;
+}
+
+.alert-queue-sub-priority-box--item {
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e9ecef;
+}
+
+.alert-queue-sub-priority-box--item .icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.alert-queue-sub-priority-box--item .icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.alert-queue-sub-priority-box--item .label {
+  margin-left: 8px;
+  width: calc(100% - 24px - 8px);
+  height: 24px;
+  font-size: 16px;
+  color: #121212;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

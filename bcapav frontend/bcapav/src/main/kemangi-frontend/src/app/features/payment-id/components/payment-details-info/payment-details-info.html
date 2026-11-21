@@ -1,0 +1,59 @@
+<div class="card no-border card-pavo-default-type-ii mb-24">
+  <div class="approval-details approval-details--type-i">
+    <div class="approval-details__left">
+      <div class="approval-details__column approval-details__column--left">
+        <div class="approval-details__item">
+          <div class="approval-details__label">Requested Date</div>
+          <div class="approval-details__value">
+            {{(data?.requestDate|date:"dd-MMM-yyyy HH:mm:ss") ||'-'}}
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Request Type</div>
+          <div class="approval-details__value">{{data?.requestType||'-'}}</div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Last Action Date</div>
+          <div class="approval-details__value">
+            {{(data?.lastActionDate |date:"dd-MMM-yyyy HH:mm:ss") ||'-'}}
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Last Action Status</div>
+          <div class="approval-details__value">{{data?.actionStatus||"-"}}</div>
+        </div>
+      </div>
+
+      <div class="approval-details__column approval-details__column--right">
+        <div class="approval-details__item">
+          <div class="approval-details__label">Payment ID</div>
+          <div class="approval-details__value">{{data?.paymentId||'-'}}</div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">CIN</div>
+          <div class="approval-details__value">{{data?.cin||'-'}}</div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Customer Name</div>
+          <div class="approval-details__value">{{data?.customerName||'-'}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approval-details__divider transparent"></div>
+
+    <div class="approval-details__right">
+      <div class="approval-details__column approval-details__column--left">
+        <div class="approval-details__item">
+          <div class="approval-details__label">Bank Name</div>
+          <div class="approval-details__value">{{data?.bankName||'-'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

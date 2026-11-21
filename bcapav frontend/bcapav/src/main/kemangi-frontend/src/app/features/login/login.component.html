@@ -1,0 +1,68 @@
+<div class="login-bg">
+    <section class="initial-page">
+        <div class="container-fluid">
+            <div class="row position-relative justify-content-center" style="height: 100vh;">
+                <div class="col-md-5 text-center d-flex flex-column justify-content-center left-side">
+                    <div class="d-flex flex-row justify-content-center">
+                        <img src="/assets/img/PAVO-logo-transparent.png" alt="" height="56px" style="margin-right: 10px;">
+                        
+                        <img src="/assets/img/PAVO NEXT GEN.svg" alt="logo">
+                    </div>
+                    <form [formGroup]="loginForm" class="d-flex flex-column justify-content-center mt-5" (ngSubmit)="login()">
+                        
+                        <div class="form-group mb-2 align-items-start d-flex flex-column">
+                            <label>User ID</label>
+                            <input type="text" class="form-control" placeholder="Input User ID" id="username" formControlName="username" [ngClass]="{ 'is-invalid': isSubmitted && formControls['username'].errors }">
+                            <div class="small" *ngIf="isSubmitted && formControls['username'].errors">
+                                <div *ngIf="formControls['username'].errors['required']">
+                                    <label class="text-danger">User ID is required</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="position-relative form-group mb-2 align-items-start d-flex flex-column">
+                            <label>Password</label>
+                            <input [type]="show ? 'text' : 'password'"
+                                    class="form-control pr-5"
+                                    placeholder="Input Password"
+                                    id="password"
+                                    formControlName="password"
+                                    [ngClass]="{ 'is-invalid' : isSubmitted && formControls['password'].errors }">
+                             <p class="position-absolute btn btn-link btn-show-pass" (click)="password()">
+                                <img alt="finch"  *ngIf="show" src="assets/img/blind.svg" alt="show-password" >
+                                <img alt="finch"  *ngIf="!show" src="assets/img/ic-view-table.png" alt="hide-password">
+                            </p>
+                            <div class="small mb-2" *ngIf="isSubmitted && formControls['password'].errors">
+                                <div *ngIf="formControls['password'].errors['required']">
+                                    <label class="text-danger">Password is required</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mt-3 mb-3" *ngIf="error && isSubmitted">
+                            <div class="bg-danger rounded" style="padding: 5px;">
+                                {{error}}
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div class="form-group text-center mt-3 d-flex">
+                            <button class="btn btn-primary btn-login">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-5 d-flex flex-column justify-content-center right-side" style="width: 35vw;">
+                    <div>
+                        <img
+                            width="90%"
+                            alt=""
+                            class="mb-4"
+                            src="assets/img/pavo-login-illust.png"
+                        />
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+</div>

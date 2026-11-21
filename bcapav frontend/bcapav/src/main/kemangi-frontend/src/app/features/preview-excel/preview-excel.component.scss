@@ -1,0 +1,86 @@
+.tabs-container {
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+  width: 80%;
+}
+
+/* Chrome, Edge, Safari */
+.tabs-container::-webkit-scrollbar {
+  height: 6px; /* slim horizontal scrollbar */
+}
+
+.tabs-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 10px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  min-width: max-content;
+}
+
+/* Base tab */
+.tabs button {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #5f6368;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.tabs button:hover {
+  background: #f1f3f4;
+  color: #202124;
+}
+
+/* Active tab (Google Sheets style) */
+.tabs button.active {
+  background: #fff;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+/* Bottom indicator */
+.tabs button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: #1a73e8;
+  border-radius: 2px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #000;
+  padding: 6px;
+}
+
+.download-btn {
+  padding: 6px 12px;
+}

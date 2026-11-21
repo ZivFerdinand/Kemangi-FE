@@ -1,0 +1,52 @@
+@let d = details;
+
+<section class="card no-border card-pavo-default-type-ii">
+  <div class="role-info">
+    <div class="role-info__section--i">
+      <div style="margin-bottom: 16px">
+        <app-toggle-switch
+          [(ngModel)]="d.activeStatus"
+          [disabled]="isDisabled"
+        ></app-toggle-switch>
+      </div>
+      <div class="role-info__item">
+        <div class="role-info__label">Notes</div>
+        <div class="role-info__content">{{ d.note || '-'}}</div>
+      </div>
+      <div class="role-info__item">
+        <div class="role-info__label">Description</div>
+        <div class="role-info__content">{{d.description || '-' }}</div>
+      </div>
+    </div>
+    <div class="role-info__separator"></div>
+    <div class="role-info__section--ii">
+      <div class="role-info__item">
+        <div class="role-info__label">Requested By</div>
+        <div class="role-info__content">
+          {{ d.requesterName===''?'-':d.requesterName }}
+        </div>
+      </div>
+      <div class="role-info__item">
+        <div class="role-info__label">Requested Date</div>
+        <div class="role-info__content">
+          {{ details.requestDate === '' ?'-': (details.requestDate |
+          date:'dd-MMM-yyyy HH:mm:ss') }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="d-flex align-items-center justify-content-end btn-section">
+  <button type="button" class="btn-type-1 btn-white-outlined" (click)="back()">
+    Back
+  </button>
+  @if(pageType==='task list'){
+  <button type="button" class="btn-type-1 btn-reject ms-3" (click)="reject()">
+    Reject
+  </button>
+  <button type="button" class="btn-type-1 btn-approve ms-3" (click)="approve()">
+    Approve
+  </button>
+  }
+</section>

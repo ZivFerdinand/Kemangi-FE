@@ -1,0 +1,68 @@
+<div class="custom-select-type-a">
+  <div
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    class="select-trigger"
+    [class.placeholder]="!selected"
+    [class.is-invalid]="isInvalid"
+    [class.disabled]="disabled"
+    (click)="!disabled && onTriggerClick($event)"
+  >
+    @if (isOpen) {
+    <input
+      #searchInput
+      type="text"
+      [(ngModel)]="searchTerm"
+      class="search-input"
+      [placeholder]="placeholder"
+      (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
+    />
+    } @else {
+    <span> {{ selected?.name || placeholder }} </span>
+    <span class="custom-arrow-i">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+    }
+  </div>
+
+  @if (isInvalid) {
+  <div class="invalid-input">{{ errorMessage }}</div>
+  }
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen && !disabled"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+    (backdropClick)="closeDropdown()"
+  >
+    <div class="dropdown" [style.width.px]="dropdownWidth">
+      @for (group of filteredOptions; track $index) {
+
+      <div class="group-header" (click)="toggleGroup(group)">
+        <span>
+          <img
+            [src]="
+                  group.open
+                    ? 'assets/img/ic-arrow-black-up.svg'
+                    : 'assets/img/ic-arrow-black-down.svg'
+                "
+          />
+        </span>
+        {{ group.group }}
+      </div>
+
+      @if (group.open) {
+      <div>
+        @for (item of group.items; track $index) {
+        <div class="option" (click)="!disabled && select(item)">
+          {{ item.name }}
+        </div>
+        }
+      </div>
+      } }
+    </div>
+  </ng-template>
+</div>

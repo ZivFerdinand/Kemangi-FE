@@ -1,0 +1,308 @@
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <ng-container
+    [ngTemplateOutlet]="type==='requested'?detailRequested:detailTask"
+    [ngTemplateOutletContext]="{ detail: data }"
+  ></ng-container>
+
+  <div class="d-flex align-items-end justify-content-between">
+    <div>
+      <label class="search-box--label">Search Card Number</label>
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control pr-5"
+          placeholder="Search here"
+          [(ngModel)]="query"
+          (keyup.enter)="handleQuery()"
+        />
+        <button type="button" class="search-btn" (click)="handleQuery()">
+          <img src="/assets/img/ic-find.svg" alt="find" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-table
+    [columns]="columns"
+    [data]="tableData"
+    [pageInfo]="pageInfo"
+    [pageParams]="pageQuery"
+    [cellTemplates]="{
+          no: noTpl,amount:amountTpl,idsStatus:idsStatusTpl,processStatus:processStatusTpl
+        }"
+    (pageChange)="handlePageChange($event)"
+    (sort)="handleSortChange($event.direction, $event.key)"
+    [showPageInfo]="true"
+  />
+</section>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery?.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #amountTpl let-row let-i="index">
+  {{ row.amount != null ? (row.amount | number: "1.0-0" : "de") : "-" }}
+</ng-template>
+
+<ng-template #idsStatusTpl let-row let-i="index">
+  {{ row.idsStatus === true ? 'Success':row.idsStatus === false?'Failed':'-'}}
+</ng-template>
+
+<ng-template #processStatusTpl let-row let-i="index">
+  {{ row.processStatus === true ? 'Success':row.processStatus ===
+  false?'Failed':'-'}}
+</ng-template>
+
+<ng-template #detailRequested let-detail="detail">
+  <div class="approval-details approval-details--type-i mb-24">
+    <div class="approval-details__left">
+      <div class="approval-details__column approval-details__column--left">
+        <div class="dummy-toggle-switch"></div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">File Name</div>
+          <div class="approval-details__value">
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(null,null)"
+            >
+              {{ data.fileName || "-" }}
+            </button>
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Valid Records</div>
+          <div class="approval-details__value">
+            @if(data.totalValidData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(true,null)"
+            >
+              {{data.totalValidData}}
+            </button>
+            } @else{ {{0}} }
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Approval Status</div>
+          <div class="approval-details__value">
+            <div
+              class="approval-status-label"
+              [class.approval-status-label--approved]="
+                  data.approvalStatus === 'APPROVED'
+                "
+              [class.approval-status-label--rejected]="
+                  data.approvalStatus === 'REJECTED'
+                "
+              [class.approval-status-label--pending]="
+                  data.approvalStatus === 'PENDING'
+                "
+            >
+              {{ (data.approvalStatus || "-") | capitalize }}
+            </div>
+          </div>
+        </div>
+        <div class="dummy-toggle-switch"></div>
+      </div>
+
+      <div class="approval-details__column approval-details__column--right">
+        <div class="dummy-toggle-switch"></div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Total Records</div>
+          <div class="approval-details__value">{{data.totalData||'-'}}</div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Invalid Records</div>
+          <div class="approval-details__value">
+            @if(data.totalInvalidData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(false, null)"
+            >
+              {{data.totalInvalidData}}
+            </button>
+            } @else { {{0}} }
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Rejection Notes</div>
+          <div class="approval-details__value">{{data.rejectionNote||'-'}}</div>
+        </div>
+
+        <div class="dummy-toggle-switch"></div>
+      </div>
+    </div>
+
+    <div class="approval-details__divider"></div>
+
+    <div class="approval-details__right">
+      <div class="approval-details__column approval-details__column--left">
+        <div class="dummy-toggle-switch"></div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Requested Date</div>
+          <div class="approval-details__value">
+            {{(data.requestDate | date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+
+        <!-- == -->
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Reviewed Date</div>
+          <div class="approval-details__value">
+            {{(data.approvalDate | date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Process Status</div>
+          <div class="approval-details__value">
+            @if ( data.processStatus===''||data.processStatus === "REJECTED" ) {
+            <div>-</div>
+            } @else {
+            <div
+              class="process-status-label"
+              [class.process-status-label--pending]="data.processStatus === 'PENDING'"
+              [class.process-status-label--done]="data.processStatus === 'DONE'"
+              [class.process-status-label--in-progress]="data.processStatus === 'IN_PROGRESS'"
+              [class.process-status-label--waiting]="data.processStatus === 'WAITING'"
+            >
+              {{ data.processStatus === "IN_PROGRESS" ? "In Progress" :
+              data.processStatus ? (data.processStatus | capitalize) : "-" }}
+            </div>
+            }
+          </div>
+        </div>
+
+        @if(data?.processStatus==='DONE'){
+        <div class="approval-details__item">
+          <div class="approval-details__label">Failed</div>
+          <div class="approval-details__value">
+            @if(data.totalFailedData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(null, false)"
+            >
+              {{data.totalFailedData}}
+            </button>
+            } @else{ {{0}} }
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="approval-details__column approval-details__column--left">
+        <div class="dummy-toggle-switch"></div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Requested By</div>
+          <div class="approval-details__value">{{data.requesterName||'-'}}</div>
+        </div>
+
+        <!-- == -->
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Reviewed By</div>
+          <div class="approval-details__value">{{data.approverName||'-'}}</div>
+        </div>
+
+        @if(data?.processStatus==='DONE'){
+        <div class="approval-details__item">
+          <div class="approval-details__label">Success</div>
+          <div class="approval-details__value">
+            @if(data.totalSuccessData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(null, true)"
+            >
+              {{data.totalSuccessData}}
+            </button>
+            } @else{ {{0}} }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #detailTask let-detail="detail">
+  <div class="approval-details approval-details--type-i mb-24">
+    <div class="approval-details__left">
+      <div class="approval-details__column approval-details__column--left">
+        <div class="approval-details__item mt-3">
+          <div class="approval-details__label">File Name</div>
+          <div class="approval-details__value">
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(null,null)"
+            >
+              {{ data.fileName || "-" }}
+            </button>
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Valid Records</div>
+          <div class="approval-details__value">
+            @if(data.totalValidData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(true,null)"
+            >
+              {{data.totalValidData}}
+            </button>
+            } @else{ {{0}} }
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Requested By</div>
+          <div class="approval-details__value">{{data.requesterName||'-'}}</div>
+        </div>
+      </div>
+
+      <div class="approval-details__column approval-details__column--right">
+        <div class="approval-details__item mt-3">
+          <div class="approval-details__label">Total Records</div>
+          <div class="approval-details__value">{{data.totalData||'-'}}</div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Invalid Records</div>
+          <div class="approval-details__value">
+            @if(data.totalInvalidData>0){
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(false, null)"
+            >
+              {{data.totalInvalidData}}
+            </button>
+            } @else { {{0}} }
+          </div>
+        </div>
+
+        <div class="approval-details__item">
+          <div class="approval-details__label">Requested Date</div>
+          <div class="approval-details__value">
+            {{(data.requestDate | date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

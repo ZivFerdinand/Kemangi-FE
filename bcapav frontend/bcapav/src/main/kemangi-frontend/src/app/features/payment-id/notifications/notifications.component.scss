@@ -1,0 +1,32 @@
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 304px;
+  margin-right: 16px;
+}
+
+.search-box .form-control {
+  margin-right: 8px;
+  width: 248px;
+  height: 48px;
+}
+
+.search-btn {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #144e83;
+  border: none;
+  color: #ffffff;
+}
+
+.search-btn:hover {
+  background-color: #1a6cb3;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}

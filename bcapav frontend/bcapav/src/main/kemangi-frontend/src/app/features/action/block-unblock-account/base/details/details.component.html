@@ -1,0 +1,92 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <section class="card no-border card-pavo-default-type-ii mb-24">
+    <div class="details__item">
+      <div class="details__label">Action:</div>
+      <div class="details__value fw-bold">
+        {{ (details.action | capitalize) || "-" }}
+      </div>
+    </div>
+
+    <div class="details__item">
+      <div class="details__label">File Name:</div>
+      <div class="details__value">
+        <button
+          type="button"
+          class="attachment-link"
+          (click)="
+            handleDownload({
+              id: details.id,
+              fileName: details.fileName,
+              validStatus: null,
+              processStatus: null,
+            })
+          "
+        >
+          {{ details.fileName || "-" }}
+        </button>
+      </div>
+    </div>
+
+    <div class="details__item">
+      <div class="details__label">Total Records:</div>
+      <div class="details__value">{{ details.totalData || 0 }}</div>
+    </div>
+
+    <div class="details__item">
+      <div class="details__label">Valid Records:</div>
+      <div class="details__value">
+        {{ details.totalValidData || 0 }}
+      </div>
+    </div>
+
+    <div class="details__item" [class.mb-24]="details.totalInvalidData">
+      <div class="details__label">Invalid Records:</div>
+      <div class="details__value">
+        {{ details.totalInvalidData || 0 }}
+      </div>
+    </div>
+
+    @if (details.totalInvalidData > 0) {
+      <div class="upload-block-unblock-caution mb-24">
+        The following records are invalid. Please review and correct the invalid
+        records.
+      </div>
+
+      <div>
+        <app-table
+          [columns]="columns"
+          [data]="tableData"
+          [pageInfo]="pageInfo"
+          [pageParams]="pageQuery"
+          [showPageInfo]="true"
+          (pageChange)="handlePageChange($event)"
+          (sort)="handleSortChange($event.direction, $event.key)"
+          [cellTemplates]="{
+            no: noTpl,
+          }"
+        ></app-table>
+      </div>
+    }
+  </section>
+  <div class="d-flex justify-content-end">
+    <button
+      type="button"
+      class="btn-type-5 btn-white-outlined me-3"
+      (click)="back()"
+    >
+      Back
+    </button>
+    <button
+      type="button"
+      class="btn-type-5 btn-dark-blue"
+      [disabled]="details.totalInvalidData === details.totalData"
+      (click)="submit()"
+    >
+      Submit
+    </button>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>

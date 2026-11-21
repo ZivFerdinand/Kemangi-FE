@@ -1,0 +1,61 @@
+.form-check-label {
+  margin-left: 8px;
+  color: #393939;
+}
+
+.data-group-form-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.form-group-custom {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 360px;
+}
+
+.delete-btn {
+  background-color: transparent;
+  position: absolute;
+  box-shadow: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  top: 12px;
+  right: 16px;
+}
+
+.btn-white-outlined img {
+  margin-right: 8px;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.card.datagroup-form {
+  border-radius: 8px;
+}
+
+.data_group_info {
+  word-break: break-all;
+  color: #121212;
+}
+
+.data-group-current-detail-section-i--container {
+  width: 768px;
+}
+
+.data-group-current-detail-section-i--sub-container {
+  width: calc((768px - 48px) / 2);
+}
+
+.data-group_details_label_i {
+  font-size: 14px;
+  color: #555555;
+  width: 150px;
+  line-height: 20px;
+}

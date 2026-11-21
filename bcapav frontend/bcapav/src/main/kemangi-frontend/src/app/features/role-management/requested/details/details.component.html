@@ -1,0 +1,20 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (details()?.requestType === "UPDATE") {
+    <app-edit-role-approval
+      [rawMenuList]="rawMenuList()"
+      [details]="details()"
+      [prevDetails]="prevDetails()"
+      [pageType]="'requested list'"
+      [back]="back.bind(this)"
+    />
+  }
+
+  @if (details()?.requestType !== "UPDATE") {
+    <app-default-role-approval
+      [rawMenuList]="rawMenuList()"
+      [details]="details()"
+      [pageType]="'requested list'"
+      [back]="back.bind(this)"
+    />
+  }
+</app-content-layout>

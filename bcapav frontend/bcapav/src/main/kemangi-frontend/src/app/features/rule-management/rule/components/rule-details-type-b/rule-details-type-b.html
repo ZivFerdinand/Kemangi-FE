@@ -1,0 +1,197 @@
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div class="base-details base-details--type-i">
+    <div class="base-details__left base-details--draft">
+      <div class="base-details__column">
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">
+            Requested By
+          </div>
+          <div class="base-details__value base-details--draft">
+            {{data().requesterName||'-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">Review 1 By</div>
+          <div class="base-details__value base-details--draft">
+            {{data().approver1Name||'-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">Review 2 By</div>
+          <div class="base-details__value base-details--draft">
+            {{data().approver2Name||'-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">Status</div>
+          <div class="base-details__value base-details--draft">
+            <div
+              class="approval-status-label"
+              [class.approval-status-label--approved]="
+                  data().approvalStatus === 'APPROVED'
+                "
+              [class.approval-status-label--rejected]="
+                  data().approvalStatus === 'REJECTED'
+                "
+              [class.approval-status-label--pending]="
+                  data().approvalStatus === 'PENDING' || data().approvalStatus === 'DRAFT'
+                "
+            >
+              {{ (data().approvalStatus || "-") | capitalize }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="base-details__column">
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">
+            Requested Date
+          </div>
+          <div class="base-details__value base-details--draft">
+            {{(data().requestDate| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">
+            Review 1 Date
+          </div>
+          <div class="base-details__value base-details--draft">
+            {{(data().approval1Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">
+            Review 2 Date
+          </div>
+          <div class="base-details__value base-details--draft">
+            {{(data().approval2Date| date:"dd-MMM-yyyy HH:mm:ss") || '-'}}
+          </div>
+        </div>
+
+        <div class="base-details__item base-details--draft">
+          <div class="base-details__label base-details--draft">
+            Rejection Notes
+          </div>
+          <div class="base-details__value base-details--draft">
+            {{data().rejectionNote || '-'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div class="base-details base-details--type-i">
+    <div class="base-details__left">
+      <div class="base-details__column base-details__column--left">
+        <div style="margin-bottom: 16px">
+          <app-toggle-switch
+            [(ngModel)]="data().activeStatus"
+            [disabled]="true"
+          ></app-toggle-switch>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Product Group</div>
+          <div class="base-details__value">{{data().productType||'-'}}</div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Rule Name</div>
+          <div class="base-details__value">{{data().ruleName||'-'}}</div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Short Description</div>
+          <div class="base-details__value">{{data().ruleDescShort||'-'}}</div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Type</div>
+          <div class="base-details__value">{{data().ruleType||'-'}}</div>
+        </div>
+      </div>
+
+      <div class="base-details__column base-details__column--right">
+        <div class="dummy-toggle-switch"></div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Rule ID</div>
+          <div class="base-details__value">{{data().ruleId||'-'}}</div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Effective Date</div>
+          <div class="base-details__value">
+            {{(data().ruleStart| date:"dd-MMM-yyyy") || '-'}} {{data().ruleStart
+            && data().ruleEnd? " - ":" "}} {{(data().ruleEnd|
+            date:"dd-MMM-yyyy") || ''}}
+          </div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Long Description</div>
+          <div class="base-details__value">{{data().ruleDescLong||'-'}}</div>
+        </div>
+
+        <div class="base-details__item">
+          <div class="base-details__label">Attachment</div>
+
+          @if (data().listFiles.length > 0) {
+          <div class="base-details__value">
+            @for (file of data().listFiles; track file.generatedName) {
+            <button
+              type="button"
+              class="attachment-link"
+              (click)="handleDownload(file.url ?? '', file.extension ?? '')"
+            >
+              {{ file.originalName || "null" }}
+            </button>
+            }
+          </div>
+          } @else {
+          <div>-</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="base-details__right">
+      <div class="base-details__column base-details__column--left">
+        <div class="dummy-toggle-switch"></div>
+        <div class="w-100 d-flex align-items-center" style="margin-top: 27px">
+          <img
+            [src]="data().alertFlag?'assets/img/ic-checkbox-gray-checked.svg'
+          :'assets/img/ic-checkbox-gray-unchecked.svg'"
+            alt="alert"
+            width="18"
+            height="18"
+          />
+
+          <div style="margin-left: 8px">Alert</div>
+        </div>
+      </div>
+
+      <div class="base-details__column base-details__column--left">
+        <div class="dummy-toggle-switch"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-subrule-details
+  [initialSubRules]="data().subrules"
+  [dropdownFunction]="dropdownRuleFunction"
+  [dropdownOperator]="dropdownRuleOperator"
+  [dropdownDataGroup]="dropdownDataGroup"
+  [dropdownHistorical]="dropdownHistorical"
+  [productType]="data().productType"
+  [requestType]="data().requestType"
+  [mode]="'DRAFT'"
+/>

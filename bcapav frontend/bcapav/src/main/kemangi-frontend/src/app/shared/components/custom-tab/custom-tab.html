@@ -1,0 +1,14 @@
+<div class="custom-tab" [class.type-b]="styleType==='type-b'">
+  @for (tab of tabs; track tab.value) {
+  <button
+    type="button"
+    class="custom-tab__tab-btn"
+    [class.type-b]="styleType==='type-b'"
+    [class.active]="activeTab === tab.value"
+    [disabled]="!isDisabledFn(tab.value)"
+    (click)="selectTab(tab.value)"
+  >
+    {{ tab.label }}
+  </button>
+  }
+</div>

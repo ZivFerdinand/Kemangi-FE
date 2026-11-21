@@ -1,0 +1,512 @@
+.sidebar {
+  border-radius: 0 24px 24px 0px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  padding-top: 20px;
+  background-color: #144e83;
+  transition: width 0.5s ease;
+  z-index: 1000;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 2px 2px 8px 0px #00000040;
+}
+
+.sidebar .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar .nav-link {
+  height: 40px;
+  margin-bottom: 2.5px !important;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 10px;
+  margin: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  // opacity: 0;
+  transition: opacity 0.3s ease;
+  transition-delay: 0.5s;
+}
+
+.sidebar .logo-area-img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  // transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  // transition-delay: 0.3s;
+  // opacity: 0;
+}
+
+
+.sidebar .description {
+  font-size: 13px;
+  // opacity: 0;
+  transition: opacity 0.3s ease;
+  transition-delay: 0.8s;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis !important;
+  max-width: 130px;
+}
+
+.sidebar .nav-link:hover {
+  color: #005caa;
+  font-weight: bold;
+  background-color: #cde4f8;
+}
+
+.sidebar .sub-menu .nav-link {
+  padding-left: 3%;
+  margin: 0 10px 0 50px;
+  // opacity: 0;
+  transition: opacity 0.3s ease;
+  transition-delay: 0.8s;
+}
+
+.sidebar .sub-menu .nav-link {
+  margin: 5px -10px !important;
+  padding-left: 70px !important;
+  width: calc(100% + 10px) !important;
+}
+
+.sidebar .sub-menu,
+.sidebar .sub-menu .nav-link {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.sidebar .nav-link[aria-expanded="true"] {
+  font-weight: bold;
+}
+
+:not(.collapsed) .sidebar .nav-link[aria-expanded="true"] {
+  background-color: #cde4f8;
+  color: #005caa;
+  font-weight: bold;
+}
+
+.sidebar .nav-link-logout {
+  border-radius: 24px;
+  margin: auto;
+  margin-top: 25px;
+  width: 25%;
+  display: flex;
+  color: white;
+  background-color: #005CAA;
+  height: min-content;
+}
+
+.sidebar:hover .nav-link,
+.sidebar:hover .logo-area-img,
+.sidebar:hover .logo-area-text,
+.sidebar:hover .description,
+.sidebar:hover .sub-menu .nav-link {
+  opacity: 1;
+}
+
+.collapsed .sidebar {
+  min-width: 63px;
+  width: 63px;
+  overflow-y: hidden;
+}
+
+.collapsed .sidebar .logo-area-img {
+  width: 40px;
+  height: 40px;
+  transition-delay: 0s;
+  opacity: 1;
+}
+
+.collapsed .sidebar .logo-area-text {
+  display: none;
+}
+
+.collapsed .sidebar .description {
+  // opacity: 0;
+  display: none;
+}
+
+.collapsed .sidebar .nav-link {
+  justify-content: unset;
+  margin: 0px 0px !important;
+  margin-bottom: 2.5px !important;
+  opacity: 1;
+}
+
+.collapsed .sidebar .nav-link-logout {
+  border-radius: 24px;
+  margin: auto;
+  margin-top: 25px !important;
+  background-color: transparent;
+  display: block;
+  height: 40px;
+}
+
+// .collapsed .sidebar .sub-menu a {
+//   opacity: 0;
+//   display: none;
+// }
+
+.collapsed .main-content {
+  margin-left: 60px;
+}
+
+.sidebar .submenu-arrow {
+  margin-left: auto;
+  margin-right: 0;
+  display: inline-block;
+  transition: transform 0.3s;
+  vertical-align: middle;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sidebar .nav-link {
+  position: relative;
+}
+
+.sidebar .nav-link .icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.2s ease-in-out;
+}
+
+.sidebar .nav-link .icon img {
+  display: none;
+}
+
+.sidebar .nav-home .icon {
+  background-image: url("/assets/img/ic-home.svg");
+}
+
+.sidebar .nav-link.nav-home:hover .icon,
+.sidebar .nav-link.nav-home.active .icon {
+  background-image: url("/assets/img/ic-home-dark.svg");
+}
+
+.sidebar .nav-alert .icon {
+  background-image: url("/assets/img/ic-alert-detail.svg");
+}
+
+.collapsed .sidebar .nav-alert .icon {
+  background-image: url("/assets/img/ic-alert-detail.svg");
+}
+
+.sidebar .nav-link.nav-alert:hover .icon,
+.sidebar .nav-link.nav-alert[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-alert-detail-dark.svg") !important;
+}
+
+.sidebar .nav-report .icon {
+  background-image: url("/assets/img/ic-rep.svg");
+}
+
+.sidebar .nav-link.nav-report:hover .icon,
+.sidebar .nav-link.nav-report.active .icon {
+  background-image: url("/assets/img/ic-rep-dark.svg");
+}
+
+.sidebar .nav-payment-id .icon {
+  background-image: url("/assets/img/ic-payment-id-white.svg");
+}
+
+.sidebar .nav-link.nav-payment-id:hover .icon,
+.sidebar .nav-link.nav-payment-id.active .icon {
+  background-image: url("/assets/img/ic-payment-id-blue.svg");
+}
+
+.sidebar .nav-role .icon {
+  background-image: url("/assets/img/ic-role-mgmt.svg");
+}
+
+.collapsed .sidebar .nav-role .icon {
+  background-image: url("/assets/img/ic-role-mgmt.svg");
+}
+
+.sidebar .nav-link.nav-role:hover .icon,
+.sidebar .nav-link.nav-role[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-role-mgmt-dark.svg") !important;
+}
+
+.sidebar .nav-machine .icon {
+  background-image: url("/assets/img/ic-machine-learning.svg");
+}
+
+.collapsed .sidebar .nav-machine .icon {
+  background-image: url("/assets/img/ic-machine-learning.svg");
+}
+
+.sidebar .nav-link.nav-machine:hover .icon,
+.sidebar .nav-link.nav-machine[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-machine-learning-dark.svg") !important;
+}
+
+.sidebar .nav-action .icon {
+  background-image: url("/assets/img/ic-action.svg");
+}
+
+.collapsed .sidebar .nav-action .icon {
+  background-image: url("/assets/img/ic-action.svg");
+}
+
+.sidebar .nav-link.nav-action:hover .icon,
+.sidebar .nav-link.nav-action[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-action-dark.svg") !important;
+}
+
+.sidebar .nav-alert-queue .icon {
+  background-image: url("/assets/img/ic-alert-white.svg");
+}
+
+.collapsed .sidebar .nav-alert-queue .icon {
+  background-image: url("/assets/img/ic-alert-white.svg");
+}
+
+.sidebar .nav-link.nav-alert-queue:hover .icon,
+.sidebar .nav-link.nav-alert-queue[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-alert-blue.svg") !important;
+}
+
+.sidebar .nav-rule .icon {
+  background-image: url("/assets/img/ic-rule-mgmt.svg");
+}
+
+.collapsed .sidebar .nav-rule .icon {
+  background-image: url("/assets/img/ic-rule-mgmt.svg");
+}
+
+.sidebar .nav-link.nav-rule:hover .icon,
+.sidebar .nav-link.nav-rule[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-rule-mgmt-dark.svg") !important;
+}
+
+.sidebar .nav-approval .icon {
+  background-image: url("/assets/img/ic-approval.svg");
+}
+
+.collapsed .sidebar .nav-approval .icon {
+  background-image: url("/assets/img/ic-approval.svg");
+}
+
+.sidebar .nav-link.nav-approval:hover .icon,
+.sidebar .nav-link.nav-approval[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-approval-dark.svg") !important;
+}
+
+.sidebar .nav-link.nav-settings:hover .icon,
+.sidebar .nav-link.nav-settings[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-settings-dark.svg");
+}
+
+.sidebar .nav-settings .icon,
+.collapsed .sidebar .nav-settings .icon {
+  background-image: url("/assets/img/ic-settings.svg");
+}
+
+.sidebar .nav-data-master .icon {
+  background-image: url("/assets/img/ic-data-master.svg");
+}
+
+.collapsed .sidebar .nav-data-master .icon {
+  background-image: url("/assets/img/ic-data-master.svg");
+}
+
+.sidebar .nav-link.nav-data-master:hover .icon,
+.sidebar .nav-link.nav-data-master[aria-expanded="true"] .icon {
+  background-image: url("/assets/img/ic-data-master-dark.svg") !important;
+}
+
+.sidebar .nav-link:hover {
+  color: #144e83;
+  background-color: #cde4f8;
+}
+
+:not(.collapsed) .sidebar .nav-link[aria-expanded="true"] {
+  color: #144e83;
+  background-color: #cde4f8;
+}
+
+.collapsed .sidebar .nav-link-logout {
+  justify-content: center;
+  align-items: start;
+  width: 25%;
+  height: 40px;
+}
+
+.collapsed .sidebar .nav-link-logout .icon {
+  background-image: url("/assets/img/ic-arrow-lined.svg");
+
+  // width: 32px !important;
+  // height: 32px !important;
+  margin: 0 auto;
+  transform: scaleX(-1);
+}
+
+.sidebar .nav-link-logout .icon {
+  background-image: url("/assets/img/ic-arrow-lined.svg");
+}
+
+.sidebar .submenu-arrow {
+  /* Ganti sumber gambar dari <img> dengan properti content */
+  content: url("/assets/img/ic-arrow-right-white.svg");
+  transition: content 0.3s ease;
+  /* Transisi (mungkin tidak didukung semua browser) */
+}
+
+/* 2. Aturan Hover - Ganti dengan panah gelap */
+.sidebar .nav-link:hover .submenu-arrow {
+  content: url("/assets/img/ic-arrow-right-dark.svg");
+}
+
+/* 3. Aturan Menu Terbuka - Ganti juga dengan panah gelap */
+:not(.collapsed) .sidebar .nav-link[aria-expanded="true"] .submenu-arrow {
+  content: url("/assets/img/ic-arrow-right-dark.svg");
+}
+
+.sidebar .nav-link[aria-expanded="true"] .submenu-arrow {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.collapsed .nav-scrollable-area {
+
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.nav-scrollable-area {
+  height: 70%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // padding-right: 20px; /* Inset the scrollbar */
+  box-sizing: border-box;
+}
+
+.nav-scrollable-area:hover {
+  overflow-y: auto;
+}
+
+/* Hide scrollbar when collapsed */
+.collapsed .nav-scrollable-area {
+  overflow-y: hidden;
+}
+
+/* Custom scrollbar (Webkit browsers: Chrome, Edge, Safari) */
+.nav-scrollable-area::-webkit-scrollbar {
+  width: 8px;
+
+}
+
+.nav-scrollable-area::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 8px;
+}
+
+.nav-scrollable-area:hover::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+/* Optional: Inset the scrollbar further using background */
+.nav-scrollable-area::-webkit-scrollbar-track {
+  background: transparent;
+  margin-right: 20px;
+  /* Not supported everywhere */
+}
+
+// ===== POPUP SUBMENU (untuk collapsed state) =====
+.nav-item-wrapper {
+  position: relative;
+  width: 100%;
+
+  // Sembunyikan popup saat tidak collapsed
+  .popup-submenu {
+    display: none;
+  }
+}
+
+
+
+// Arrow indicator on collapsed submenu parent icons
+.collapsed-arrow-indicator {
+  display: none; // hidden by default (non-collapsed)
+  position: absolute;
+  bottom: 4px;
+  right: -15px;
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 14px;
+  text-align: center;
+  pointer-events: none;
+  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+// Show only when collapsed
+.collapsed .sidebar .icon {
+  position: relative; // needed for absolute child positioning
+}
+
+.collapsed .sidebar .collapsed-arrow-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-popup-menu {
+  position: fixed;
+  /* atau absolute jika parent relative */
+  z-index: 2000;
+  min-width: 180px;
+  background: #fff;
+  color: #144e83;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.18);
+  border-radius: 8px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-popup-menu .nav-link {
+  color: #144e83;
+  background: none;
+  border-radius: 0;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.sidebar-popup-menu .nav-link:hover {
+  background: #cde4f8;
+  color: #005caa;
+}
+
+.collapsed-arrow-indicator {
+  display: inline-block;
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
+}
+
+.collapsed-arrow-indicator.open {
+  transform: rotate(0deg);
+}

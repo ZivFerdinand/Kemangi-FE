@@ -1,0 +1,19 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-rule-details-type-b
+    [data]="details"
+    [dropdownRuleFunction]="dropdownRuleFunction"
+    [dropdownDataGroup]="dropdownDataGroup"
+    [dropdownRuleOperator]="dropdownRuleOperator"
+    [dropdownHistorical]="dropdownHistorical"
+  />
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

@@ -1,0 +1,29 @@
+<div id="infoModal">
+  <div class="modal-header">
+    <div class="content">
+      <button
+        type="button"
+        class="btn-modal-close"
+        aria-label="Close"
+        (click)="onOkClicked()"
+      >
+        @if(type==='error'){
+        <img src="/assets/img/ic-times-rounded-red.svg" alt="error" />}
+
+        <!-- /// -->
+
+        @if(type==='success'){
+        <img src="/assets/img/ic-checked-rounded-green.svg" alt="success" />}
+      </button>
+      <h5 class="title">{{ title || 'Error'}}</h5>
+    </div>
+  </div>
+  <div class="modal-body" [innerHTML]="message">
+    <!-- <p>{{message}}</p> -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-confirm-yes" (click)="onOkClicked()">
+      OK
+    </button>
+  </div>
+</div>

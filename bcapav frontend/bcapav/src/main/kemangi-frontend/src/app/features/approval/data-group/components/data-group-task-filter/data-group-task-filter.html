@@ -1,0 +1,347 @@
+<div class="d-flex position-relative mb-24">
+  <button
+    type="button"
+    class="btn-type-1 toggle-filter"
+    (click)="toggleFilter()"
+  >
+    <img src="/assets/img/ic-filter-blue.svg" alt="filter" />
+    <div class="name">Filter</div>
+  </button>
+
+  <form class="card card--filter" [class.d-none]="!showFilter()">
+    <div class="filter-inputs">
+      <div class="filter-inputs-section">
+        <div class="form-item mb-24">
+          <label for="name">Data Group ID</label>
+
+          <div class="ng-select-custom">
+            <ng-select
+              #dataGroupSelect
+              [items]="dataGroups()"
+              [minTermLength]="3"
+              bindLabel="name"
+              bindValue="data_group_id"
+              [multiple]="true"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Data Group ID"
+              (change)="updateFilter('dataGroupId', $event)"
+              [searchFn]="customSearchDataGroup"
+            >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label"> {{ item?.dataGroupId }} </span>
+                <span
+                  class="ng-value-icon right"
+                  (click)="clear(item)"
+                  aria-hidden="true"
+                  ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                /></span>
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item?.dataGroupId }}</span>
+                  <img
+                    [class.d-none]="
+                        !filterBy().dataGroupId.includes(item?.dataGroupId)
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        <div class="form-item mb-24">
+          <label for="description">Data Group Description</label>
+          <textarea
+            placeholder="Description"
+            id="description"
+            class="form-control pr-5"
+            rows="3"
+            [value]="filterBy().description"
+            (change)="updateFilter('description', $any($event.target).value)"
+          >
+          </textarea>
+        </div>
+
+        <div class="form-item mb-24">
+          <label for="requesterId">Requested By</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #requesterSelect
+              [items]="users()"
+              [minTermLength]="3"
+              bindLabel="fullName"
+              bindValue="userId"
+              [multiple]="true"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Requested By"
+              (change)="updateFilter('requesterId', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label"> {{ item?.fullName }} </span>
+                <span
+                  class="ng-value-icon right"
+                  (click)="clear(item)"
+                  aria-hidden="true"
+                  ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                /></span>
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.fullName }}</span>
+                  <img
+                    [class.d-none]="
+                        !filterBy().requesterId.includes(item.userId)
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        @if(approvalLevel() !== 1){
+        <div class="form-item mb-24">
+          <label for="approver1Id">Review 1 By</label>
+
+          <div class="ng-select-custom">
+            <ng-select
+              #approver1Select
+              [items]="users()"
+              [minTermLength]="3"
+              bindLabel="fullName"
+              bindValue="userId"
+              [multiple]="true"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Review 1 By"
+              (change)="updateFilter('approver1Id', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label">{{ item?.fullName }}</span>
+                <span
+                  class="ng-value-icon right"
+                  (click)="clear(item)"
+                  aria-hidden="true"
+                  ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                /></span>
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.fullName }}</span>
+                  <img
+                    [class.d-none]="
+                        !filterBy().approver1Id.includes(item.userId)
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        }
+
+        <div class="form-item">
+          <label for="status">Action Type</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #requestTypeSelect
+              [items]="requestType"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Action Type"
+              (change)="updateFilter('requestType', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.name }}</span>
+                  <img
+                    [class.d-none]="filterBy().requestType !== item?.id"
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-inputs-section">
+        <div class="form-item mb-24">
+          <label for="name">Data Group Name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Data Group Name"
+            [value]="filterBy().name"
+            (input)="updateFilter('name', $event.target.value)"
+          />
+        </div>
+
+        <div class="form-item mb-24">
+          <label for="dynamic_watch_list">Dynamic Watchlist</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #dynamicWatchlistSelect
+              [items]="enumBoolean"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Dynamic Watchlist"
+              (change)="updateFilter('dynamicWatchList', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.name }}</span>
+                  <img
+                    [class.d-none]="filterBy().dynamicWatchList !== item.id"
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        <div class="form-item mb-24">
+          <label for="requestedDateInput" class="label-medium">
+            Requested Date
+          </label>
+          <app-date-range-picker
+            [name]="'requestDate'"
+            [displayMonths]="1"
+            [fromDate]="requestFromDate"
+            [toDate]="requestToDate"
+            [maxDate]="maxDate"
+            (fromDateChange)="onFromDateChange($event)"
+            (toDateChange)="onToDateChange($event)"
+            [placeholder]="'dd-mmm-yyyy to dd-mmm-yyyy'"
+            [outsideDays]="'visible'"
+          />
+        </div>
+
+        @if(approvalLevel() !== 1){
+        <div class="form-item mb-24">
+          <label for="approval1DateInput" class="label-medium">
+            Review 1 Date
+          </label>
+          <app-date-range-picker
+            [name]="'approval1Date'"
+            [displayMonths]="1"
+            [fromDate]="approval1FromDate"
+            [toDate]="approval1ToDate"
+            [maxDate]="maxDate"
+            (fromDateChange)="onFromDateChange($event)"
+            (toDateChange)="onToDateChange($event)"
+            [placeholder]="'dd-mmm-yyyy to dd-mmm-yyyy'"
+            [outsideDays]="'visible'"
+          />
+        </div>
+        }
+
+        <div class="form-item">
+          <label for="status">On/Off</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #activeStatusSelect
+              [items]="activeStatus"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Select Status"
+              (change)="updateFilter('activeStatus', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.name }}</span>
+                  <img
+                    [class.d-none]="filterBy().activeStatus !== item.id"
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue me-3"
+        (click)="resetFilter()"
+      >
+        Reset
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="submitFilter()"
+      >
+        Apply
+      </button>
+    </div>
+  </form>
+</div>

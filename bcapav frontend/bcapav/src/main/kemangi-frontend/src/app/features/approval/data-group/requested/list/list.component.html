@@ -1,0 +1,242 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      [isDisabledFn]="checkMenu"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div class="mb-24">
+    <app-data-group-requested-filter
+      [users]="users"
+      [dataGroups]="dataGroups"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          dataGroupId: dataGroupIdTpl,
+          name: name,
+          description: descTpl,
+          ruleCount: ruleCountTpl,
+          requesterName: requesterNameTpl,
+          approver1Name: approver1NameTpl,
+          approver2Name: approver2NameTpl,
+          requestDate: requestDateTpl,
+          approval1Date: approval1DateTpl,
+          approval2Date: approval2DateTpl,
+          activeStatus: activeStatusTpl,
+          view: viewBtnTpl,
+          dynamicWatchList: dynamicWatchListTpl,
+          approvalStatus: approvalStatusTpl,
+          rejectionNote: rejectionNoteTpl,
+          requestType: requestTypeTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #dataGroupIdTpl let-row>
+  <div class="truncate">{{ row.dataGroupId ? row.dataGroupId : "-" }}</div>
+</ng-template>
+
+<ng-template #name let-row>
+  <div class="truncate">{{ row.name ? row.name : "-" }}</div>
+</ng-template>
+
+<ng-template #descTpl let-row>
+  <div class="truncate">
+    {{ row.description || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #rejectionNoteTpl let-row>
+  <div class="truncate">
+    {{ row.rejectionNote || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approvalStatusTpl let-row>
+  <div class="approval-status-wrapper">
+    <div
+      class="approval-status-label mx-auto"
+      [class.approval-status-label--approved]="
+        row.approvalStatus === 'APPROVED'
+      "
+      [class.approval-status-label--rejected]="
+        row.approvalStatus === 'REJECTED'
+      "
+      [class.approval-status-label--pending]="row.approvalStatus === 'PENDING'"
+      [class.approval-status-label--draft]="row.approvalStatus === 'DRAFT'"
+    >
+      {{ row.approvalStatus ? (row.approvalStatus | capitalize) : "-" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #requestTypeTpl let-row>
+  {{
+    row.requestType === "CREATE"
+      ? "NEW"
+      : row.requestType === "UPDATE"
+        ? "EDIT"
+        : row.requestType
+  }}
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approver1NameTpl let-row>
+  <div class="truncate">
+    {{ row.approver1Name || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approver2NameTpl let-row>
+  <div class="truncate">
+    {{ row.approver2Name || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requestDateTpl let-row>
+  <div class="truncate">
+    {{ (row.requestDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approval1DateTpl let-row>
+  <div class="truncate">
+    {{ (row.approval1Date | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approval2DateTpl let-row>
+  <div class="truncate">
+    {{ (row.approval2Date | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #noTplRuleRelation let-row let-i="index">
+  {{ (pageQueryRuleRelations.page - 1) * pageQueryRuleRelations.limit + i + 1 }}
+</ng-template>
+
+<ng-template #dynamicWatchListTpl let-row>
+  @if (row.dynamicWatchList) {
+    <img src="./assets/img/ic-checkbox-dark-gray-checked.svg" alt="dynamic" />
+  } @else {
+    <div></div>
+  }
+</ng-template>
+
+<ng-template #activeStatusTpl let-row>
+  <div class="active-status-wrapper">
+    <div
+      class="active-status-label"
+      [class.active-status-label--on]="row?.activeStatus"
+      [class.active-status-label--off]="!row?.activeStatus"
+    >
+      {{ row?.activeStatus ? "On" : "Off" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #ruleCountTpl let-row>
+  <button
+    type="button"
+    class="rule-relation"
+    (click)="open(content, row.dataGroupId)"
+  >
+    {{ row.ruleCount }}
+  </button>
+</ng-template>
+
+<ng-template #activeStatNewTpl let-row>
+  <div class="active-status-wrapper" style="min-width: 81px">
+    <div
+      class="active-status-label"
+      [class.active-status-label--on]="row?.activeStatus"
+      [class.active-status-label--off]="!row?.activeStatus"
+    >
+      {{ row?.activeStatus ? "Active" : "Inactive" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <a
+      [routerLink]="['/home/approval/data-group/requested-list', row?.apprId]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div>Data Group Name:</div>
+      <div class="ms-3">{{ dataGroupNameRelation }}</div>
+    </div>
+    <div class="p-3">
+      <app-table
+        [columns]="columnsRuleRelation"
+        [data]="tableDataRuleRelations"
+        [pageInfo]="pageInfoRuleRelations"
+        [pageParams]="pageQueryRuleRelations"
+        [cellTemplates]="{
+          no: noTplRuleRelation,
+          activeStatus: activeStatNewTpl,
+        }"
+        (pageChange)="handlePageRuleRelationChange($event)"
+        (limitChange)="handleLimitChangeRuleRelations($event)"
+        (sort)="handleSortChangeRuleRelations($event.direction, $event.key)"
+        [showLimitSize]="true"
+      ></app-table>
+    </div>
+  </div>
+</ng-template>

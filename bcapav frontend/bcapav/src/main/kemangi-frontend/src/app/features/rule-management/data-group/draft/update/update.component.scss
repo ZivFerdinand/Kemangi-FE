@@ -1,0 +1,160 @@
+.custom-checkbox {
+  border-radius: 2px !important;
+  border-width: 2px;
+  border-color: #144e83; /* outline color */
+  background-color: white;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+}
+
+/* On hover */
+.custom-checkbox:hover {
+  border-color: #144e83; /* hover outline color */
+}
+
+/* When focused */
+.custom-checkbox:focus {
+  box-shadow: 0 0 0 0.2rem rgba(20, 78, 131, 0.25);
+  border-color: #144e83;
+}
+
+/* When checked */
+.custom-checkbox:checked {
+  background-color: #144e83; /* checked color */
+  border-color: #144e83;
+}
+
+/* Optional: if you want the check icon to be white */
+.custom-checkbox:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3e%3cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox .form-check-label,
+.form-check-label {
+  margin-left: 8px;
+}
+
+.data-group-form-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.form-group-custom {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 360px;
+}
+
+.delete-btn {
+  background-color: transparent;
+  position: absolute;
+  box-shadow: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  top: 12px;
+  right: 16px;
+}
+
+.btn-white-outlined img {
+  margin-right: 8px;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.card.datagroup-form {
+  border-radius: 8px;
+}
+
+.data-group-info {
+  margin: 0;
+  color: #121212;
+  width: 206px;
+  word-break: break-all;
+}
+
+.data-group-info.changed {
+  color: #ffa822;
+}
+
+.data-group-btn-upload {
+  display: block;
+  height: 32px;
+  border-radius: 16px;
+  box-shadow: none;
+  border: none;
+  background-color: #e6f3ff;
+  color: #005caa;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  padding: 8px 16px;
+}
+
+.form-check-label {
+  margin-left: 8px;
+  color: #393939;
+}
+
+.data-group-form-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.form-group-custom {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 360px;
+}
+
+.delete-btn {
+  background-color: transparent;
+  position: absolute;
+  box-shadow: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  top: 12px;
+  right: 16px;
+}
+
+.btn-white-outlined img {
+  margin-right: 8px;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.card.datagroup-form {
+  border-radius: 8px;
+}
+
+.data_group_info {
+  word-break: break-all;
+  color: #121212;
+}
+
+.data-group-current-detail-section-i--container {
+  width: 768px;
+}
+
+.data-group-current-detail-section-i--sub-container {
+  width: calc((768px - 48px) / 2);
+}
+
+.data-group_details_label_i {
+  font-size: 14px;
+  color: #555555;
+  width: 150px;
+  line-height: 20px;
+}

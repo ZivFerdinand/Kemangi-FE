@@ -1,0 +1,294 @@
+<div [class.d-none]="!hasPipeline" class="card p-3 border-pipeline">
+  <div class="fw-semibold section-title mb-24">Pipeline Summary</div>
+
+  <div>
+    <app-detail-rule-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-detail-rule-tab>
+  </div>
+
+  <div class="mb-24">
+    @if(pipeline.skipIfExists){
+    <div class="skip-if-exist-view">
+      SKIP IF EXIST: <span>{{pipeline.varName||'-'}}</span>
+    </div>
+    }
+
+    <!-- == -->
+
+    @if(tableData.length > 0) {
+    <app-pipeline-table-v2
+      [columns]="columns"
+      [data]="tableData"
+      [cellTemplates]="{
+          no: noTpl,
+          function:functionDTpl,
+          parameter:parameterDTpl,
+          parameterValue:parameterValueDTpl,
+          operator:operatorDTpl,
+          outcome1:outcome1DTpl,
+          value:valueDTpl,
+          setToVar:setToVarDTpl,
+          fieldEventType:fieldEventTypeDTpl,
+          pipelineOutcome1:outcome1DTpl,
+          pipelineOutcome2:outcome2DTpl,
+          empty:emptyTpl,
+          field:fieldDTpl
+        }"
+      [showPageInfo]="true"
+      [pagination]="true"
+      [pageInfo]="tableInfo"
+      [pageParams]="tableQuery"
+      (pageChange)="pageChange($event)"
+    />
+    }
+
+    <!-- == -->
+
+    @if(pipeline.pipelineCustomData){
+    <ng-container *ngTemplateOutlet="pipelineCustomSummary"></ng-container>
+    }
+
+    <!-- // -->
+  </div>
+</div>
+
+<ng-template #noTpl let-row let-i="index"> {{ i + 1 }} </ng-template>
+
+<ng-template #functionDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item__item">{{row.function}}</div>
+</ng-template>
+
+<ng-template #parameterDTpl let-row let-i="index">
+  @if(row.pipelineType ==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Group By</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+  <!-- === -->
+
+  @else if(row.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Balance Timing/Position</div>
+    <div class="pipeline-table-multi-item__item">Account Number</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Historical Table</div>
+    <div class="pipeline-table-multi-item__item">Group Key</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Operations</div>
+    <div class="pipeline-table-multi-item__item">Key</div>
+    <div class="pipeline-table-multi-item__item">Value</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Previous Context</div>
+    <div class="pipeline-table-multi-item__item">Details of Data</div>
+    <div class="pipeline-table-multi-item__item">Expiry Time</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">Field Event Type</div>
+    <div class="pipeline-table-multi-item__item">Operation</div>
+    <div class="pipeline-table-multi-item__item">Data Group</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #parameterValueDTpl let-row let-i="index">
+  @if(row.pipelineType==='AGGREGATION'){
+  <div class="pipeline-table-multi-item__item">{{row.groupBy}}</div>
+  <div class="pipeline-table-multi-item__item justify-content-between">
+    <span style="width: 120px">{{row.period}}</span>
+    <span style="width: 120px">{{row.unit}}</span>
+    <span style="width: 120px">{{row.ttlType}}</span>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.ACCOUNTNUMBER}}
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='GETHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+    <div class="pipeline-table-multi-item__item">{{row.criteria.KEY}}</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='JOURNEY'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.PREVIOUSCONTEXT}}
+    </div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.CONTEXT}}</div>
+
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <span style="width: 120px">{{row.period}}</span>
+      <span style="width: 120px">{{row.unit}}</span>
+      <span style="width: 120px">{{row.ttlType}}</span>
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.OPERATION}}
+    </div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.KEY}}</div>
+
+    <div class="pipeline-table-multi-item__item">{{row.criteria.VALUE}}</div>
+
+    <div class="pipeline-table-multi-item__item justify-content-between">
+      <span style="width: 120px">{{row.period}}</span>
+      <span style="width: 120px">{{row.unit}}</span>
+      <span style="width: 120px">{{row.ttlType}}</span>
+    </div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.criteria.VALUE}}</div>
+    <div class="pipeline-table-multi-item__item">
+      {{row.criteria.OPERATION}}
+    </div>
+    <div class="pipeline-table-multi-item__item">{{row.criteria.GROUP}}</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #valueDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item w-100">{{row.value}}</div>
+  </div>
+</ng-template>
+
+<ng-template #operatorDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.operator}}</div>
+  </div>
+</ng-template>
+
+<ng-template #setToVarDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.varName}}</div>
+  </div>
+</ng-template>
+
+<ng-template #fieldDTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALIDJOURNEY</div>
+  </div>
+</ng-template>
+
+<ng-template #fieldEventTypeDTpl let-row let-i="index">
+  @if(row.pipelineType==='AGGREGATION'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.eventType || '-'}}</div>
+  </div>
+
+  }
+
+  <!-- === -->
+
+  @else {
+  <div class="d-flex justify-content-between">
+    <div class="pipeline-table-multi-item-wrapper">
+      <div class="pipeline-table-multi-item__item">{{row.eventType || ''}}</div>
+    </div>
+    <div class="pipeline-table-multi-item-wrapper">
+      <div class="pipeline-table-multi-item__item">
+        {{row.eventTypeExtra || ''}}
+      </div>
+    </div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome1DTpl let-row let-i="index">
+  @if(row.pipelineType==='GETBALANCE'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">BALANCE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  @else if(row.pipelineType==='REALTIMEHISTORICAL'){
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">VALUE</div>
+  </div>
+  }
+
+  <!-- === -->
+
+  <!-- === -->
+
+  @else {
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.outcome}}</div>
+  </div>
+  }
+</ng-template>
+
+<ng-template #outcome2DTpl let-row let-i="index">
+  <div class="pipeline-table-multi-item-wrapper">
+    <div class="pipeline-table-multi-item__item">{{row.outcomeExtra}}</div>
+  </div>
+</ng-template>
+
+<ng-template #emptyTpl let-row let-i="index">
+  <div style="width: 250px; height: 100%"></div>
+</ng-template>
+
+<ng-template #pipelineCustomSummary>
+  <div class="mb-24 pipeline-summary-title">CUSTOM</div>
+
+  <div class="card pipeline-custom-summary">
+    <div class="content">
+      <pre>{{displayPipelineCustomData||''}}</pre>
+    </div>
+  </div>
+</ng-template>

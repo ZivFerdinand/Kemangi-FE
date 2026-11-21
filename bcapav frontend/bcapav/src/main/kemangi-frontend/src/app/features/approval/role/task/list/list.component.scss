@@ -1,0 +1,116 @@
+.icon {
+  align-items: center;
+  margin: auto;
+}
+// ======
+
+.approval-tab {
+  height: 48px;
+  width: 246px;
+  background-color: #ffffff;
+  border-radius: 30px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+}
+
+.approval-tab__tab-btn,
+.approval-tab__task-list-btn,
+.approval-tab__requested-list-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  background-color: #ffffff;
+  color: #00335e;
+  box-shadow: none;
+  border: none;
+}
+.approval-tab__tab-btn.active,
+.approval-tab__task-list-btn.active,
+.approval-tab__requested-list-btn.active {
+  background-color: #144e83;
+  color: #ffffff;
+}
+
+// .page-title {
+//   color: #144e83;
+//   font-weight: 700;
+//   margin-bottom: 24px;
+// }
+
+.task-list-filter {
+  width: 100%;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.filter-btn {
+  display: flex;
+  padding: 12px 24px;
+  border-radius: 24px;
+  border: none;
+  background-color: #144e83;
+
+  .name {
+    margin-left: 8px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+}
+
+.filter-btn:hover {
+  background-color: #1a6cb3;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.task-list-filter-area {
+  background-color: #ffffff;
+  width: 944px;
+  position: absolute;
+  padding: 20px;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.filter-inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.filter-inputs-section {
+  width: 48.78%;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-action {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  width: 16px;
+  text-decoration: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.btn-action img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}

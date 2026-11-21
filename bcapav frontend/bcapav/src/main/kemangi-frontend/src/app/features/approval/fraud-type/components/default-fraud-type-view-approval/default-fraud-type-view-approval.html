@@ -1,0 +1,98 @@
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div style="margin-bottom: 16px">
+    <app-toggle-switch
+      [(ngModel)]="details.activeStatus"
+      [disabled]="isDisabled"
+    ></app-toggle-switch>
+  </div>
+
+  <div
+    class="d-flex flex-wrap align-items-start justify-content-between content-field--container"
+    style="align-items: stretch"
+  >
+    <div class="content-field--section-type-i">
+      <div class="form-item d-flex" style="margin-bottom: 8px">
+        <label for="requested_by" class="data_label">Requested By</label>
+        <div class="data_info">
+          {{ details.requesterName===''?'-':details.requesterName}}
+        </div>
+      </div>
+      <div class="form-item d-flex" style="margin-bottom: 8px">
+        <label for="reviewed_by" class="data_label">Reviewed By</label>
+        <div class="data_info">
+          {{ details.approverName===''?'-':details.approverName }}
+        </div>
+      </div>
+      <div
+        class="form-item d-flex align-items-center"
+        style="margin-bottom: 8px"
+      >
+        <label for="status" class="data_label">Status</label>
+        <div style="width: 108px">
+          <div class="approval-status-wrapper">
+            <div
+              class="approval-status-label mx-auto"
+              [class.approval-status-label--approved]="
+        details.approvalStatus === 'APPROVED'
+      "
+              [class.approval-status-label--rejected]="
+        details.approvalStatus==='REJECTED'
+      "
+              [class.approval-status-label--pending]="details.approvalStatus === 'PENDING'"
+              [class.approval-status-label--draft]="details.approvalStatus === 'DRAFT'"
+            >
+              {{ details.approvalStatus ? (details.approvalStatus | capitalize)
+              : "-" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-field--section-type-i">
+      <div class="form-item d-flex" style="margin-bottom: 8px">
+        <label for="reviewed_by" class="data_label">Requested Date</label>
+        <div class="data_info">
+          {{ details.requestDate === '' ?'-': (details.requestDate |
+          date:'dd-MMM-yyyy HH:mm:ss') }}
+        </div>
+      </div>
+      <div class="form-item d-flex" style="margin-bottom: 8px">
+        <label for="reviewed_by" class="data_label">Reviewed Date</label>
+        <div class="data_info">
+          {{ details.approvalDate === '' ?'-': (details.approvalDate |
+          date:'dd-MMM-yyyy HH:mm:ss') }}
+        </div>
+      </div>
+      <div class="form-item d-flex" style="margin-bottom: 8px">
+        <label for="rejection_note" class="data_label">Rejection Notes</label>
+        <div class="data_info">
+          {{ details.rejectionNote===''?'-':details.rejectionNote }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div
+    class="d-flex flex-column flex-wrap align-items-start justify-content-between content-field--container"
+    style="align-items: stretch"
+  >
+    <div class="form-item d-flex" style="margin-bottom: 8px">
+      <label for="note" class="data_label">Fraud Type</label>
+      <div class="data_info fraud-type_ft">{{ details.fraudType}}</div>
+    </div>
+    <div class="form-item d-flex">
+      <label for="description" class="data_label">Description</label>
+      <div class="data_info fraud-type_desc">
+        {{ details.description===''?'-':details.description }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="d-flex align-items-center justify-content-end btn-section">
+  <button type="button" class="btn-type-1 btn-white-outlined" (click)="back()">
+    Back
+  </button>
+</section>

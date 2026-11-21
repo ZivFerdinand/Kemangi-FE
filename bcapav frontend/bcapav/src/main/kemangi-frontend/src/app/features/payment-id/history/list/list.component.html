@@ -1,0 +1,101 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div class="mb-24">
+    <app-payment-id-history-filter
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          action: actionTypeTpl,
+          detailProduct: viewBtnTpl,
+          requesterName: requesterNameTpl,
+          requestDate: requestDateTpl,
+          lastActionStatus: actionStatusTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <a
+      [routerLink]="['/home/payment-id/history', row.id]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requestDateTpl let-row>
+  <div class="truncate">
+    {{ (row.requestDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #actionTypeTpl let-row let-i="index">
+  <div class="truncate">
+    {{ row.action }}
+  </div>
+</ng-template>
+
+<ng-template #actionStatusTpl let-row>
+  <div
+    class="approval-status-label"
+    [class.approval-status-label--approved]="row.actionStatus === 'SUCCESS'"
+    [class.approval-status-label--rejected]="row.actionStatus === 'FAILED'"
+  >
+    {{ row.actionStatus | capitalize }}
+  </div>
+</ng-template>

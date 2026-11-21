@@ -1,0 +1,27 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @let d = details(); @if (d.requestType !== "UPDATE") {
+  <app-email-template-view-approval-i
+    [details]="details()"
+    [pageType]="pageType"
+  />
+  } @if (d.requestType === "UPDATE") {
+  <app-email-template-view-approval-ii
+    [details]="details()"
+    [prevDetails]="prevDetails()"
+    [pageType]="pageType"
+  />
+  }
+
+  <section
+    class="d-flex align-items-center justify-content-end btn-section"
+    style="padding-bottom: 50px"
+  >
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

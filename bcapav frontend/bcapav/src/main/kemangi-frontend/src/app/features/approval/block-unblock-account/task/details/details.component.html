@@ -1,0 +1,39 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-block-unblock-details
+    [data]="details"
+    [type]="pageType"
+    [tableData]="tableData"
+    [pageInfo]="pageInfo"
+    [pageQuery]="pageQuery"
+    (handlePage)="handlePageChange($event)"
+    (handleSort)="handleSortChange($event.order, $event.param)"
+    (handledownload)="handleDownload($event)"
+    (handleSearch)="handleQuery($event)"
+  ></app-block-unblock-details>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+
+    <button
+      type="button"
+      class="btn-type-1 btn-reject ms-3"
+      (click)="handleReject()"
+    >
+      Reject
+    </button>
+
+    <button
+      type="button"
+      class="btn-type-1 btn-approve ms-3"
+      (click)="handleApprove()"
+    >
+      Approve
+    </button>
+  </section>
+</app-content-layout>

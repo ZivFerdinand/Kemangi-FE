@@ -1,0 +1,27 @@
+.payment-id-products {
+  padding: 88px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.history-header {
+  padding: 7px 12px;
+  border-bottom: 1px solid #144e83;
+}
+
+.history-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #144e83;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}

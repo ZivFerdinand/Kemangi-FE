@@ -1,0 +1,34 @@
+.breadcrumb {
+  align-items: flex-start;
+}
+
+.breadcrumb-item {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.breadcrumb-item + .breadcrumb-item::before {
+  display: flex;
+  align-items: center;
+
+  content: url("../../../../../public/assets/img/ic-arrow-breadcrumb.svg") !important;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+}
+
+.breadcrumb .breadcrumb-item a,
+.breadcrumb .breadcrumb-item.active {
+  font-size: 14px;
+}
+
+.breadcrumb .breadcrumb-item a {
+  color: #555555;
+}
+
+.breadcrumb .breadcrumb-item.active {
+  color: #144e83;
+  font-weight: 600;
+}

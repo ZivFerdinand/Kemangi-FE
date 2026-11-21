@@ -1,0 +1,41 @@
+<div class="d-flex flex-row align-items-center position-absolute app-header"
+  [class.sidebar-collapsed]="isSidebarCollapsed">
+  <div class="d-flex align-items-center left-side-text">
+    <img src="/assets/img/PAVO NEXT GEN.svg" alt="logo" style="height: 45px !important;" />
+  </div>
+  <div class="btn-group">
+    <div class="p-0 btn d-flex align-items-center" style="outline: none !important; border: none !important;">
+      <img class="bell-ring" src="/assets/img/ic-bell.svg" alt="profile" />
+      <div class="d-flex flex-column align-items-start user-info-area">
+        <span>Hello, {{ fullName }}</span>
+        <span>{{ roleName }}</span>
+      </div>
+      <div style="border-left: 2px solid #222; height: 32px; margin: 0 12px;"></div>
+
+      <img [attr.title]="'Logout'" (click)="logout()" src="/assets/img/ic-logout-dark.svg" alt="Custom"
+        style="width:30px; height:30px;">
+    </div>
+  </div>
+</div>
+
+
+<!-- <div
+  class="dropdown-menu"
+  [class.show]="isDropdownOpen"
+  *ngIf="isDropdownOpen"
+  tabindex="-1"
+  role="menu"
+  aria-hidden="false"
+>
+  <button type="button" tabindex="0" class="dropdown-item" (click)="('a')">
+    Profile
+  </button>
+  <button
+    type="button"
+    tabindex="0"
+    class="dropdown-item"
+    (click)="logout()"
+  >
+    Logout
+  </button>
+</div> -->

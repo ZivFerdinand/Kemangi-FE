@@ -1,0 +1,383 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <section class="card p-3 no-border datagroup-form mb-24">
+    <div style="margin-bottom: 18px">
+      <app-toggle-switch formControlName="activeStatus"></app-toggle-switch>
+    </div>
+
+    <div
+      class="d-flex flex-wrap mb-24 rule-form-field--container-i"
+      style="align-items: stretch"
+    >
+      <div class="form-item form-group-custom">
+        <label name="product_group">Product Group</label>
+
+        <div class="ng-select-custom">
+          <ng-select
+            #productGroupSelect
+            [items]="dropdownProductGroup"
+            bindLabel="productGroup"
+            bindValue="productGroup"
+            formControlName="productType"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Product Group"
+            [class.is-invalid]="
+                  f['productType']?.invalid &&
+                  ( f['productType']?.dirty ||
+                    f['productType']?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.productGroup }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.productGroup }}</span>
+                <img
+                  [class.d-none]="
+                      form.get('productType')?.value !==
+                      item.productGroup
+                    "
+                  src="assets/img/ic-check-black.svg"
+                  alt="selected"
+                />
+              </div>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+
+        @if ( f["productType"]?.invalid && (f["productType"]?.dirty ||
+        f["productType"]?.touched) ) {
+        <div class="invalid-input">
+          @if (f["productType"]?.errors?.["required"]) { Product is required }
+        </div>
+        }
+      </div>
+
+      @if(mode==='DELETE'||mode==='UPDATE'||approvalStatus==='REJECTED'){
+      <div class="form-item form-group-custom" style="margin-left: 40px">
+        <label for="rule_id">Rule ID</label>
+        <input
+          id="rule_id"
+          type="text"
+          class="form-control pr-5"
+          formControlName="ruleId"
+          [disabled]="true"
+          placeholder="Rule ID"
+        />
+      </div>
+      }
+      <!-- === -->
+      @if(requestType==='UPDATE'&&approvalStatus==='DRAFT'){
+      <div class="form-item form-group-custom" style="margin-left: 40px">
+        <label for="rule_id">Rule ID</label>
+        <input
+          id="rule_id"
+          type="text"
+          class="form-control pr-5"
+          formControlName="ruleId"
+          [disabled]="true"
+          placeholder="Rule ID"
+        />
+      </div>
+      }
+
+      <div class="form-item form-group-custom d-flex" style="margin-left: 40px">
+        <div class="form-check d-flex align-items-center form-group-custom">
+          <input
+            class="form-check-input custom-checkbox"
+            type="checkbox"
+            formControlName="alertFlag"
+            id="alert"
+          />
+          <label class="form-check-label" for="alert">Alert</label>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-wrap justify-content-between mb-24 data-group-form-field--container"
+      style="align-items: stretch"
+    >
+      <div class="form-item form-group-custom">
+        <label for="rule_name">Rule Name</label>
+        <div class="rule-name-container">
+          @if(prefixRuleName){
+          <div class="rule-name-prefix">{{prefixRuleName}}</div>
+          }
+
+          <input
+            id="rule_name"
+            type="text"
+            class="form-control pr-5"
+            [class.add-prefix]="prefixRuleName"
+            [class.is-invalid]="
+              f['ruleName']?.invalid &&
+              (f['ruleName']?.dirty || f['ruleName']?.touched)
+            "
+            formControlName="ruleName"
+            [disabled]="true"
+            placeholder="Rule Name"
+          />
+        </div>
+
+        @if ( f["ruleName"]?.invalid && (f["ruleName"]?.dirty ||
+        f["ruleName"]?.touched) ) {
+        <div>
+          @if (f["ruleName"]?.errors?.["required"]) {
+          <div class="invalid-input">Rule Name is required</div>
+          } @if (f["ruleName"]?.errors?.["maxlength"]) {
+          <div class="invalid-input">
+            Max {{ f["ruleName"]?.errors?.["maxlength"].requiredLength }}
+            characters allowed
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-item form-group-custom">
+        <label for="effective_date">Effective Date</label>
+
+        <app-date-range-picker
+          [disabled]="mode==='DELETE'"
+          [displayMonths]="1"
+          [fromDate]="fromDate"
+          [toDate]="toDate"
+          [minDate]="minDate"
+          (fromDateChange)="onFromDateChange($event)"
+          (toDateChange)="onToDateChange($event)"
+          [placeholder]="'dd-mmm-yyyy to dd-mmm-yyyy'"
+          [outsideDays]="'visible'"
+          [required]="true"
+          (touched)="form.get('ruleStart')?.markAsTouched()"
+        />
+
+        @if ( f['ruleStart']?.invalid && (f['ruleStart']?.dirty
+        ||f['ruleStart']?.touched )) {
+        <div class="invalid-input">
+          @if (f["ruleStart"]?.errors?.["required"]) { Effective Date is
+          required }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-wrap justify-content-between mb-24 rule-form-field--container"
+      style="align-items: stretch"
+    >
+      <div class="form-item form-group-custom">
+        <label for="rule_desc_short">Short Description</label>
+        <input
+          id="rule_desc_short"
+          type="text"
+          class="form-control pr-5"
+          [class.is-invalid]="
+              f['ruleDescShort']?.invalid &&
+              (f['ruleDescShort']?.dirty || f['ruleDescShort']?.touched)
+            "
+          formControlName="ruleDescShort"
+          [disabled]="true"
+          placeholder="Short Description"
+        />
+        @if ( f["ruleDescShort"]?.invalid && (f["ruleDescShort"]?.dirty ||
+        f["ruleDescShort"]?.touched) ) {
+        <div>
+          @if (f["ruleDescShort"]?.errors?.["required"]) {
+          <div class="invalid-input">Short Description is required</div>
+          } @if (f["ruleDescShort"]?.errors?.["maxlength"]) {
+          <div class="invalid-input">
+            Max {{ f["ruleDescShort"]?.errors?.["maxlength"].requiredLength }}
+            characters allowed
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-item form-group-custom-type-b">
+        <label for="rule_desc_long">Long Description</label>
+        <textarea
+          #autoDescTA
+          id="rule_desc_long"
+          class="form-control pr-5"
+          [class.is-invalid]="
+              f['ruleDescLong']?.invalid &&
+              (f['ruleDescLong']?.dirty || f['ruleDescLong']?.touched)
+            "
+          formControlName="ruleDescLong"
+          rows="1"
+          (input)="autogrow(autoDescTA)"
+          placeholder="Long Description"
+        ></textarea>
+        @if ( f["ruleDescLong"]?.invalid && (f["ruleDescLong"]?.dirty ||
+        f["ruleDescLong"]?.touched) ) {
+        <div>
+          @if (f["ruleDescLong"]?.errors?.["required"]) {
+          <div class="invalid-input">Long Description is required</div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-wrap justify-content-between mb-24 data-group-form-field--container"
+      style="align-items: stretch"
+    >
+      <div class="form-item form-group-custom">
+        <label name="type">Type</label>
+
+        <div class="ng-select-custom">
+          <ng-select
+            #ruleTypesSelect
+            [items]="ruleTypes"
+            bindLabel="label"
+            bindValue="value"
+            [multiple]="false"
+            [hideSelected]="false"
+            searchPlaceholder="Choose..."
+            placeholder="Type"
+            formControlName="ruleType"
+            [class.is-invalid]="
+                  f['ruleType']?.invalid &&
+                  ( f['ruleType']?.dirty ||
+                    f['ruleType']?.touched)
+                "
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.label }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <div
+                class="d-flex w-100 justify-content-between align-items-center"
+              >
+                <span>{{ item.label }}</span>
+                <img
+                  [class.d-none]="
+                      form.get('ruleType')?.value !== item.value
+                    "
+                  src="assets/img/ic-check-black.svg"
+                  alt="selected"
+                />
+              </div>
+            </ng-template>
+          </ng-select>
+          <span class="custom-arrow">
+            <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+          </span>
+        </div>
+
+        @if ( f["ruleType"]?.invalid && (f["ruleType"]?.dirty ||
+        f["ruleType"]?.touched) ) {
+        <div class="invalid-input">
+          @if (f["ruleType"]?.errors?.["required"]) { Type is required }
+        </div>
+        }
+      </div>
+
+      <div class="form-item form-group-custom">
+        <label name="attachment">Attachment</label>
+
+        <input
+          type="file"
+          #fileInput
+          hidden
+          (change)="onFileSelected($event)"
+          (click)="onFileInputClick()"
+          accept=".pdf,.xls,.xlsx"
+        />
+
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="rule-btn-upload"
+        >
+          Upload File
+        </button>
+
+        @if ( f["listFiles"]?.invalid && (f["listFiles"]?.dirty ||
+        f["listFiles"]?.touched) ) {
+        <div>
+          @if (f["listFiles"]?.errors?.["required"]) {
+          <div class="invalid-input">Attachment is required</div>
+          }
+        </div>
+
+        <!-- === -->
+
+        }
+
+        <div class="d-flex flex-column gap-3" style="margin-top: 8px">
+          @for (item of listFiles.controls; track item.value.generatedName) {
+          <app-badge-uploaded-doc
+            [originalName]="item.value.originalName"
+            [extension]="item.value.extension"
+            [generatedName]="item.value.generatedName"
+            (clearFile)="clearFile($event)"
+          />
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-form-subrule-section-v2
+    [mode]="mode"
+    [productType]="form.get('productType')?.value"
+    [initialData]="ruleForm?.subrules||[]"
+    [dropdownFunction]="dropdownFunction"
+    [dropdownDataGroup]="dropdownDataGroup"
+    [dropdownOperator]="dropdownOperator"
+    [dropdownPipelineType]="dropdownPipelineType"
+    [dropdownParameterType]="dropdownParameterType"
+    [dropdownPipeline]="dropdownPipeline"
+    [dropdownHistorical]="dropdownHistorical"
+    [dropdownEmailTemplate]="dropdownEmailTemplate"
+    [dropdownAb]="dropdownAb"
+    [dropdownRule]="dropdownRule"
+    (updateSubrules)="updateSubrules($event)"
+    (getDropdownPipeline)="emitDropdownPipeline($event)"
+  />
+
+  <section
+    class="d-flex align-items-center justify-content-end btn-section mb-24"
+  >
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined me-3"
+      (click)="back()"
+    >
+      Back
+    </button>
+
+    @if(mode!=='DELETE'){
+    <button
+      type="button"
+      class="btn-type-1 btn-light-blue me-3"
+      (click)="onSubmitDraft()"
+    >
+      Save as Draft
+    </button>
+    }
+
+    <!-- === -->
+
+    @if(mode!=='DELETE'){<button
+      type="submit"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="isInvalid()"
+    >
+      Submit</button
+    >} @else{
+    <button type="submit" class="btn-type-1 btn-dark-blue">Submit</button>
+    }
+  </section>
+</form>

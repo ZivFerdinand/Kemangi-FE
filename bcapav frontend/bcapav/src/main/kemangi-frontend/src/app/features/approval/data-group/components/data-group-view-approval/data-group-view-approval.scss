@@ -1,0 +1,138 @@
+.w-49 {
+  width: 49%;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.me-40 {
+  margin-right: 40px;
+}
+
+.ms-36 {
+  margin-left: 36px;
+}
+
+.role-info {
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.content-info__item {
+  display: flex;
+  align-items: flex-start;
+  min-height: 24px;
+  padding: 2px 0px;
+}
+
+.content-info__label {
+  width: 150px;
+  color: #555555;
+  font-size: 14px;
+}
+
+.content-info__content {
+  width: calc(100% - 150px);
+  color: #121212;
+  word-break: break-all;
+}
+
+.role-info__separator {
+  width: 1px;
+  // background-color: #144e83;
+  // min-height: 200px;
+  // height: 100%;
+  //height: 100%;
+  margin: 0 36px 0 0;
+}
+
+.content-field--section-type-ii-styles {
+  padding: 5px 36px 5px 0px;
+  border-right: 1px solid #144e83;
+}
+
+.content-field--section-type-iii-styles {
+  padding: 49px 0px 0px 33px;
+}
+
+//pagination
+::ng-deep .pagination {
+  margin: auto;
+}
+
+::ng-deep .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .table-pagination .pagination .page-item.active .page-link {
+  background-color: #005caa;
+  color: white;
+  border: none;
+}
+
+::ng-deep .table-pagination .page-link {
+  color: #226a69;
+  border-radius: 8px;
+  padding: 6px 12px;
+  border: none;
+  font-size: 14px;
+}
+
+::ng-deep .table-pagination .page-link:hover {
+  background-color: #005caa;
+  color: #ffffff;
+  border-radius: 6px !important;
+  font-size: 14px;
+}
+
+::ng-deep .disabled > .page-link,
+.page-link.disabled {
+  pointer-events: none;
+  background-color: #ffffff;
+  border: none;
+}
+
+#pageSize {
+  height: 40px;
+}
+
+.form-select {
+  border: 1px solid#c4c4c4;
+}
+
+.form-select:focus {
+  box-shadow: none;
+  border: 1px solid#c4c4c4;
+}
+
+.sort-icon {
+  margin-left: 6px;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.page-info {
+  font-size: 14px;
+  line-height: 20px;
+  color: #868e96;
+}

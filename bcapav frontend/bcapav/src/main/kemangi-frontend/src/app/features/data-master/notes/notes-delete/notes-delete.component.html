@@ -1,0 +1,87 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <form [formGroup]="notesForm">
+    <section class="card no-border card-pavo-default-type-ii mb-24">
+      <div class="mb-24">
+        <app-toggle-switch formControlName="activeStatus"></app-toggle-switch>
+      </div>
+
+      <div class="d-flex mb-3">
+        <div class="d-flex flex-column me-40" style="width: 360px">
+          <div class="form-item">
+            <label for="note">Notes</label>
+            <input
+              id="note"
+              type="text"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['note']?.invalid && (f['note']?.dirty || f['note']?.touched)
+              "
+              formControlName="note"
+              placeholder="Notes"
+            />
+            @if (
+              f["note"]?.invalid && (f["note"]?.dirty || f["note"]?.touched)
+            ) {
+              <div>
+                @if (f["note"]?.errors?.["required"]) {
+                  <div class="invalid-input">Notes is required</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="d-flex flex-column" style="width: 800px">
+          <div class="form-item">
+            <label for="description">Description</label>
+
+            <textarea
+              #autoDescTA
+              id="description"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['description']?.invalid &&
+                (f['description']?.dirty || f['description']?.touched)
+              "
+              formControlName="description"
+              rows="1"
+              (input)="autogrow(autoDescTA)"
+              placeholder="Description"
+            ></textarea>
+            @if (
+              f["description"]?.invalid &&
+              (f["description"]?.dirty || f["description"]?.touched)
+            ) {
+              <div>
+                @if (f["description"]?.errors?.["required"]) {
+                  <div class="invalid-input">Description is required</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="d-flex align-items-center justify-content-end btn-section">
+      <button
+        type="button"
+        class="btn-type-1 btn-white-outlined me-3"
+        (click)="back()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="
+          f['activeStatus'].value
+            ? handleDeleteImmediately()
+            : handleDeleteConfirmation()
+        "
+        [disabled]="notesForm.invalid"
+      >
+        Submit
+      </button>
+    </section>
+  </form>
+</app-content-layout>

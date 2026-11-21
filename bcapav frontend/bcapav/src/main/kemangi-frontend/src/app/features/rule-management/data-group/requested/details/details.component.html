@@ -1,0 +1,26 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (details().requestType === "UPDATE") {
+    <app-data-group-view-edit-approval
+      [details]="details()"
+      [prevDetails]="prevDetails()"
+      [ruleRelationList]="ruleRelationList()"
+      [ruleRelationPageInfo]="pageRuleRelationInfo"
+      [ruleRelationPageQuery]="pageRuleRelationQuery"
+      [back]="back.bind(this)"
+      (pageChange)="handlePageChange($event)"
+      (sort)="handleSortChange($event.direction, $event.key)"
+    />
+  }
+
+  @if (details().requestType !== "UPDATE") {
+    <app-data-group-view-approval
+      [details]="details()"
+      [ruleRelationList]="ruleRelationList()"
+      [ruleRelationPageInfo]="pageRuleRelationInfo"
+      [ruleRelationPageQuery]="pageRuleRelationQuery"
+      [back]="back.bind(this)"
+      (pageChange)="handlePageChange($event)"
+      (sort)="handleSortChange($event.direction, $event.key)"
+    />
+  }
+</app-content-layout>

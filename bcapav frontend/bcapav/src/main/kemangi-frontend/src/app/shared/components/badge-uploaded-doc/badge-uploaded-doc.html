@@ -1,0 +1,21 @@
+<div class="uploaded-doc">
+  <div (click)="download()">
+    <span
+      class="doc-name"
+      [class.type-i]="type==='type-i'"
+      [class.type-ii]="type==='type-ii'"
+      >{{originalName.split('.')[0]}}</span
+    >
+    <span
+      class="doc-extension"
+      [class.type-i]="type==='type-i'"
+      [class.type-ii]="type==='type-ii'"
+      >{{extension}}</span
+    >
+  </div>
+
+  @if(showClearBtn){
+  <button class="doc-remove" type="button" (click)="removeFile(generatedName)">
+    <img src="/assets/img/ic-times-black.svg" alt="clear-all" /></button
+  >}
+</div>

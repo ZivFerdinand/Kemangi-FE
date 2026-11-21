@@ -1,0 +1,8 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-alert-queue-form
+    [mode]="mode"
+    [initialData]="details"
+    (handleBackPage)="handleBack($event)"
+    (handleSubmit)="handleSubmit($event)"
+  ></app-alert-queue-form
+></app-content-layout>

@@ -1,0 +1,80 @@
+.block-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  min-width: 168px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+.block-btn.download-type {
+  color: #005caa;
+  border: 0.7px solid #005caa;
+  background-color: #ffffff;
+  padding: 0 16px;
+}
+
+.block-btn.upload-type {
+  background: #144e83;
+  border: 0.7px solid #144e83;
+  color: #ffffff;
+}
+
+.block-btn.upload-type:disabled {
+  background: #b9b9b9;
+  border: 0.7px solid #b9b9b9;
+  cursor: not-allowed;
+}
+
+.upload-msg {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #121212;
+}
+
+.custom-radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.custom-radio input {
+  display: none;
+}
+
+.radio {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #555555;
+  border-radius: 50%;
+  position: relative;
+}
+
+.custom-radio input.invalid + .radio {
+  border: 2px solid #dd1205;
+}
+
+.custom-radio input:checked + .radio {
+  border-color: #555555;
+}
+
+.custom-radio input:checked + .radio::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #555555;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-white-outlined:disabled {
+  background-color: #dddddd;
+  color: #c2c2c2;
+  border-color: #dddddd;
+}

@@ -1,0 +1,305 @@
+@let d=details; @let p=prevDetails;
+
+<section class="card no-border card-pavo-default-type-ii mb-24 w-100 flex-row">
+  <div class="d-flex w-49">
+    <div class="d-flex flex-column me-40 w-49">
+      <div class="form-item" [class.mb-24]="pageType!=='task list'">
+        <label>Requested By</label>
+        <div class="content-detail">
+          {{d.requesterName===''?'-':d.requesterName}}
+        </div>
+      </div>
+
+      @if(pageType!=='task list'){
+      <div class="form-item mb-24">
+        <label>Reviewed By</label>
+        <div class="content-detail">
+          {{d.approverName===''?'-':d.approverName}}
+        </div>
+      </div>
+
+      <div class="form-item">
+        <label>Status</label>
+        <div class="content-detail">
+          <div style="width: 108px">
+            <div class="approval-status-wrapper">
+              <div
+                class="approval-status-label"
+                [class.approval-status-label--approved]="
+                  details.approvalStatus === 'APPROVED'
+                "
+                [class.approval-status-label--rejected]="
+                  details.approvalStatus === 'REJECTED'
+                "
+                [class.approval-status-label--pending]="
+                  details.approvalStatus === 'PENDING'
+                "
+              >
+                {{ (details.approvalStatus || "-") | capitalize }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="d-flex flex-column w-49">
+      <div class="form-item" [class.mb-24]="pageType!=='task list'">
+        <label>Requested Date</label>
+        <div class="content-detail">
+          {{ details.requestDate!=='' ? (details.requestDate | date :
+          "dd-MMM-yyyy HH:mm:ss") : '-' }}
+        </div>
+      </div>
+
+      @if(pageType!=='task list'){
+      <div class="form-item mb-24">
+        <label>Reviewed Date</label>
+        <div class="content-detail">
+          {{ details.approvalDate!=='' ? (details.approvalDate | date :
+          "dd-MMM-yyyy HH:mm:ss") : '-' }}
+        </div>
+      </div>
+
+      <div class="form-item">
+        <label>Rejection Notes</label>
+        <div class="content-detail">
+          {{d.rejectionNote===''?'-':d.rejectionNote}}
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+
+<div class="w-100 d-flex align-items-start justify-content-between mb-24">
+  <div class="card no-border card-pavo-default-type-ii w-49">
+    <div class="d-flex align-items-center justify-content-start">
+      <div class="edit-approval-title-state">Before</div>
+    </div>
+  </div>
+  <div class="card no-border card-pavo-default-type-ii w-49">
+    <div class="d-flex align-items-center justify-content-start">
+      <div class="edit-approval-title-state">After</div>
+    </div>
+  </div>
+</div>
+
+<div class="w-100 d-flex align-items-start justify-content-between mb-24">
+  <div class="card no-border card-pavo-default-type-ii w-49 pb-5">
+    <div style="margin-bottom: 8px">
+      <app-toggle-switch
+        [(ngModel)]="p.activeStatus"
+        [disabled]="isDisabled"
+      ></app-toggle-switch>
+    </div>
+
+    <div class="d-flex mb-24">
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>Template ID</label>
+          <div class="content-detail">
+            {{p.templateId===''?'-':p.templateId}}
+          </div>
+        </div>
+        <div class="form-item mb-24">
+          <label>Template Name</label>
+          <div class="content-detail">
+            {{p.templateName===''?'-':p.templateName}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Event Type</label>
+          <div class="content-detail">{{p.eventType===''?'-':p.eventType}}</div>
+        </div>
+      </div>
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>Template Type</label>
+          <div class="content-detail">
+            {{p.templateType===''?'-':p.templateType}}
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Product</label>
+          <div class="content-detail">
+            {{p.productType===''?'-':p.productType}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-approval-ii-separator mb-24"></div>
+
+    <div class="fw-bold template-detail-title mb-24">Template Detail</div>
+
+    <div class="d-flex mb-24">
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>To</label>
+          <div class="content-detail">
+            {{p.emailTo.length===0?'-':p.emailTo.join(', ')}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>BCC</label>
+          <div class="content-detail">
+            {{p.emailBcc.length===0?'-':p.emailBcc.join(', ')}}
+          </div>
+        </div>
+      </div>
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>CC</label>
+          <div class="content-detail">
+            {{p.emailCc.length===0?'-':p.emailCc.join(', ')}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Subject</label>
+          <div class="content-detail">
+            {{p.emailSubject===''?'-':p.emailSubject}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-item mb-24">
+      <label class="mb-3">Body Email</label>
+      <div>
+        @if (!nonHighlighted) {
+        <div>-</div>
+        } @else {
+        <div [innerHTML]="nonHighlighted"></div>
+        }
+      </div>
+    </div>
+
+    <div class="form-item">
+      <label class="mb-3">Parameter</label>
+      <div class="content-detail">{{ p.emailParameter|| "-" }}</div>
+    </div>
+  </div>
+
+  <div class="card no-border card-pavo-default-type-ii w-49 pb-5">
+    <div style="margin-bottom: 8px">
+      <app-toggle-switch
+        [(ngModel)]="d.activeStatus"
+        [disabled]="isDisabled"
+      ></app-toggle-switch>
+    </div>
+
+    <div class="d-flex mb-24">
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>Template ID</label>
+          <div
+            class="content-detail"
+            [class.after]="d.templateId!==p.templateId"
+          >
+            {{d.templateId===''?'-':d.templateId}}
+          </div>
+        </div>
+        <div class="form-item mb-24">
+          <label>Template Name</label>
+          <div
+            class="content-detail"
+            [class.after]="d.templateName!==p.templateName"
+          >
+            {{d.templateName===''?'-':d.templateName}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Event Type</label>
+          <div class="content-detail" [class.after]="d.eventType!==p.eventType">
+            {{d.eventType===''?'-':d.eventType}}
+          </div>
+        </div>
+      </div>
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>Template Type</label>
+          <div
+            class="content-detail"
+            [class.after]="d.templateType!==p.templateType"
+          >
+            {{d.templateType===''?'-':d.templateType}}
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Product</label>
+          <div
+            class="content-detail"
+            [class.after]="d.productType!==p.productType"
+          >
+            {{d.productType===''?'-':d.productType}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-approval-ii-separator mb-24"></div>
+
+    <div class="fw-bold template-detail-title mb-24">Template Detail</div>
+
+    <div class="d-flex mb-24">
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>To</label>
+          <div
+            class="content-detail"
+            [class.after]="!isEqualArray(d.emailTo,p.emailTo)"
+          >
+            {{d.emailTo.length===0?'-':d.emailTo.join(', ')}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>BCC</label>
+          <div
+            class="content-detail"
+            [class.after]="!isEqualArray(d.emailBcc,p.emailBcc)"
+          >
+            {{d.emailBcc.length===0?'-':d.emailBcc.join(', ')}}
+          </div>
+        </div>
+      </div>
+      <div class="w-49">
+        <div class="form-item mb-24">
+          <label>CC</label>
+          <div
+            class="content-detail"
+            [class.after]="!isEqualArray(d.emailCc,p.emailCc)"
+          >
+            {{d.emailCc.length===0?'-':d.emailCc.join(', ')}}
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Subject</label>
+          <div
+            class="content-detail"
+            [class.after]="d.emailSubject!==p.emailSubject"
+          >
+            {{d.emailSubject===''?'-':d.emailSubject}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-item mb-24">
+      <label class="mb-3">Body Email</label>
+      @if(highlighted){
+      <div [innerHTML]="highlighted" class="mb-3"></div>
+      } @else {
+      <div>-</div>
+      }
+    </div>
+
+    <div class="form-item">
+      <label class="mb-3">Parameter</label>
+      <div class="content-detail">{{ d.emailParameter|| "-" }}</div>
+    </div>
+  </div>
+</div>

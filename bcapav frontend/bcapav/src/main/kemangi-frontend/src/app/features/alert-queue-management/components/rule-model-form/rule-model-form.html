@@ -1,0 +1,242 @@
+<div class="card no-border card-pavo-default-type-i">
+  <h3 class="alert-queue-label mb-24">Rule & Model</h3>
+  @if(mode!=='DELETE'){
+  <div class="d-flex w-100" cdkDropListGroup>
+    <div
+      class="card card-pavo-default-type-vi alert-queue-list me-3 rule-model-section left"
+    >
+      <h4 class="alert-queue-label" style="margin-bottom: 4px">
+        Available Items
+      </h4>
+      <p class="alert-queue-info mb-3">
+        Drag & drop item to the required priority
+      </p>
+      @for (box of sourceBoxes; track box.name) {
+      <div class="alert-queue-unassigned-box mb-3">
+        <div class="header">
+          <div class="header__content">
+            <span
+              class="header__counter"
+              [class.font-size-extend]="visibleSourceItems(box) > 99"
+            >
+              {{ visibleSourceItems(box) > 99?'99+':visibleSourceItems(box) }}
+            </span>
+
+            <h3 class="header__label">{{box.name}}</h3>
+          </div>
+          <div class="header__tabs">
+            <app-custom-tab
+              [tabs]="tabs[getTabKey(box.name)]"
+              [activeTab]="activeTab[getTabKey(box.name)]"
+              (tabChange)="handleTabChange($event,getTabKey(box.name))"
+              styleType="type-b"
+              tabActiveBg="#1263A8"
+              tabBtnColor="#65748B"
+            ></app-custom-tab>
+          </div>
+        </div>
+
+        <div class="body">
+          <div class="alert-queue-search-box">
+            <input
+              type="text"
+              [placeholder]="'Search '+box.name"
+              #searchInput
+              [value]="box.searchQuery"
+              (input)="box.searchQuery = searchInput.value"
+            />
+            <button type="button">
+              <img src="/assets/img/ic-small-magnifier.svg" alt="search" />
+            </button>
+          </div>
+          <div class="alert-queue-list-box" id="alertQueueListBox">
+            <div ngbAccordion>
+              @for (group of box.groups; track group.branchName) {
+              @if(group.items.length > 0){
+              <div ngbAccordionItem [collapsed]="true">
+                <h2 ngbAccordionHeader>
+                  <button ngbAccordionButton>{{group.branchName}}</button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div
+                        cdkDropList
+                        [id]="sourceGroupListId(box, group)"
+                        [cdkDropListData]="group.items"
+                        [cdkDropListConnectedTo]="allDropListIds"
+                        (cdkDropListDropped)="drop($event)"
+                      >
+                        @for (item of group.items; track item.id){
+                        <div
+                          class="alert-queue-sub-priority-box--item type-ii"
+                          [class.item-hidden]="!matchesSearch(box, item)"
+                          cdkDrag
+                        >
+                          <div class="icon">
+                            <img
+                              [src]="item.sourceName==='Rule'?'/assets/img/ic-alert-rule.svg':'/assets/img/ic-alert-threshold.svg'"
+                              alt="icon"
+                            />
+                          </div>
+                          <div class="label">{{item?.name||'-'}}</div>
+                          <div class="action-buttons type-ii">
+                            <button type="button" class="menu">
+                              <img
+                                [src]="'/assets/img/ic-small-menu.svg'"
+                                alt="icon"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                        }
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              } }
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    <div
+      class="card card-pavo-default-type-vi alert-queue-priority rule-model-section right"
+    >
+      <h4 class="alert-queue-label mb-24">Alert Queue</h4>
+      <div class="alert-queue-priority-row">
+        @for(box of priorityBoxes; track box.name){
+        <div
+          class="alert-queue-priority-box"
+          [class.priority-high]="box.name==='High'"
+          [class.priority-medium]="box.name==='Medium'"
+          [class.priority-low]="box.name==='Low'"
+        >
+          <h5
+            class="alert-queue-label"
+            [class.priority-high]="box.name==='High'"
+            [class.priority-medium]="box.name==='Medium'"
+            [class.priority-low]="box.name==='Low'"
+          >
+            {{box.name}} Priority
+          </h5>
+
+          @for(level of box.levels; track level.name; let i = $index){
+          <div class="alert-queue-sub-priority-box">
+            <div class="d-flex justify-content-between">
+              <h6 class="alert-queue-label">{{ level.name }}</h6>
+              <button
+                type="button"
+                class="btn-delete-priority"
+                (click)="deleteLevel(box, i)"
+              >
+                <img [src]="'/assets/img/ic-small-garbage.svg'" alt="icon" />
+              </button>
+            </div>
+            <div
+              cdkDropList
+              [id]="levelListId(box, level)"
+              [cdkDropListData]="level.items"
+              [cdkDropListConnectedTo]="allDropListIds"
+              (cdkDropListDropped)="drop($event)"
+              style="min-height: 50px"
+            >
+              @for(item of level.items; track item.id ){
+              <div class="alert-queue-sub-priority-box--item" cdkDrag>
+                <div class="icon">
+                  <img
+                    [src]="item.sourceName==='Rule'?'/assets/img/ic-alert-rule.svg':'/assets/img/ic-alert-threshold.svg'"
+                    alt="icon"
+                  />
+                </div>
+                <div class="label">{{item.name||'-'}}</div>
+                <div class="action-buttons">
+                  <button
+                    type="button"
+                    class="delete"
+                    (click)="deleteItemFromLevel(level, item)"
+                  >
+                    <img
+                      [src]="'/assets/img/ic-small-garbage.svg'"
+                      alt="icon"
+                    />
+                  </button>
+                  <button type="button" class="menu">
+                    <img [src]="'/assets/img/ic-small-menu.svg'" alt="icon" />
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+          }
+
+          <button
+            type="button"
+            class="btn-add-priority"
+            (click)="addLevel(box)"
+          >
+            <img src="/assets/img/ic-small-plus.svg" alt="add" />Add Priority
+            Level
+          </button>
+        </div>
+        }
+        <!-- <div class="alert-queue-priority-box priority-high">
+          <h5 class="alert-queue-label priority-high">High Priority</h5>
+          <div class="alert-queue-sub-priority-box">
+            <div class="d-flex justify-content-between">
+              <h6 class="alert-queue-label">Priority 1</h6>
+              <button type="button" class="btn-delete-priority">
+                <img [src]="'/assets/img/ic-small-garbage.svg'" alt="icon" />
+              </button>
+            </div>
+
+            <div class="alert-queue-sub-priority-box--item">
+              <div class="icon">
+                <img [src]="'/assets/img/ic-alert-rule.svg'" alt="icon" />
+              </div>
+              <div class="label">Rule 1 RUle 1 Rule 1 Rule 1 Rule 1</div>
+              <div class="action-buttons">
+                <button type="button" class="delete">
+                  <img [src]="'/assets/img/ic-small-garbage.svg'" alt="icon" />
+                </button>
+                <button type="button" class="menu">
+                  <img [src]="'/assets/img/ic-small-menu.svg'" alt="icon" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn-add-priority">
+            <img src="/assets/img/ic-small-plus.svg" alt="add" />Add Priority
+            Level
+          </button>
+        </div>
+        <div class="alert-queue-priority-box priority-medium">
+          <h5 class="alert-queue-label priority-medium">Medium Priority</h5>
+          <button type="button" class="btn-add-priority">
+            <img src="/assets/img/ic-small-plus.svg" alt="add" />Add Priority
+            Level
+          </button>
+        </div>
+        <div class="alert-queue-priority-box priority-low">
+          <h5 class="alert-queue-label priority-low">Low Priority</h5>
+          <button type="button" class="btn-add-priority">
+            <img src="/assets/img/ic-small-plus.svg" alt="add" />Add Priority
+            Level
+          </button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- == -->
+
+  @if(mode==='DELETE'){
+  <app-rule-model-preview
+    [initialPriorityBoxes]="priorityBoxes"
+  ></app-rule-model-preview>
+  }
+</div>

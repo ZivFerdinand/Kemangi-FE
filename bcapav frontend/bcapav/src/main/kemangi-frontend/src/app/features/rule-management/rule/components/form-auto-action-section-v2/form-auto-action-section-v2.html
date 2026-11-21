@@ -1,0 +1,190 @@
+<section class="card p-3 no-border datagroup-form mb-24">
+  <div class="fw-semibold section-title mb-24">Auto Action</div>
+
+  <div class="mb-24">
+    <div class="table-auto-action-title">Table Parameter</div>
+    <app-rule-table
+      [columns]="columns"
+      [data]="tableData"
+      [cellTemplates]="{
+          no: noTpl,
+        }"
+      [showPageInfo]="false"
+      [pagination]="false"
+      [showNoData]="true"
+      (sort)="handleSortChange($event.direction, $event.key)"
+    ></app-rule-table>
+  </div>
+
+  <!-- --- -->
+
+  @if(mode!=='DELETE'){
+  <div class="d-flex justify-content-start">
+    <button
+      type="button"
+      class="btn-type-1 btn-light-blue fw-bold"
+      (click)="open(contentAutoAction)"
+    >
+      @if(tableData.length>0){Edit Action } @else{Add Action}
+    </button>
+  </div>
+
+  }
+</section>
+
+<ng-template #noTpl let-row let-i="index"> {{ i + 1 }} </ng-template>
+
+<ng-template #contentAutoAction let-modal>
+  <div class="card no-border p-4">
+    <div class="d-flex align-items-center" style="margin-bottom: 30px">
+      <div class="fw-semibold">Auto Action</div>
+    </div>
+
+    <app-detail-rule-tab
+      [tabs]="subruleTabs"
+      [activeTab]="subruleTabActive"
+      (tabChange)="handleTabChange($event)"
+    />
+
+    <div class="w-100 d-flex justify-content-start align-items-stretch mb-56">
+      <div style="width: 38.97%">
+        <div class="form-item mb-24">
+          <label>List Channel</label>
+
+          <div class="ng-select-custom select-action-type">
+            <ng-select
+              [items]="dropdownChannelType"
+              bindLabel="channelType"
+              [(ngModel)]="selectedValues"
+              [multiple]="true"
+              [clearable]="false"
+              [closeOnSelect]="false"
+              placeholder="List Channel"
+              (change)="updateAutoAction('channelType', $event)"
+            >
+              <ng-template
+                ng-option-tmp
+                let-item="item"
+                let-selected="selected"
+              >
+                <div class="custom-option">
+                  <span style="margin-left: 8px">{{ item.label }}</span>
+                </div>
+              </ng-template>
+
+              <ng-template ng-multi-label-tmp let-items="items">
+                @for (val of items; let last = $last; track val) {
+                <span class="label-action">
+                  {{ findLabel('channelType',val) }}@if (!last) {; }
+                </span>
+                }
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        @if(selectedValues.length>0){
+        <div class="mb-64">
+          @for (item of selectedValues; let i = $index;track item) {
+
+          <div
+            class="action-type--selected"
+            [class.active]="autoActionTabActive === item.label"
+          >
+            <p (click)="handleActionTypeActive(item.label)">
+              Channel {{i+1}} - {{item.label}}
+            </p>
+            <button
+              type="button"
+              class="remove-action-type-btn"
+              (click)="handleDeleteActionType(item.value)"
+            >
+              <img src="/assets/img/ic-garbage-dark-blue.svg" alt="remove" />
+            </button>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-auto-action-separator"></div>
+
+      <div style="width: 55.14%">
+        @if (autoActionTabActive==='EMAIL'){
+        <app-auto-action-email
+          [dropdownEmailTemplate]="dropdownEmailTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionForm"
+          (updateAutoAction)="getUpdateAutoAction($event)"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (autoActionTabActive==='SMS'){
+        <app-auto-action-sms
+          [dropdownSmsTemplate]="dropdownSmsTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionForm"
+          (updateAutoAction)="getUpdateAutoAction($event)"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (autoActionTabActive==='WA'){
+        <app-auto-action-whatsapp
+          [dropdownWaTemplate]="dropdownWaTemplate"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionForm"
+          (updateAutoAction)="getUpdateAutoAction($event)"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (autoActionTabActive==='MBCA'){
+        <app-auto-action-mbca
+          [dropdownMbNotif]="dropdownMbNotif"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionForm"
+          (updateAutoAction)="getUpdateAutoAction($event)"
+        />
+        }
+
+        <!-- --- -->
+
+        @if (autoActionTabActive==='AUTO BLOCK'){
+        <app-auto-action-auto-block
+          [dropdownAbTemplate]="dropdownAb"
+          [dropdownParameter]="dropdownParameter"
+          [autoActionData]="autoActionForm"
+          (updateAutoAction)="getUpdateAutoAction($event)"
+        />
+        }
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button
+        type="button"
+        class="btn-type-1 fw-bold btn-light-blue"
+        style="margin-right: 11px"
+        (click)="cancel()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 fw-bold btn-dark-blue"
+        [disabled]="isInvalid()"
+        (click)="submit()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</ng-template>

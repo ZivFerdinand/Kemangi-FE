@@ -1,0 +1,71 @@
+<div id="reasonModal">
+  @if (title) {
+  <div class="modal-header">
+    <h4 class="modal-title font-weight-bold">{{ title }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  } @if(isModalOpen){
+  <form
+    class="modal-body"
+    [formGroup]="formGroup"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="mb-2 message">{{ message }}</div>
+    <div class="mb-24">Please add notes here:</div>
+    <div class="custom-text-area">
+      <textarea
+        id="reason_action"
+        class="form-control pr-5"
+        formControlName="note"
+        [class.is-invalid]="isInvalid('note')"
+        [placeholder]="'input text here'"
+        rows="3"
+        (keydown)="onKeyDown($event, 'note')"
+      ></textarea>
+
+      <div
+        class="custom-text-area__counter"
+        [class.is-invalid]="isInvalid('note')"
+      >
+        {{formGroup.get('note')?.value?.length??'0' }}/200
+      </div>
+    </div>
+
+    @if(getErrorMessage('note')){
+    <div class="invalid-input">{{ getErrorMessage('note') }}</div>
+    }
+
+    <!-- <div>
+      @if (showError('note','required')) {
+      <div class="invalid-input">Notes is required</div>
+      } @if (showError('note','maxlength')) {
+      <div class="invalid-input">
+        Max {{ formGroup.get('note')?.errors?.['maxlength']?.requiredLength }}
+        characters allowed
+      </div>
+      } @if (showError('note','minlength')) {
+      <div class="invalid-input">
+        Min {{ formGroup.get('note')?.errors?.['minlength']?.requiredLength }}
+        characters allowed
+      </div>
+      }
+    </div> -->
+  </form>
+  }
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-confirm-no" (click)="dismiss()">
+      {{ btnCancelText }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-confirm-yes"
+      (click)="accept()"
+      [disabled]="formGroup.invalid"
+    >
+      {{ btnOkText }}
+    </button>
+  </div>
+</div>

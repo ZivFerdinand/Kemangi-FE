@@ -1,0 +1,30 @@
+export const SMC_DETAILS_INIT = {
+  id: 0,
+  fileName: '',
+  totalData: 0,
+  totalValidData: 0,
+  totalInvalidData: 0,
+  approvalStatus: '',
+  processStatus: '',
+  rejectionNote: '',
+  retryFlag: null,
+  requesterId: '',
+  requesterName: '',
+  requestDate: '',
+  approverId: '',
+  approverName: '',
+  approvalDate: '',
+  totalFailedData: null,
+  totalSuccessData: null,
+};
+
+export const SMC_DETAILS_LIST_TABLE_QUERY = {
+  limit: 20,
+  page: 1,
+  sort: '',
+  sortDir: '',
+  query: '',
+  validStatus: null,
+  processStatus: null,
+  retryFlag: null,
+};

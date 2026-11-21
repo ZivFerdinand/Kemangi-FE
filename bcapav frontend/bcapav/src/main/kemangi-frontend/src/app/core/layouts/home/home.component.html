@@ -1,0 +1,11 @@
+<div class="app-container">
+  <app-header [isSidebarCollapsed]="isSidebarCollapsed"></app-header>
+
+  <div class="app-main">
+    <app-sidebar [listMenu]="profileUser.menuCode" [(isCollapsed)]="isSidebarCollapsed"></app-sidebar>
+    <div class="app-main__outer" [class.collapsed]="isSidebarCollapsed">
+      <router-outlet></router-outlet>
+      <!-- <app-footer></app-footer> -->
+    </div>
+  </div>
+</div>

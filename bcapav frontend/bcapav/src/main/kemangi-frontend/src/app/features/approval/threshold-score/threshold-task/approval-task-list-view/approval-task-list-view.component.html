@@ -1,0 +1,20 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (apprDetailData.request_type === 'UPDATE') {
+  <app-edit-threshold-approval
+    [detailData]="apprDetailData"
+    [pageType]="'task list'"
+    [back]="back.bind(this)"
+    (reject)="handleReject()"
+    (approve)="handleApprove()"
+    
+  />
+  } @else {
+  <app-default-threshold-approval
+    [detailData]="apprDetailData"
+    [pageType]="'task list'"
+    [back]="back.bind(this)"
+    (reject)="handleReject()"
+    (approve)="handleApprove()"
+  />
+  }
+</app-content-layout>

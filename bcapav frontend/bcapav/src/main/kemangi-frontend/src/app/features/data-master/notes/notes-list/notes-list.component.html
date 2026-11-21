@@ -1,0 +1,201 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div class="role-management-list-area">
+    <div class="role-management-list-above">
+      <div class="d-flex align-items-center">
+        <div class="search-box">
+          <input
+            type="text"
+            class="form-control pr-5"
+            placeholder="Search here"
+            [(ngModel)]="pageQuery.note"
+            (keyup.enter)="handleQuery()"
+          />
+          <button type="button" class="search-btn" (click)="handleQuery()">
+            <img src="/assets/img/ic-find.svg" alt="find" />
+          </button>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <button
+          type="button"
+          class="btn-type-1 btn-dark-blue"
+          [disabled]="!createPermission"
+          (click)="navigateTo('/home/data-master/notes/create')"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="!createPermission ? `You don't have permission` : null"
+        >
+          <img src="/assets/img/ic-plus.svg" alt="add" /> Create New Notes
+        </button>
+      </div>
+    </div>
+  </div>
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          note: noteTpl,
+          description: descriptionTpl,
+          lastUpdatedByName: lastUpdatedByNameTpl,
+          lastApprovalName: lastApprovalNameTpl,
+          lastUpdatedDt: lastUpdatedDtTpl,
+          lastApprovalDt: lastApprovalDtTpl,
+          activeStatus: activeStatusTpl,
+          action: actionBtnsTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #noteTpl let-row>
+  <div class="truncate">{{ row.note ? row.note : "-" }}</div>
+</ng-template>
+
+<ng-template #descriptionTpl let-row>
+  <div class="truncate">{{ row.description ? row.description : "-" }}</div>
+</ng-template>
+
+<ng-template #actionBtnsTpl let-row>
+  <div
+    class="d-flex align-items-center justify-content-around"
+    style="width: 64px"
+  >
+    <a
+      [routerLink]="['/home/data-master/notes', row.id]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+
+    <!-- --//-- -->
+
+    <!-- --//-- -->
+    <!-- --//-- -->
+
+    @if (editPermission) {
+      @if (row.hasPendingRequest) {
+        <div
+          class="action-buttons__item"
+          placement="start"
+          tooltipClass="custom-tooltip"
+          [ngbTooltip]="
+            row.hasPendingRequest ? 'Notes has pending request' : 'Loading...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/data-master/notes', row.id, 'edit']"
+          class="action-buttons__item"
+        >
+          <img src="./assets/img/ic-pen-blue.svg" alt="edit" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+      </div>
+    }
+    <!-- --//-- -->
+    @if (deletePermission) {
+      @if (row.hasPendingRequest) {
+        <div
+          class="action-buttons__item"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row.hasPendingRequest ? 'Notes has pending request' : 'Loading...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/data-master/notes', row.id, 'delete']"
+          class="action-buttons__item"
+        >
+          <img src="./assets/img/ic-garbage-blue.svg" alt="delete" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+      </div>
+    }
+    <!-- --//-- -->
+  </div>
+</ng-template>
+
+<ng-template #activeStatusTpl let-row>
+  <div class="active-status-wrapper">
+    <div
+      class="active-status-label"
+      [class.active-status-label--on]="row.activeStatus"
+      [class.active-status-label--off]="!row.activeStatus"
+    >
+      {{ row.activeStatus ? "On" : "Off" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #lastUpdatedByNameTpl let-row>
+  <div class="truncate">
+    {{ row.lastUpdatedByName ? row.lastUpdatedByName : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApprovalNameTpl let-row>
+  <div class="truncate">
+    {{ row.lastApprovalName ? row.lastApprovalName : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastUpdatedDtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastUpdatedDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApprovalDtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApprovalDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>

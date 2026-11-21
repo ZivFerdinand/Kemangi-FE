@@ -1,0 +1,111 @@
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.me-40 {
+  margin-right: 40px;
+}
+
+.ms-36 {
+  margin-left: 36px;
+}
+
+.menu-box {
+  padding-bottom: 40px;
+}
+
+.menu-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #144e83;
+  padding: 18px 12px;
+}
+
+.menu-title .text {
+  color: #144e83;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 0.5;
+}
+
+.table-menu {
+  width: 100%;
+}
+
+.table-menu__header {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 6px;
+  background-color: #144e83;
+  display: flex;
+  align-items: center;
+}
+
+.table-menu__header .table-menu__item {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ffffff;
+  min-width: 180px;
+}
+
+.table-menu__header .table-menu__item.action {
+  width: 260px;
+}
+
+.table-menu__header .table-menu__item:first-child {
+  justify-content: start;
+}
+
+.table-menu__body .table-menu__item-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 12px;
+  border-bottom: 1px solid #144e83;
+}
+
+.table-menu__body .table-menu__item-row .table-menu__item-column {
+  min-width: 180px;
+  display: flex;
+  justify-content: center;
+}
+
+.table-menu__body .table-menu__item-row .table-menu__item-column.action {
+  width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-menu__body .table-menu__item-row .table-menu__item-column:first-child {
+  justify-content: flex-start;
+}
+
+@media (max-width: 1010px) {
+  .table-menu__header .table-menu__item:first-child {
+    min-width: 180px;
+  }
+
+  .table-menu__header .table-menu__item {
+    min-width: 100px;
+    // max-width: 100px;
+  }
+
+  .table-menu__body .table-menu__item-row .table-menu__item-column:first-child {
+    min-width: 180px;
+  }
+
+  .table-menu__body .table-menu__item-row .table-menu__item-column {
+    min-width: 100px;
+  }
+}
+
+.thumb-icon {
+  height: 20px;
+  width: 20px;
+  margin-left: 16px;
+  cursor: pointer;
+}

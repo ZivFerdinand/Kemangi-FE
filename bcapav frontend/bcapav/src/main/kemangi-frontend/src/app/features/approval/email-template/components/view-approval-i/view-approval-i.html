@@ -1,0 +1,176 @@
+@let d=details;
+<section class="card no-border card-pavo-default-type-ii mb-24 w-100 flex-row">
+  <div class="d-flex w-49">
+    <div class="d-flex flex-column me-40 w-49">
+      <div class="form-item" [class.mb-24]="pageType!=='task list'">
+        <label>Requested By</label>
+        <div class="content-detail">
+          {{d.requesterName===''?'-':d.requesterName}}
+        </div>
+      </div>
+
+      @if(pageType!=='task list'){
+      <div class="form-item mb-24">
+        <label>Reviewed By</label>
+        <div class="content-detail">
+          {{d.approverName===''?'-':d.approverName}}
+        </div>
+      </div>
+
+      <div class="form-item">
+        <label>Status</label>
+        <div class="content-detail">
+          <div style="width: 108px">
+            <div class="approval-status-wrapper">
+              <div
+                class="approval-status-label"
+                [class.approval-status-label--approved]="
+                  details.approvalStatus === 'APPROVED'
+                "
+                [class.approval-status-label--rejected]="
+                  details.approvalStatus === 'REJECTED'
+                "
+                [class.approval-status-label--pending]="
+                  details.approvalStatus === 'PENDING'
+                "
+              >
+                {{ (details.approvalStatus || "-") | capitalize }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="d-flex flex-column w-49">
+      <div class="form-item" [class.mb-24]="pageType!=='task list'">
+        <label>Requested Date</label>
+        <div class="content-detail">
+          {{ details.requestDate!=='' ? (details.requestDate | date :
+          "dd-MMM-yyyy HH:mm:ss") : '-' }}
+        </div>
+      </div>
+
+      @if(pageType!=='task list'){
+      <div class="form-item mb-24">
+        <label>Reviewed Date</label>
+        <div class="content-detail">
+          {{ details.approvalDate!=='' ? (details.approvalDate | date :
+          "dd-MMM-yyyy HH:mm:ss") : '-' }}
+        </div>
+      </div>
+
+      <div class="form-item">
+        <label>Rejection Notes</label>
+        <div class="content-detail">
+          {{d.rejectionNote===''?'-':d.rejectionNote}}
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="card no-border card-pavo-default-type-ii mb-24">
+  <div style="margin-bottom: 8px">
+    <app-toggle-switch
+      [(ngModel)]="details.activeStatus"
+      [disabled]="isDisabled"
+    ></app-toggle-switch>
+  </div>
+
+  <div
+    class="d-flex flex-column flex-wrap align-items-start justify-content-between"
+    style="align-items: stretch"
+  >
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Template ID</label>
+      <div class="data_info data_info-ext">
+        {{d.templateId===''?'-':d.templateId}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Template Type</label>
+      <div class="data_info data_info-ext">
+        {{d.templateType===''?'-':d.templateType}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="note" class="data_label">Template Name</label>
+      <div class="data_info data_info-ext">
+        {{d.templateName===''?'-':d.templateName}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Product</label>
+      <div class="data_info data_info-ext">
+        {{d.productType===''?'-':d.productType}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Event Type</label>
+      <div class="data_info data_info-ext">
+        {{d.eventType===''?'-':d.eventType}}
+      </div>
+    </div>
+
+    <div
+      class="email-template-info-horizontal-separator"
+      style="margin-bottom: 8px"
+    ></div>
+
+    <div class="fw-bold template-detail-title" style="margin-bottom: 8px">
+      Template Detail
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">To</label>
+      <div class="data_info data_info-ext">
+        {{d.emailTo.length===0?'-':d.emailTo}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">CC</label>
+      <div class="data_info data_info-ext">
+        {{d.emailCc.length===0?'-':d.emailCc}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">BCC</label>
+      <div class="data_info data_info-ext">
+        {{d.emailBcc.length===0?'-':d.emailBcc}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Subject</label>
+      <div class="data_info data_info-ext">
+        {{d.emailSubject===''?'-':d.emailSubject}}
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="description" class="data_label">Body Email</label>
+
+      <div class="data_info data_info-ext">
+        @if (d.emailBody === "") {
+        <div>-</div>
+        } @else {
+        <div [innerHTML]="d.emailBody"></div>
+        }
+      </div>
+    </div>
+
+    <div class="form-item w-100 d-flex" style="margin-bottom: 8px">
+      <label for="Parameter" class="mb-0 data_label">Parameter</label>
+      <div class="data_info data_info-ext">{{ d.emailParameter||"-" }}</div>
+    </div>
+  </div>
+</section>

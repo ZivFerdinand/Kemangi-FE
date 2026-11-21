@@ -1,0 +1,170 @@
+<div class="d-flex position-relative mb-24">
+  <button
+    type="button"
+    class="btn-type-1 toggle-filter"
+    (click)="toggleFilter()"
+  >
+    <img src="/assets/img/ic-filter-blue.svg" alt="filter" />
+    <div class="name">Filter</div>
+  </button>
+
+  <form class="card card--filter" [class.d-none]="!showFilter()">
+    <div class="filter-inputs">
+      <div class="filter-inputs-section">
+        <div class="form-item mb-24">
+          <label for="action">Account Type</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #accountTypeSelect
+              [items]="accountTypes"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Account Type"
+              (change)="updateFilter('accountType', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.name }}</span>
+                  <img
+                    [class.d-none]="filterBy().accountType !== item?.id"
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label for="requesterId">Requested By</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #requesterSelect
+              [items]="users()"
+              [minTermLength]="3"
+              bindLabel="fullName"
+              bindValue="userId"
+              [multiple]="true"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Requested By"
+              (change)="updateFilter('requesterId', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label"> {{ item?.fullName }} </span>
+                <span
+                  class="ng-value-icon right"
+                  (click)="clear(item)"
+                  aria-hidden="true"
+                  ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                /></span>
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.fullName }}</span>
+                  <img
+                    [class.d-none]="
+                        !filterBy().requesterId.includes(item.userId)
+                      "
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-inputs-section">
+        <div class="form-item mb-24">
+          <label for="action">Action</label>
+          <div class="ng-select-custom">
+            <ng-select
+              #actionSelect
+              [items]="actionBlockType"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="false"
+              [hideSelected]="false"
+              searchPlaceholder="Choose..."
+              placeholder="Action"
+              (change)="updateFilter('action', $event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <div
+                  class="d-flex w-100 justify-content-between align-items-center"
+                >
+                  <span>{{ item.name }}</span>
+                  <img
+                    [class.d-none]="filterBy().action !== item?.id"
+                    src="assets/img/ic-check-black.svg"
+                    alt="selected"
+                  />
+                </div>
+              </ng-template>
+            </ng-select>
+            <span class="custom-arrow">
+              <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+            </span>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label for="requestedDateInput" class="label-medium">
+            Requested Date
+          </label>
+          <app-date-range-picker
+            [name]="'requestDate'"
+            [displayMonths]="1"
+            [fromDate]="requestFromDate"
+            [toDate]="requestToDate"
+            [maxDate]="maxDate"
+            (fromDateChange)="onFromDateChange($event)"
+            (toDateChange)="onToDateChange($event)"
+            [placeholder]="'dd-mmm-yyyy to dd-mmm-yyyy'"
+            [outsideDays]="'visible'"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue me-3"
+        (click)="resetFilter()"
+      >
+        Reset
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="submitFilter()"
+      >
+        Apply
+      </button>
+    </div>
+  </form>
+</div>

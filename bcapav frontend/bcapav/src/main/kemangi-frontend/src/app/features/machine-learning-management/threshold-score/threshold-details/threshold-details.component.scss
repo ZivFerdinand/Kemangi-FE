@@ -1,0 +1,67 @@
+.form-check-label {
+  margin-left: 8px;
+  color: #393939;
+}
+
+.data-group-form-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.form-group-custom {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 380px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-group-custom-2 {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 550px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-group-custom-3 {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 100%;
+}
+
+.delete-btn {
+  background-color: transparent;
+  position: absolute;
+  box-shadow: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  top: 12px;
+  right: 16px;
+}
+
+.btn-white-outlined img {
+  margin-right: 8px;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.card.datagroup-form {
+  border-radius: 8px;
+}
+
+.data_group_info {
+  word-break: break-all;
+  color: #121212;
+  margin-bottom: 0;
+}
+
+.w-50 , .w-25 , .w-75{
+  min-height: 30px;
+}

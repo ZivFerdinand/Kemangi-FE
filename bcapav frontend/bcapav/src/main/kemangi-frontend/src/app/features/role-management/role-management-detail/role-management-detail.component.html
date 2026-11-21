@@ -1,0 +1,351 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <section class="card no-border card-pavo-default-type-ii mb-24">
+    <div class="approval-details approval-details--type-i">
+      <div class="approval-details__left">
+        <div class="approval-details__column approval-details__column--left">
+          <div style="margin-bottom: 16px">
+            <app-toggle-switch
+              [(ngModel)]="roleDetailData.active_status"
+              [disabled]="isDisabled"
+            ></app-toggle-switch>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Role ID</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.role_id || "-" }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Role Name</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.role_name }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Description</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.role_description }}
+            </div>
+          </div>
+        </div>
+
+        <div class="w-100 mt-3 d-flex align-items-center">
+          <img
+            [src]="
+              roleDetailData.is_reviewer
+                ? 'assets/img/ic-checkbox-gray-checked.svg'
+                : 'assets/img/ic-checkbox-gray-unchecked.svg'
+            "
+            alt="alert"
+            width="18"
+            height="18"
+          />
+
+          <div style="margin-left: 8px">As Alert Reviewer</div>
+        </div>
+      </div>
+
+      <div class="approval-details__divider"></div>
+
+      <div class="approval-details__right">
+        <div class="approval-details__column approval-details__column--left">
+          <div class="dummy-toggle-switch"></div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Requested By</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.last_updated_by_name || "-" }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Reviewed By</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.last_approval_name || "-" }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Created By</div>
+            <div class="approval-details__value">
+              {{ roleDetailData.created_by_name || "-" }}
+            </div>
+          </div>
+        </div>
+
+        <div class="approval-details__column approval-details__column--left">
+          <div class="dummy-toggle-switch"></div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Requested Date</div>
+            <div class="approval-details__value">
+              {{
+                (roleDetailData.last_updated_dt
+                  | date: "dd-MMM-yyyy HH:mm:ss") || "-"
+              }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Reviewed Date</div>
+            <div class="approval-details__value">
+              {{
+                (roleDetailData.last_approval_dt
+                  | date: "dd-MMM-yyyy HH:mm:ss") || "-"
+              }}
+            </div>
+          </div>
+
+          <div class="approval-details__item">
+            <div class="approval-details__label">Created Date</div>
+            <div class="approval-details__value">
+              {{
+                (roleDetailData.created_dt | date: "dd-MMM-yyyy HH:mm:ss") ||
+                  "-"
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card no-border card-pavo-default-type-ii">
+    @for (section of menuSections; track section) {
+      <div class="menu-section">
+        <div class="menu-box">
+          <div class="menu-title">
+            <div class="text">{{ section.title }}</div>
+
+            @if (section.type === "approval") {
+              <img
+                src="/assets/img/ic-info.svg"
+                class="thumb-icon"
+                alt="info"
+                placement="end"
+                tooltipClass="custom-tooltip"
+                ngbTooltip="Approval for OPR-OPS is only applicable outside office hours"
+              />
+            }
+
+            @if (section.title !== "Alert Detail") {
+              <div
+                class="form-check d-flex align-items-center mb-0"
+                [class.ms-12]="
+                  section.title !== 'Approval' &&
+                  section.title !== 'Alert Detail'
+                "
+                [class.ms-32]="section.title === 'Approval'"
+              >
+                <div class="checkbox-all">
+                  <img
+                    [id]="'checkAll-' + section.title"
+                    [src]="
+                      section.selectedAll
+                        ? './assets/img/ic-checkbox-blue-checked.svg'
+                        : './assets/img/ic-checkbox-blue-unchecked.svg'
+                    "
+                    alt="checked all"
+                  />
+                </div>
+
+                <label
+                  class="form-check-label"
+                  [for]="'checkAll-' + section.title"
+                >
+                  Select All
+                </label>
+              </div>
+            }
+          </div>
+
+          @if (section.type === "approval") {
+            <ng-container>
+              <div class="table-menu">
+                <div class="table-menu__header">
+                  <div class="table-menu__item action">Action</div>
+                  <div class="table-menu__item">Requested List</div>
+                  <div class="table-menu__item">Task List</div>
+                  <div class="table-menu__item">Approval Level</div>
+                </div>
+
+                <div class="table-menu__body">
+                  @for (row of section.rows; track row) {
+                    <div class="table-menu__item-row">
+                      <div class="table-menu__item-column action">
+                        {{ row.subMenu }}
+                      </div>
+
+                      <!-- Requested -->
+
+                      <div class="table-menu__item-column">
+                        <div class="checkbox-detail">
+                          <img
+                            [src]="
+                              row.Requested
+                                ? './assets/img/ic-checkbox-gray-checked.svg'
+                                : './assets/img/ic-checkbox-gray-unchecked.svg'
+                            "
+                            alt="checked"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Task -->
+
+                      <div class="table-menu__item-column">
+                        <div class="checkbox-detail">
+                          <img
+                            [src]="
+                              row.Task
+                                ? './assets/img/ic-checkbox-gray-checked.svg'
+                                : './assets/img/ic-checkbox-gray-unchecked.svg'
+                            "
+                            alt="checked"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Select Task Approver -->
+
+                      @if (row.lv1 || row.lv2) {
+                        <div class="table-menu__item-column">
+                          <div class="ng-select-custom select-approver">
+                            <ng-select
+                              [items]="approverLevels"
+                              bindLabel="label"
+                              bindValue="value"
+                              [multiple]="false"
+                              [hideSelected]="false"
+                              searchPlaceholder="Choose..."
+                              placeholder="Approver"
+                              [(ngModel)]="row.selectedLevel"
+                              clearable="false"
+                              disabled="true"
+                            >
+                              <ng-template ng-label-tmp let-item="item">
+                                {{ item.label }}
+                              </ng-template>
+                              <ng-template ng-option-tmp let-item="item">
+                                <div
+                                  class="d-flex w-100 justify-content-between align-items-center"
+                                >
+                                  <span>{{ item.label }}</span>
+                                </div>
+                              </ng-template>
+                            </ng-select>
+                            <span class="custom-arrow">
+                              <img
+                                src="./assets/img/ic-arrow-down-gray.svg"
+                                alt="down"
+                              />
+                            </span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </ng-container>
+          }
+
+          @if (section.type === "dynamic") {
+            <ng-container>
+              <div class="table-menu">
+                <div class="table-menu__header">
+                  <div class="table-menu__item action">
+                    {{
+                      section.title === "Report"
+                        ? "Type"
+                        : section.title === "Approval" ||
+                            section.title === "Alert Detail" ||
+                            section.title === "Role Management"
+                          ? "Action"
+                          : "Submenu"
+                    }}
+                  </div>
+                  @for (col of section.columns; track col) {
+                    <div class="table-menu__item">{{ col }}</div>
+                  }
+                </div>
+
+                <div class="table-menu__body">
+                  @for (row of section.rows; track row) {
+                    <div class="table-menu__item-row">
+                      <div class="table-menu__item-column action">
+                        {{ row.subMenu }}
+                      </div>
+
+                      @for (col of section.columns; track col) {
+                        <div class="table-menu__item-column">
+                          <div class="checkbox-detail">
+                            <img
+                              [src]="
+                                row[col]
+                                  ? './assets/img/ic-checkbox-gray-checked.svg'
+                                  : './assets/img/ic-checkbox-gray-unchecked.svg'
+                              "
+                              alt="checked"
+                            />
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </ng-container>
+          }
+
+          @if (section.type === "alert") {
+            <ng-container>
+              <div class="table-menu">
+                <div class="table-menu__header">
+                  <div class="table-menu__item action">Action</div>
+                  <div class="table-menu__item"></div>
+                </div>
+
+                <div class="table-menu__body">
+                  @for (row of section.rows; track row) {
+                    <div class="table-menu__item-row">
+                      <div class="table-menu__item-column action">
+                        {{ row.subMenu }}
+                      </div>
+
+                      <div class="table-menu__item-column">
+                        <div class="checkbox-detail">
+                          <img
+                            [src]="
+                              row.checked
+                                ? './assets/img/ic-checkbox-gray-checked.svg'
+                                : './assets/img/ic-checkbox-gray-unchecked.svg'
+                            "
+                            alt="checked"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </ng-container>
+          }
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

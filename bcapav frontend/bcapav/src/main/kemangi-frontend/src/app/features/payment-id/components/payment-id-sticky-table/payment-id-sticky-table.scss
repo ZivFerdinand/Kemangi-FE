@@ -1,0 +1,303 @@
+// ---------- Layout wrapper ----------
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; // only scrolls when column minSize floors exceed the container
+}
+
+.divTable {
+  display: block;
+  border: none;
+  width: 100%;
+}
+
+.thead,
+.tbody {
+  width: 100%;
+}
+
+.tr {
+  display: flex;
+  width: 100%;
+}
+
+// ---------- Cells ----------
+.th,
+.td {
+  display: flex;
+  align-items: center;
+  min-width: 0; // allow flex items to shrink below content width
+  overflow: hidden;
+  box-sizing: border-box; // padding counts toward flex sizing, keeps header/body aligned
+  font-size: 14px;
+  color: #555555;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.td[style*="position: sticky"] {
+  background-color: #fff;
+  opacity: 1;
+}
+
+.td.cell-highlight {
+  background-color: #ffeed3;
+}
+
+.td.cell-highlight[style*="position: sticky"] {
+  background-color: #ffeed3;
+}
+
+// ---------- Header ----------
+.thead .tr {
+  border-bottom-color: #ffffff;
+}
+
+.thead .tr .th {
+  background-color: #144e83;
+  border-bottom-color: #ffffff;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 16px 12px;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  word-break: normal;
+  // removed: flex: 0 0 auto (flex now comes from [style.flex] binding)
+}
+
+.thead .tr .th:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.thead .tr .th:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.th > .d-flex {
+  width: 100%;
+}
+
+.header-text {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.truncate {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: normal;
+}
+
+// ---------- Body ----------
+.tbody .tr {
+  border-bottom: 1px solid #144e83;
+}
+
+.tbody .tr .td {
+  padding: 16px 12px;
+}
+
+.no-data {
+  width: 100%;
+  padding: 16px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #144e83;
+  font-size: 14px;
+  color: #555555;
+}
+
+// ---------- Sorting ----------
+.btn-sort-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 20px;
+  margin-left: 6px;
+  flex: 0 0 auto;
+}
+
+.btn-sort {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+  height: 8px;
+  width: 8px;
+}
+
+.btn-sort-group img {
+  height: 7.65px;
+  width: 7.65px;
+}
+
+.sort-icon {
+  margin-left: 6px;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+// ---------- Column resizer ----------
+.resizer {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  right: 0;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.resizer.isResizing {
+  background: #0c3458;
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .resizer {
+    opacity: 0;
+  }
+
+  *:hover > .resizer {
+    opacity: 1;
+  }
+}
+
+// ---------- Footer / pagination ----------
+.page-info {
+  font-size: 14px;
+  line-height: 20px;
+  color: #868e96;
+}
+
+::ng-deep .pagination {
+  margin: auto;
+}
+
+::ng-deep .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .table-pagination .pagination .page-item.active .page-link {
+  background-color: #005caa;
+  color: white;
+  border: none;
+}
+
+::ng-deep .table-pagination .page-link {
+  color: #226a69;
+  border-radius: 8px;
+  padding: 6px 12px;
+  border: none;
+  font-size: 14px;
+}
+
+::ng-deep .table-pagination .page-link:hover {
+  background-color: #005caa;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+::ng-deep .disabled > .page-link,
+.page-link.disabled {
+  pointer-events: none;
+  background-color: #ffffff;
+  border: none;
+}
+
+#pageSize {
+  height: 40px;
+}
+
+.form-select {
+  border: 1px solid #c4c4c4;
+}
+
+.form-select:focus {
+  box-shadow: none;
+  border: 1px solid #c4c4c4;
+}
+
+// ---------- ng-select (page size) ----------
+.page-limit-label {
+  font-size: 14px;
+  color: #333333;
+  margin-right: 10px;
+}
+
+.ng-select-limit {
+  position: relative;
+}
+
+.ng-select-limit .ng-select.ng-select-focused ::ng-deep .ng-select-container {
+  border-color: #555555;
+}
+
+.ng-select-limit .ng-select ::ng-deep .ng-arrow-wrapper {
+  visibility: hidden;
+}
+
+.ng-select-limit .ng-select ::ng-deep .ng-arrow-wrapper .ng-arrow {
+  display: none !important;
+}
+
+.ng-select-limit .ng-select.ng-select-single ::ng-deep .ng-select-container {
+  height: 40px;
+  width: 77px;
+  border-radius: 6px;
+  border: 1px solid #c4c4c4; // was invalid: border-color: 1px solid #c4c4c4
+}
+
+.ng-select-limit .ng-select ::ng-deep .ng-input > input {
+  caret-color: transparent;
+}
+
+.custom-arrow {
+  position: absolute;
+  right: 10px;
+  top: 55%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  width: 24px;
+  height: 24px;
+  z-index: 1001;
+}
+
+.custom-arrow img {
+  width: 100%;
+  height: 100%;
+}

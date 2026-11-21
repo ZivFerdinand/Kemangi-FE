@@ -1,0 +1,229 @@
+<div class="table-responsive">
+  <div class="divTable" [style.min-width.px]="table.getTotalSize()">
+    <div class="thead">
+      @for (headerGroup of table.getHeaderGroups(); track headerGroup.id) {
+      <div class="tr">
+        @for (header of headerGroup.headers; track header.id) {
+
+        <div
+          class="th"
+          [attr.colSpan]="header.colSpan"
+          [ngStyle]="getCommonPinningStyles(header.column)"
+        >
+          @if (!header.isPlaceholder) {
+          <div
+            class="d-flex align-items-center h-100"
+            [class.justify-content-start]="header.column.columnDef.meta?.align==='left'"
+            [class.justify-content-center]="header.column.columnDef.meta?.align==='center'"
+            [class.justify-content-end]="header.column.columnDef.meta?.align==='right'"
+          >
+            <div
+              class="header-text"
+              [class.text-start]="header.column.columnDef.meta?.align==='left'"
+              [class.text-center]="header.column.columnDef.meta?.align==='center'"
+              [class.text-end]="header.column.columnDef.meta?.align==='right'"
+            >
+              <ng-container
+                *flexRender="
+                  header.column.columnDef.header;
+                  props: header.getContext();
+                  let header
+                "
+              >
+                <div class="truncate" [innerHTML]="header"></div>
+              </ng-container>
+            </div>
+
+            @if(header.column.columnDef.meta?.sortable){
+
+            <div class="btn-sort-group">
+              <button
+                type="button"
+                class="btn-sort"
+                (click)="onSort('asc', header.column.id)"
+              >
+                <img src="assets/img/ic-up.svg" />
+              </button>
+              <button
+                type="button"
+                class="btn-sort"
+                (click)="onSort('desc', header.column.id)"
+              >
+                <img src="assets/img/ic-down.svg" />
+              </button>
+            </div>
+
+            }
+          </div>
+          }
+
+          <div
+            class="resizer"
+            [class.isResizing]="header.column.getIsResizing()"
+            [class.disabled]="!header.column.getCanResize()"
+            (dblclick)="header.column.resetSize()"
+            (mousedown)="header.getResizeHandler()($event)"
+            (touchstart)="header.getResizeHandler()($event)"
+          ></div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    <div class="tbody">
+      @if (data().length === 0 ) {
+      <div class="no-data">
+        <div class="text-center">No data available</div>
+      </div>
+      } @else {@for (row of table.getRowModel().rows; track row.id; let i =
+      $index) {
+      <div class="tr">
+        @for (cell of row.getVisibleCells(); track cell.id) {
+        <div
+          class="td"
+          [class.cell-highlight]="cell.column.columnDef.meta?.['highlight']?.(cell.row.original) ?? false"
+          [ngStyle]="getCommonPinningStyles(cell.column)"
+          [style.width.px]="cell.column.getSize()"
+          [class.justify-content-start]="cell.column.columnDef.meta?.align==='left'"
+          [class.justify-content-center]="cell.column.columnDef.meta?.align==='center'"
+          [class.justify-content-end]="cell.column.columnDef.meta?.align==='right'"
+        >
+          @if (cellTemplates[cell.column.id]) {
+          <ng-container
+            *ngTemplateOutlet="
+                cellTemplates[cell.column.id]!;
+                context: {
+                  $implicit: row.original,
+                  row: row.original,
+                  cell: cell,
+                  column: cell.column,
+                  index: i
+                }
+              "
+          ></ng-container>
+          } @else {
+          <ng-container
+            *flexRender="
+                cell.column.columnDef.cell;
+                props: cell.getContext();
+                let cellValue
+              "
+          >
+            <div [innerHTML]="cellValue"></div>
+          </ng-container>
+          }
+        </div>
+        }
+      </div>
+      } }
+
+      <!-- // -->
+    </div>
+  </div>
+</div>
+
+<div
+  class="d-flex align-items-center"
+  [class.justify-content-start]="showPageInfo && !showPagination"
+  [class.justify-content-between]="showPageInfo && showPagination"
+  [class.justify-content-end]="!showPageInfo && showPagination"
+  [class.d-none]="!showPageInfo && !showPagination"
+  style="margin-top: 30px"
+>
+  @if(showPageInfo){
+  <div class="page-info">
+    Showing {{ startIndex + 1 }} to {{ endIndex }} of {{
+    pageInfo().totalElements }} entries
+  </div>
+  }
+
+  <div class="d-flex align-items-center">
+    @if(showPageSize){
+    <div class="d-flex align-items-center">
+      <label for="limit" class="page-limit-label">Show</label>
+      <div class="ng-select-limit">
+        <ng-select
+          [items]="pageSizeList"
+          bindLabel="name"
+          bindValue="id"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="10"
+          (change)="onPageSizeChange($event?.id)"
+          clearable="false"
+          [ngModel]="pageQuery()?.limit"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.name }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.name }}</span>
+            </div>
+          </ng-template>
+        </ng-select>
+
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+    }
+
+    <!-- //// -->
+
+    @if(showPagination){
+    <ngb-pagination
+      class="table-pagination"
+      [collectionSize]="pageInfo().totalElements"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [maxSize]="5"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange($event)"
+    >
+      >
+
+      <ng-template ngbPaginationFirst>
+        <img
+          src="assets/img/ic-chevron-double-left.svg"
+          alt="first"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationPrevious>
+        <img
+          src="assets/img/ic-chevron-left.svg"
+          alt="prev"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationNext>
+        <img
+          src="assets/img/ic-chevron-right.svg"
+          alt="next"
+          width="16"
+          height="16"
+        />
+      </ng-template>
+
+      <ng-template ngbPaginationLast>
+        <img
+          src="assets/img/ic-chevron-double-right.svg"
+          alt="last"
+          width="16"
+          height="16"
+        /> </ng-template
+    ></ngb-pagination>
+    }
+  </div>
+</div>

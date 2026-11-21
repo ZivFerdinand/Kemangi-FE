@@ -1,0 +1,371 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <section class="card no-border card-pavo-default-type-ii mb-24">
+      <div style="margin-bottom: 18px">
+        <app-toggle-switch formControlName="active_status"></app-toggle-switch>
+      </div>
+
+      <div class="d-flex mb-24">
+        <div class="d-flex flex-column me-40" style="width: 360px">
+          <div class="form-item mb-24">
+            <label for="role_id">Role ID</label>
+            <input
+              id="role_id"
+              type="text"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['role_id']?.invalid &&
+                (f['role_id']?.dirty || f['role_id']?.touched)
+              "
+              formControlName="role_id"
+              [disabled]="roleId !== ''"
+              placeholder="Role ID"
+            />
+            @if (
+              f["role_id"]?.invalid &&
+              (f["role_id"]?.dirty || f["role_id"]?.touched)
+            ) {
+              <div>
+                @if (f["role_id"]?.errors?.["required"]) {
+                  <div class="invalid-input">Role ID is required</div>
+                }
+                @if (f["role_id"]?.errors?.["maxlength"]) {
+                  <div class="invalid-input">
+                    Max
+                    {{ f["role_id"]?.errors?.["maxlength"].requiredLength }}
+                    characters allowed
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="form-item">
+            <label for="role_description">Description</label>
+            <textarea
+              #autoDescTA
+              id="role_description"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['role_description']?.invalid &&
+                (f['role_description']?.dirty || f['role_description']?.touched)
+              "
+              formControlName="role_description"
+              rows="3"
+              placeholder="Description"
+              rows="1"
+              (input)="autogrow(autoDescTA)"
+              (keydown)="onKeyDown($event, 'role_description')"
+            ></textarea>
+            @if (
+              f["role_description"]?.invalid &&
+              (f["role_description"]?.dirty || f["role_description"]?.touched)
+            ) {
+              <div>
+                @if (f["role_description"]?.errors?.["required"]) {
+                  <div class="invalid-input">Description is required</div>
+                }
+                @if (f["role_description"]?.errors?.["maxlength"]) {
+                  <div class="invalid-input">
+                    Max
+                    {{
+                      f["role_description"]?.errors?.["maxlength"]
+                        .requiredLength
+                    }}
+                    characters allowed
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="d-flex flex-column" style="width: 360px">
+          <div class="form-item mb-24">
+            <label for="role_name">Role Name</label>
+            <input
+              id="role_name"
+              type="text"
+              class="form-control pr-5"
+              [class.is-invalid]="
+                f['role_name']?.invalid &&
+                (f['role_name']?.dirty || f['role_name']?.touched)
+              "
+              formControlName="role_name"
+              placeholder="Role Name"
+            />
+            @if (
+              f["role_name"]?.invalid &&
+              (f["role_name"]?.dirty || f["role_name"]?.touched)
+            ) {
+              <div>
+                @if (f["role_name"]?.errors?.["required"]) {
+                  <div class="invalid-input">Role Name is required</div>
+                }
+                @if (f["role_name"]?.errors?.["maxlength"]) {
+                  <div class="invalid-input">
+                    Max
+                    {{ f["role_name"]?.errors?.["maxlength"].requiredLength }}
+                    characters allowed
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <label class="cb-pv-ii" for="is_reviewer">
+        <input
+          class="cb-pv-ii__input"
+          type="checkbox"
+          formControlName="is_reviewer"
+          id="is_reviewer"
+        />
+        <span class="cb-pv-ii__box size-18"></span>
+        <span class="cb-pv-ii__label">As Alert Reviewer</span>
+      </label>
+    </section>
+
+    <section class="card no-border card-pavo-default-type-ii">
+      @for (section of menuSections; track section) {
+        <div class="menu-section">
+          <div class="menu-box">
+            <div class="menu-title">
+              <div class="text">{{ section.title }}</div>
+
+              @if (section.type === "approval") {
+                <img
+                  src="/assets/img/ic-info.svg"
+                  class="thumb-icon"
+                  alt="info"
+                  placement="end"
+                  tooltipClass="custom-tooltip"
+                  ngbTooltip="Approval for OPR-OPS is only applicable outside office hours"
+                />
+              }
+
+              @if (section.title !== "Alert Detail") {
+                <div
+                  class="form-check d-flex align-items-center"
+                  [class.ms-36]="
+                    section.title !== 'Approval' &&
+                    section.title !== 'Alert Detail'
+                  "
+                  [class.ms-56]="section.title === 'Approval'"
+                >
+                  <div class="checkbox-all">
+                    <img
+                      [id]="'checkAll-' + section.title"
+                      [src]="
+                        section.selectedAll
+                          ? './assets/img/ic-checkbox-blue-checked.svg'
+                          : './assets/img/ic-checkbox-blue-unchecked.svg'
+                      "
+                      alt="checked all"
+                    />
+                  </div>
+
+                  <label
+                    class="form-check-label"
+                    [for]="'checkAll-' + section.title"
+                  >
+                    Select All
+                  </label>
+                </div>
+              }
+            </div>
+
+            @if (section.type === "approval") {
+              <ng-container>
+                <div class="table-menu">
+                  <div class="table-menu__header">
+                    <div class="table-menu__item action">Action</div>
+                    <div class="table-menu__item">Requested List</div>
+                    <div class="table-menu__item">Task List</div>
+                    <div class="table-menu__item">Approval Level</div>
+                  </div>
+
+                  <div class="table-menu__body">
+                    @for (row of section.rows; track row) {
+                      <div class="table-menu__item-row">
+                        <div class="table-menu__item-column action">
+                          {{ row.subMenu }}
+                        </div>
+
+                        <!-- Requested -->
+
+                        <div class="table-menu__item-column">
+                          <div class="checkbox-detail">
+                            <img
+                              [src]="
+                                row.Requested
+                                  ? './assets/img/ic-checkbox-gray-checked.svg'
+                                  : './assets/img/ic-checkbox-gray-unchecked.svg'
+                              "
+                              alt="checked"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- Task -->
+
+                        <div class="table-menu__item-column">
+                          <div class="checkbox-detail">
+                            <img
+                              [src]="
+                                row.Task
+                                  ? './assets/img/ic-checkbox-gray-checked.svg'
+                                  : './assets/img/ic-checkbox-gray-unchecked.svg'
+                              "
+                              alt="checked"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- Select Task Approver -->
+
+                        @if (row.lv1 || row.lv2) {
+                          <div class="table-menu__item-column">
+                            <div class="ng-select-custom select-approver">
+                              <ng-select
+                                [items]="approverLevels"
+                                bindLabel="label"
+                                bindValue="value"
+                                [multiple]="false"
+                                [hideSelected]="false"
+                                searchPlaceholder="Choose..."
+                                placeholder="Approver"
+                                [(ngModel)]="row.selectedLevel"
+                                clearable="false"
+                                disabled="true"
+                                [ngModelOptions]="{ standalone: true }"
+                              >
+                                <ng-template ng-label-tmp let-item="item">
+                                  {{ item.label }}
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item">
+                                  <div
+                                    class="d-flex w-100 justify-content-between align-items-center"
+                                  >
+                                    <span>{{ item.label }}</span>
+                                  </div>
+                                </ng-template>
+                              </ng-select>
+                              <span class="custom-arrow">
+                                <img
+                                  src="./assets/img/ic-arrow-down-gray.svg"
+                                  alt="down"
+                                />
+                              </span>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </ng-container>
+            }
+
+            @if (section.type === "dynamic") {
+              <ng-container>
+                <div class="table-menu">
+                  <div class="table-menu__header">
+                    <div class="table-menu__item action">
+                      {{
+                        section.title === "Report"
+                          ? "Type"
+                          : section.title === "Approval" ||
+                              section.title === "Alert Detail" ||
+                              section.title === "Role Management"
+                            ? "Action"
+                            : "Submenu"
+                      }}
+                    </div>
+                    @for (col of section.columns; track col) {
+                      <div class="table-menu__item">{{ col }}</div>
+                    }
+                  </div>
+
+                  <div class="table-menu__body">
+                    @for (row of section.rows; track row) {
+                      <div class="table-menu__item-row">
+                        <div class="table-menu__item-column action">
+                          {{ row.subMenu }}
+                        </div>
+
+                        @for (col of section.columns; track col) {
+                          <div class="table-menu__item-column">
+                            <div class="checkbox-detail">
+                              <img
+                                [src]="
+                                  row[col]
+                                    ? './assets/img/ic-checkbox-gray-checked.svg'
+                                    : './assets/img/ic-checkbox-gray-unchecked.svg'
+                                "
+                                alt="checked"
+                              />
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </ng-container>
+            }
+
+            @if (section.type === "alert") {
+              <ng-container>
+                <div class="table-menu">
+                  <div class="table-menu__header">
+                    <div class="table-menu__item action">Action</div>
+                    <div class="table-menu__item"></div>
+                  </div>
+
+                  <div class="table-menu__body">
+                    @for (row of section.rows; track row) {
+                      <div class="table-menu__item-row">
+                        <div class="table-menu__item-column action">
+                          {{ row.subMenu }}
+                        </div>
+
+                        <div class="table-menu__item-column">
+                          <div class="checkbox-detail">
+                            <img
+                              [src]="
+                                row.checked
+                                  ? './assets/img/ic-checkbox-gray-checked.svg'
+                                  : './assets/img/ic-checkbox-gray-unchecked.svg'
+                              "
+                              alt="checked"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </ng-container>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="d-flex align-items-center justify-content-end btn-section">
+      <button
+        type="button"
+        class="btn-type-1 btn-light-blue me-3"
+        (click)="back()"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="btn-type-1 btn-dark-blue"
+        (click)="onSubmit()"
+      >
+        Submit
+      </button>
+    </section>
+  </form>
+</app-content-layout>

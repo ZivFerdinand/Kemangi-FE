@@ -1,0 +1,59 @@
+<app-content-layout [title]="pageTitle" [breadcrumb]="breadcrumb">
+  @if (details.requestType === "UPDATE" && ref !== "before") {
+    <button
+      class="btn-type-1 btn-dark-blue fw-bold mb-24"
+      type="button"
+      (click)="openTab()"
+    >
+      <img
+        src="assets/img/ic-open-new-tab.svg"
+        alt="open new tab"
+        style="margin-right: 8px"
+      />Before
+    </button>
+  }
+
+  <app-alert-details
+    [ref]="ref"
+    [data]="details"
+    [prevData]="prevDetails"
+    [type]="pageType"
+  ></app-alert-details>
+
+  <div class="card no-border card-pavo-default-type-ii mb-24">
+    <h5 class="mb-24 title-section">Assign To</h5>
+    <div class="pb-3">
+      <app-table
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageParams]="pageQuery"
+        (pageChange)="handlePageChange($event)"
+        (sort)="handleSortChange($event.direction, $event.key)"
+        [showPageInfo]="true"
+        [cellTemplates]="{
+          no: noTpl,
+        }"
+      />
+    </div>
+  </div>
+
+  <app-rule-model-view
+    [data]="details.details ?? []"
+    [prevData]="prevDetails.details ?? []"
+  ></app-rule-model-view>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>

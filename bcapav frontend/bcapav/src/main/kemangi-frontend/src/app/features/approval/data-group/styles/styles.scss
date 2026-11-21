@@ -1,0 +1,40 @@
+.form-check-label {
+  margin-left: 8px;
+  color: #393939;
+}
+
+.data-group-form-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.form-group-custom {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 360px;
+}
+
+.form-group-custom p {
+  margin-bottom: 0;
+}
+.ng-dropdown-panel {
+  z-index: 99999 !important;
+}
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.card.datagroup-info {
+  border-radius: 8px;
+}
+
+.data_group_info,
+.data-group-info {
+  word-break: break-all;
+  color: #121212;
+  width: 206px;
+  margin-bottom: 0 !important;
+}
+
+.data-group-info.changed {
+  color: #ffa822;
+}

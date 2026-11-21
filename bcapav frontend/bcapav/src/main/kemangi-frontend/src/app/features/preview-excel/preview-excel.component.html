@@ -1,0 +1,45 @@
+<div class="w-100 h-100 p-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="tabs-container">
+      <div class="tabs">
+        @for (sheet of sheetNames; track sheet) {
+          <button
+            type="button"
+            (click)="activeSheet = sheet"
+            [class.active]="activeSheet === sheet"
+          >
+            {{ sheet }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <button
+      type="button"
+      (click)="handleDownload()"
+      class="btn-type-1 btn-dark-blue"
+    >
+      Download File
+    </button>
+  </div>
+
+  <table border="1">
+    <thead>
+      <tr>
+        @for (cell of allSheets?.[activeSheet]?.[0] || []; track $index) {
+          <th>{{ cell }}</th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of allSheets?.[activeSheet]?.slice(1) || []; track $index) {
+        <tr>
+          @for (cell of row; track $index) {
+            <td>{{ cell }}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,143 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <app-role-approval-requested-filter
+    [roles]="roles"
+    [users]="users"
+    (sendData)="
+      handleFilter({
+        filterBy: $event.filterBy,
+        filterDisplayTemp: $event.filterDisplayTemp,
+      })
+    "
+    (handleClearFilter)="resetFilter()"
+  />
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          roleId: roleIdTpl,
+          roleName: roleName,
+          description: descriptionTpl,
+          requesterName: requesterNameTpl,
+          approverName: approverNameTpl,
+          createdDt: createdDtTpl,
+          approvalDate: approvalDateTpl,
+          approvalStatus: approvalStatusTpl,
+          requestType: requestTypeTpl,
+          view: viewBtnTpl,
+          rejectionNote: rejectionNoteTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #roleIdTpl let-row>
+  <div class="truncate">{{ row.roleId ? row.roleId : "-" }}</div>
+</ng-template>
+
+<ng-template #roleName let-row>
+  <div class="truncate">{{ row.roleName ? row.roleName : "-" }}</div>
+</ng-template>
+
+<ng-template #descriptionTpl let-row>
+  <div class="truncate">{{ row.roleDescription || "-" }}</div>
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approverNameTpl let-row>
+  <div class="truncate">
+    {{ row.approverName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #createdDtTpl let-row>
+  <div class="truncate">
+    {{ (row.createdDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approvalDateTpl let-row>
+  <div class="truncate">
+    {{ (row.approvalDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #rejectionNoteTpl let-row>
+  <div class="truncate">
+    {{ row.rejectionNote || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <a
+      [routerLink]="['/home/role-management/requested-list', row.apprRoleId]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #approvalStatusTpl let-row>
+  <div
+    class="approval-status-label"
+    [class.approval-status-label--approved]="row.approvalStatus === 'APPROVED'"
+    [class.approval-status-label--rejected]="row.approvalStatus === 'REJECTED'"
+    [class.approval-status-label--pending]="row.approvalStatus === 'PENDING'"
+    [class.approval-status-label--draft]="row.approvalStatus === 'DRAFT'"
+  >
+    {{ row.approvalStatus ? (row.approvalStatus | capitalize) : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requestTypeTpl let-row>
+  {{
+    row.requestType === "CREATE"
+      ? "NEW"
+      : row.requestType === "UPDATE"
+        ? "EDIT"
+        : row.requestType
+  }}
+</ng-template>

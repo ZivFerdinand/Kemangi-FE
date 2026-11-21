@@ -1,0 +1,43 @@
+#confirmationModal .modal-body {
+  justify-content: center;
+  padding: 24px 24px 12px 24px;
+  border: none;
+}
+
+#confirmationModal .modal-footer {
+  justify-content: center;
+  padding: 12px 24px 24px 24px;
+  border: none;
+}
+
+.btn-confirm-yes,
+.btn-confirm-no {
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 4px;
+}
+
+.btn-confirm-yes {
+  background-color: #005caa;
+  color: #ffffff;
+}
+
+.btn-confirm-yes:hover {
+  background-color: #005298;
+  color: #ffffff;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.btn-confirm-no {
+  background-color: #e6f3ff;
+  color: #005caa;
+}
+
+.btn-confirm-no:hover {
+  background-color: #cce7ff;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}

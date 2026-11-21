@@ -1,0 +1,71 @@
+.role-management-list-above {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 304px;
+  margin-right: 16px;
+}
+
+.search-box .form-control {
+  margin-right: 8px;
+  width: 248px;
+  height: 48px;
+}
+
+.search-btn {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #144e83;
+  border: none;
+  color: #ffffff;
+}
+
+.search-btn:hover {
+  background-color: #1a6cb3;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.btn-type-1 img {
+  margin-right: 8px;
+}
+
+.btn-action {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  width: 16px;
+  text-decoration: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.btn-action img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#pageSize {
+  height: 40px;
+}
+
+.me-24 {
+  margin-right: 24px;
+}

@@ -1,0 +1,25 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-block-unblock-details
+    [showBtnRetry]="showBtnRetry"
+    [data]="details"
+    [type]="pageType"
+    [tableData]="tableData"
+    [pageInfo]="pageInfo"
+    [pageQuery]="pageQuery"
+    (handlePage)="handlePageChange($event)"
+    (handleSort)="handleSortChange($event.order, $event.param)"
+    (handledownload)="handleDownload($event)"
+    (handleSearch)="handleQuery($event)"
+    (handleRetry)="handleRetry()"
+  ></app-block-unblock-details>
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

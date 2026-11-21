@@ -1,0 +1,1342 @@
+.form-group label {
+  color: #555555 !important;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+label.disabled {
+  color: #c2c2c2 !important;
+}
+
+.form-control {
+  height: 48px;
+  border-color: #c2c2c2;
+  border-radius: 6px;
+}
+
+.form-control {
+  padding: 12px 16px;
+}
+
+.form-control:disabled {
+  background-color: #f6f6f6;
+  color: #c2c2c2;
+  border-color: #dddddd !important;
+  opacity: 1;
+}
+
+.form-control.is-invalid {
+  border-color: #dd1205 !important;
+  background-color: #ffdada;
+  background-image: none;
+}
+
+.form-control:focus,
+.form-control.is-invalid:focus {
+  box-shadow: none;
+}
+
+.invalid-input {
+  font-size: 12px;
+  color: #dd1205;
+  line-height: 16px;
+  font-weight: 400;
+  margin-top: 4px;
+  font-family: "BCASans", Arial, sans-serif !important;
+}
+
+// ng-select :: begin
+
+.ng-select-custom {
+  position: relative;
+}
+
+.ng-select-custom .ng-select.ng-select-focused ::ng-deep .ng-select-container {
+  border-color: #555555;
+}
+
+.ng-select-custom .ng-select.is-invalid ::ng-deep .ng-select-container {
+  border-color: #dd1205 !important;
+  background-color: #ffdada;
+}
+
+.ng-select-custom.select-action-type
+  .ng-select
+  ::ng-deep
+  .ng-dropdown-panel
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-selected {
+  background-color: #ffffff !important;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  background-color: #c0e2ff;
+  border-radius: 24px;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-arrow-wrapper {
+  visibility: hidden;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-arrow-wrapper .ng-arrow {
+  display: none !important;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-label {
+  font-size: 16px;
+  color: #555555;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon {
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  margin: 0 0 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.ng-select-custom .ng-select.ng-select-multiple ::ng-deep .ng-select-container {
+  min-height: 48px;
+  border-radius: 6px;
+}
+
+.ng-select-custom .ng-select.ng-select-single ::ng-deep .ng-select-container {
+  height: 48px;
+  border-radius: 6px;
+}
+
+.ng-select-custom.select-approver
+  .ng-select.ng-select-single
+  ::ng-deep
+  .ng-select-container {
+  height: 36px;
+  border-radius: 6px;
+  width: 197px;
+  font-size: 14px;
+}
+
+.ng-select-custom.select-approver.small
+  .ng-select.ng-select-single
+  ::ng-deep
+  .ng-select-container {
+  height: 36px;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ng-select-custom
+  .ng-select
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  color: #c2c2c2;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-dropdown-panel {
+  width: 100%;
+  border-radius: 8px !important;
+  box-shadow: 2px 2px 8px 0px #00000040;
+  border: none;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-dropdown-panel .is-invalid-field {
+  border-color: #dc3545 !important;
+  background-color: #ffdada !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+.ng-select-custom
+  .ng-select
+  ::ng-deep
+  .ng-dropdown-panel
+  .ng-dropdown-panel-items {
+  min-height: 48px;
+  white-space: nowrap;
+}
+
+.ng-select-custom
+  .ng-select
+  ::ng-deep
+  .ng-dropdown-panel
+  .ng-dropdown-panel-items
+  .ng-option {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-clear-wrapper {
+  right: 30px;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-dropdown-panel.ng-select-top {
+  bottom: calc(100% + 2px) !important;
+}
+
+.ng-select-custom .ng-select ::ng-deep .ng-dropdown-panel.ng-select-bottom {
+  top: calc(100% + 2px) !important;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-single
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-input {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-disabled
+  ::ng-deep
+  > .ng-select-container {
+  background-color: #f6f6f6;
+}
+
+.ng-select.ng-select-single.ng-select-disabled
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  color: #c2c2c2;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-single.ng-select-disabled
+  ::ng-deep
+  .ng-select-container {
+  border-color: #dddddd;
+}
+
+.ng-select-custom
+  .ng-select
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-input
+  > input {
+  height: 100%;
+}
+
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container {
+  padding: 0 50px 0 10px;
+}
+.ng-select-custom
+  .ng-select.ng-select-multiple
+  ::ng-deep
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  margin: 6px 4px 6px 0;
+}
+
+.ng-select-custom
+  .ng-select
+  ::ng-deep
+  .ng-dropdown-panel
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-selected {
+  color: #121212;
+  background-color: #c0e2ff !important;
+  font-weight: 400;
+}
+
+.selected-option {
+  background-color: red;
+}
+
+.custom-arrow {
+  position: absolute;
+  right: 10px;
+  top: 55%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  width: 24px;
+  height: 24px;
+  z-index: 1001;
+}
+
+.custom-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+// ng-select :: end
+
+// date picker :: begin
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+
+.custom-day.outside-day {
+  background-color: #bad3da !important;
+  opacity: 1 !important;
+  color: #99b4bc !important;
+  box-shadow: none !important;
+}
+.customDatepicker .ngb-dp-header {
+  width: 230px;
+}
+
+.customDatepicker .ngb-dp-month {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu.show {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu {
+  will-change: unset !important;
+  transform: none !important;
+  top: 0px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 0px !important;
+}
+
+.ngb-dp-header {
+  display: block; /* JANGAN ADA INI */
+}
+
+.btn-date-approval-filter {
+  position: absolute;
+  // width: 25px !important;
+  background: none;
+  box-shadow: none;
+  border: none;
+  align-items: center;
+  padding: none !important;
+  right: 5px;
+  top: 6px;
+}
+.icon {
+  align-items: center;
+  margin: auto;
+}
+
+// date picker :: end
+
+// filter :: begin
+
+.task-list-filter {
+  width: 100%;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.filter-btn {
+  display: flex;
+  padding: 12px 24px;
+  border-radius: 24px;
+  background-color: #ffffff;
+  border: 1px solid #005caa;
+
+  .name {
+    margin-left: 8px;
+    color: #005caa;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+}
+
+.filter-btn:hover {
+  background-color: #e6e6e6;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+.task-list-filter-area {
+  background-color: #ffffff;
+  width: 944px;
+  position: absolute;
+  padding: 20px;
+  border-radius: 6px;
+  z-index: 10;
+}
+
+.filter-inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.filter-inputs-section {
+  width: 48.78%;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.filter-info {
+  margin-bottom: 31px;
+}
+
+.filter-info__title {
+  font-size: 16px;
+  line-height: 24px;
+  color: #333333;
+  margin-bottom: 19px;
+}
+
+.filter-info__item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.filter-info__label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #333333;
+}
+
+.filter-info__content {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #555555;
+}
+
+// filter :: end
+
+// form :: begin
+
+.form-item label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #555555;
+}
+
+.form-item label.disabled {
+  color: #c2c2c2;
+}
+
+.form-item--custom {
+  width: 360px;
+}
+
+.data_label {
+  width: 150px;
+}
+
+.data_info {
+  width: 206px;
+  word-break: break-all;
+  color: #121212;
+}
+
+.form-info {
+  color: #121212;
+  margin: 12px 0px;
+  line-height: 24px;
+  word-break: break-all;
+}
+
+// form :: end
+
+// text :: start
+
+.text-md {
+  font-size: 16px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+// text :: end
+
+// info :: start
+
+.info-container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.info-group-container {
+  // width: calc((100% / 2) - 15px);  // responsive ? activate this
+  width: 360px;
+}
+
+// info :: end
+
+.card.card-pavo-default-type-i {
+  border-radius: 8px;
+  padding: 16px 16px 32px 16px;
+}
+
+.card.card-pavo-default-type-ii {
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card.card-pavo-default-type-iii {
+  border-radius: 8px;
+  padding: 16px 16px 40px 16px;
+}
+
+.card.card-pavo-default-type-iii.squared {
+  border-radius: 0px;
+  padding: 16px 16px 40px 16px;
+}
+
+.card-pavo-default-type-iv {
+  border-radius: 8px;
+  padding: 35px 20px;
+}
+
+.card-pavo-default-type-v {
+  border-radius: 8px;
+  padding: 40px 24px 24px 24px;
+}
+
+.card-pavo-default-type-vi {
+  border-radius: 8px;
+  padding: 16px 16px 24px 16px;
+}
+
+// checkbox :: start
+
+.custom-checkbox {
+  border-radius: 2px !important;
+  border-width: 2px;
+  border-color: #144e83; /* outline color */
+  background-color: white;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+}
+
+/* On hover */
+.custom-checkbox:hover {
+  border-color: #144e83; /* hover outline color */
+}
+
+/* When focused */
+.custom-checkbox:focus {
+  box-shadow: 0 0 0 0.2rem rgba(20, 78, 131, 0.25);
+  border-color: #144e83;
+}
+
+/* When checked */
+.custom-checkbox:checked {
+  background-color: #144e83; /* checked color */
+  border-color: #144e83;
+}
+
+/* Optional: if you want the check icon to be white */
+.custom-checkbox:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3e%3cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox .form-check-label,
+.form-check-label {
+  margin-left: 8px;
+}
+
+// checkbox :: end
+
+.border-blue {
+  border-color: #005caa;
+}
+
+#approvalDateInput,
+#approval1DateInput,
+#approval2DateInput,
+#requestedDateInput,
+#effectiveDateInput {
+  border-radius: 6px;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.content-field--container {
+  //width: calc(100% / 2.357); // responsive ? activate this
+  width: 760px;
+}
+
+.content-field--section-type-i {
+  width: 360px;
+}
+
+.watermark-container {
+  position: absolute;
+  top: 280px;
+  left: 0;
+  right: 0;
+  bottom: 35px;
+  width: 98%;
+  // height: 74%;
+  pointer-events: none;
+  z-index: 9;
+  overflow: hidden;
+}
+::ng-deep .watermark-clock {
+  position: absolute;
+  font-size: 50px;
+  color: rgba(100, 100, 100, 0.13);
+  font-weight: bold;
+  white-space: nowrap;
+  user-select: none;
+  transform: rotate(-45deg);
+}
+
+.content-field--section-type-ii {
+  width: calc((796 / 1792) * 100%);
+}
+
+.content-field--section-type-iii {
+  width: calc(100% - ((796 / 1792) * 100%));
+}
+
+// ::CKEDITOR ICON::BEGIN::
+
+// UNDO
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Undo"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Undo"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Undo"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-undo.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// REDO
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Redo"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Redo"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Redo"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-redo.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// BOLD
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Bold"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Bold"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Bold"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-bold.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// ITALIC
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Italic"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Italic"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Italic"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-italic.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// UNDERLINE
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Underline"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Underline"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Underline"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-underline.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Strikethrough
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Strikethrough"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Strikethrough"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Strikethrough"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-strikethrough.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Subscript
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Subscript"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Subscript"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Subscript"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-subscript.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Superscript
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Superscript"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Superscript"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Superscript"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-superscript.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Align left
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align left"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align left"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align left"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-align-left.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Align center
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align center"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Align center"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align center"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-align-center.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Align right
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align right"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Align right"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Align right"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-align-right.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Justify
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Justify"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Justify"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Justify"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-align-justify.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Increase indent
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Increase indent"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Increase indent"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Increase indent"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-increase-indent.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Decrease indent
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Decrease indent"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Decrease indent"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Decrease indent"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-decrease-indent.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Font Color
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Font Color"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Font Color"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Font Color"]
+  svg.ck-icon.ck-dropdown__arrow {
+  position: absolute;
+  visibility: hidden !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Font Color"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-font-color.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Highlight
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Font Background Color"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Font Background Color"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+// ::ng-deep
+//   button.ck.ck-button[data-cke-tooltip-text^="Highlight"]
+//   svg.ck-icon.ck-reset_all-excluded {
+//   position: absolute;
+//   visibility: hidden !important;
+//   width: 0 !important;
+//   height: 0 !important;
+// }
+
+// ::ng-deep
+//   button.ck.ck-button.ck-splitbutton__arrow[data-cke-tooltip-text^="Font Background Color"] {
+//   visibility: hidden !important;
+//   width: 0 !important;
+//   height: 0 !important;
+// }
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Font Background Color"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-font-background-color.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Upload image from computer
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Upload image from computer"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Upload image from computer"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Upload image from computer"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-upload-image.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Horizontal line
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Horizontal line"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Horizontal line"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Horizontal line"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-horizontal-line.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// REMOVE FORMAT
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Remove Format"] {
+  position: relative;
+}
+
+::ng-deep
+  button.ck.ck-button[data-cke-tooltip-text^="Remove Format"]
+  svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Remove Format"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-remove-format.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+// Code
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Code"] {
+  position: relative;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Code"] svg.ck-icon {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep button.ck.ck-button[data-cke-tooltip-text^="Code"]::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url("/assets/img/toolbar-code.svg"); /* Replacement Icon Example */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+::ng-deep .ck.ck-editor__top.ck-reset_all {
+  display: none !important;
+}
+
+// ::CKEDITOR ICON::END::
+
+// Checkbox Custom :: start
+
+.cb-pv-i {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cb-pv-i__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cb-pv-i__box {
+  width: 18px;
+  height: 18px;
+  background: url("/assets/img/ic-checkbox-blue-unchecked.svg") no-repeat
+    center / contain;
+}
+
+.cb-pv-i__label {
+  color: #393939;
+}
+
+.cb-pv-i__input:checked + .cb-pv-i__box {
+  background-image: url("/assets/img/ic-checkbox-blue-checked.svg");
+}
+
+.cb-pv-i__input:focus-visible + .cb-pv-i__box {
+  outline: 2px solid #4c8bf5;
+  outline-offset: 2px;
+}
+
+.cb-pv-i__input:disabled + .cb-pv-i__box {
+  opacity: 0.4;
+}
+
+.cb-pv-i__input:disabled ~ .cb-pv-i__label {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cb-pv-ii {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cb-pv-ii__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cb-pv-ii__box {
+  width: 16px;
+  height: 16px;
+  background: url("/assets/img/ic-checkbox-dark-gray-unchecked.svg") no-repeat
+    center / contain;
+}
+
+.cb-pv-ii__box.size-18 {
+  width: 18px;
+  height: 18px;
+  background: url("/assets/img/ic-checkbox-dark-gray-unchecked.svg") no-repeat
+    center / contain;
+}
+
+.cb-pv-ii__label {
+  color: #393939;
+}
+
+.cb-pv-ii__input:checked + .cb-pv-ii__box {
+  background-image: url("/assets/img/ic-checkbox-dark-gray-checked.svg");
+}
+
+.cb-pv-ii__input:focus-visible + .cb-pv-ii__box {
+  outline: 2px solid #4c8bf5;
+  outline-offset: 2px;
+}
+
+.cb-pv-ii__input:disabled + .cb-pv-ii__box {
+  opacity: 0.4;
+}
+
+.cb-pv-ii__input:disabled ~ .cb-pv-ii__label {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// custom margin
+
+.ms-12 {
+  margin-left: 12px;
+}
+
+.ms-17 {
+  margin-left: 17px;
+}
+
+.ms-24 {
+  margin-left: 24px;
+}
+
+.ms-32 {
+  margin-left: 32px;
+}
+
+.ms-36 {
+  margin-left: 36px;
+}
+
+.ms-41 {
+  margin-left: 41px;
+}
+
+.ms-56 {
+  margin-left: 56px;
+}

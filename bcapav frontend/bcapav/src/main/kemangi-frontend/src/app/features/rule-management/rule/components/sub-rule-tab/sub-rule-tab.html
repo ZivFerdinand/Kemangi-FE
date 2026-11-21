@@ -1,0 +1,31 @@
+<div class="sub-rule-tab">
+  <div class="sub-rule-tab__track" #scrollArea>
+    @for (tab of tabs; track tab.value; let i = $index) {
+    <div
+      class="sub-rule-tab__tab-item"
+      [class.active]="activeTab === tab.value"
+    >
+      <button
+        type="button"
+        (click)="selectTab(tab.value)"
+        class="sub-rule-tab__tab-item-label"
+      >
+        {{ tab.label }}
+      </button>
+      <div>
+        <button type="button" (click)="deleteTab(i); $event.stopPropagation()">
+          <img src="/assets/img/ic-trash-red.svg" alt="delete" />
+        </button>
+        <button type="button" (click)="cloneTab(i); $event.stopPropagation()">
+          <img src="/assets/img/ic-copy.svg" alt="copy" />
+        </button>
+      </div>
+    </div>
+    }
+    <button type="button" class="btn-add-sub-rule" (click)="addTab()">
+      <span
+        ><img src="/assets/img/ic-plus-border-rounded.svg" alt="add sub rule"
+      /></span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,955 @@
+<div [class.collapsed]="isCollapsed">
+  <div class="sidebar">
+    <nav class="nav flex-column">
+
+
+      <div class="mt-5 d-flex flex-column align-items-center text-center">
+        <img class="logo-area-img" src="assets/img/PAVO-logo-white-bg.svg" alt="PAVO-logo" />
+      </div>
+
+      <div class="nav-scrollable-area">
+        <a routerLink="/home/dashboard" class="nav-link nav-home" [attr.title]="'Home'">
+          <span class="icon">
+            <img alt="ic-home" />
+          </span>
+          <span class="description">Home</span>
+        </a>
+
+        @if (checkMenu("ALERTDETAIL-INQUIRY-")) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-alert" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuAlert'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuAlert'"
+            (click)="isCollapsed ? openPopupSubMenu('alert', $event) : null" [attr.title]="'Alert Detail'">
+            <span class="icon">
+              <img alt="ic-rule-mgmt" />
+              <span class="collapsed-arrow-indicator" [class.open]="isCollapsed && popupSubMenu === 'alert'">›</span>
+            </span>
+            <span class="description">
+              Alert Detail
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+          <div class="sub-menu collapse" id="submenuAlert">
+            @if (checkMenu("ALERTDETAIL-INQUIRY-")) {
+            <a routerLink="/home/alert/inquiry" class="nav-link">
+              <span class="icon">
+                <span class="description">Inquiry</span>
+              </span>
+            </a>
+            }
+          </div>
+        </div>
+        }
+
+        @if (
+        checkMenu("REPORT-REPORTUSERACTIVITY-ALLUSERS") ||
+        checkMenu("REPORT-REPORTUSERACTIVITY-OWNUSER")
+        ) {
+        <a routerLink="/home/report" class="nav-link nav-report" [attr.title]="'Report'">
+          <span class="icon">
+            <img alt="ic-rep" />
+          </span>
+          <span class="description">Report</span>
+        </a>
+        }
+
+        @if (
+        checkMenu("ROLEMANAGEMENT-ROLE-VIEW") ||
+        checkMenu("ROLEMANAGEMENT-ROLE-CREATE") ||
+        checkMenu("ROLEMANAGEMENT-ROLE-UPDATE") ||
+        checkMenu("ROLEMANAGEMENT-ROLE-DELETE")
+        ) {
+        <a routerLink="/home/role-management" class="nav-link nav-role" [attr.title]="'Role Management'">
+          <span class="icon">
+            <img alt="ic-role-mgmt" />
+          </span>
+          <span class="description">Role Management</span>
+        </a>
+        }
+
+        @if (
+        checkMenu("RULEMANAGEMENT-DATAGROUP-VIEW") ||
+        checkMenu("RULEMANAGEMENT-DATAGROUP-CREATE") ||
+        checkMenu("RULEMANAGEMENT-DATAGROUP-UPDATE") ||
+        checkMenu("RULEMANAGEMENT-DATAGROUP-DELETE") ||
+        checkMenu("RULEMANAGEMENT-RULE-VIEW") ||
+        checkMenu("RULEMANAGEMENT-RULE-CREATE") ||
+        checkMenu("RULEMANAGEMENT-RULE-UPDATE") ||
+        checkMenu("RULEMANAGEMENT-RULE-DELETE")
+        ) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-rule" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuRuleManagement'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuRuleManagement'"
+            (click)="isCollapsed ? openPopupSubMenu('rule', $event) : null" [attr.title]="'Rule Management'">
+            <span class="icon">
+              <img alt="ic-rule-mgmt" />
+              <span class="collapsed-arrow-indicator" [class.open]="isCollapsed && popupSubMenu === 'rule'">›</span>
+            </span>
+            <span class="description">
+              Rule Management
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+          <div class="sub-menu collapse" id="submenuRuleManagement">
+            @if (
+            checkMenu("RULEMANAGEMENT-DATAGROUP-VIEW") ||
+            checkMenu("RULEMANAGEMENT-DATAGROUP-CREATE") ||
+            checkMenu("RULEMANAGEMENT-DATAGROUP-UPDATE") ||
+            checkMenu("RULEMANAGEMENT-DATAGROUP-DELETE")
+            ) {
+            <a routerLink="/home/rule-management/data-group/current" class="nav-link">
+              <span class="icon">
+                <span class="description">Data Group</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("RULEMANAGEMENT-RULE-VIEW") ||
+            checkMenu("RULEMANAGEMENT-RULE-CREATE") ||
+            checkMenu("RULEMANAGEMENT-RULE-UPDATE") ||
+            checkMenu("RULEMANAGEMENT-RULE-DELETE")
+            ) {
+            <a routerLink="/home/rule-management/rule/current" class="nav-link">
+              <span class="icon">
+                <span class="description">Rule</span>
+              </span>
+            </a>
+            }
+          </div>
+        </div>
+        }
+
+        @if (
+        checkMenu("MLM-THRESHOLDSCORE-VIEW") ||
+        checkMenu("MLM-THRESHOLDSCORE-UPDATE") ||
+        checkMenu("MLM-THRESHOLDSCORE-DELETE")
+        ) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-machine" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuMachineLearning'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuMachineLearning'"
+            (click)="isCollapsed ? openPopupSubMenu('mlm', $event) : null" [attr.title]="'Machine Learning Management'">
+            <span class="icon">
+              <img alt="ic-machine-learning" />
+              <span class="collapsed-arrow-indicator" [class.open]="isCollapsed && popupSubMenu === 'mlm'">›</span>
+            </span>
+            <span class="description">
+              Machine Learning Management
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+          <div class="sub-menu collapse" id="submenuMachineLearning">
+            <a routerLink="/home/machine-learning/threshold-score/current" class="nav-link">
+              <span class="icon">
+                <span class="description">Threshold Score</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        }
+
+        @if (
+        checkMenu("APPROVAL-ALERTQUEUE-TASK-LV1") ||
+        checkMenu("APPROVAL-ALERTQUEUE-TASK-LV2") ||
+        checkMenu("APPROVAL-ALERTQUEUE-REQUESTED") ||
+        checkMenu("APPROVAL-RULE-TASK-LV1") ||
+        checkMenu("APPROVAL-RULE-TASK-LV2") ||
+        checkMenu("APPROVAL-RULE-REQUESTED") ||
+        checkMenu("APPROVAL-ROLE-TASK") ||
+        checkMenu("APPROVAL-ROLE-REQUESTED") ||
+        checkMenu("APPROVAL-DATAGROUP-TASK-LV1") ||
+        checkMenu("APPROVAL-DATAGROUP-TASK-LV2") ||
+        checkMenu("APPROVAL-DATAGROUP-REQUESTED") ||
+        checkMenu("APPROVAL-FRAUDTYPE-TASK") ||
+        checkMenu("APPROVAL-FRAUDTYPE-REQUESTED") ||
+        checkMenu("APPROVAL-NOTES-TASK") ||
+        checkMenu("APPROVAL-NOTES-REQUESTED") ||
+        checkMenu("APPROVAL-BINNUMBER-TASK") ||
+        checkMenu("APPROVAL-BINNUMBER-REQUESTED") ||
+        checkMenu("APPROVAL-EMAILTEMPLATE-TASK") ||
+        checkMenu("APPROVAL-EMAILTEMPLATE-REQUESTED") ||
+        checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV1") ||
+        checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV2") ||
+        checkMenu("APPROVAL-THRESHOLDSCORE-REQUESTED") ||
+        checkMenu("APPROVAL-BLOCKUNBLOCK-TASK") ||
+        checkMenu("APPROVAL-BLOCKUNBLOCK-REQUESTED") ||
+        checkMenu("APPROVAL-SMC-TASK") ||
+        checkMenu("APPROVAL-SMC-REQUESTED")
+        ) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-approval" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuApproval'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuApproval'"
+            (click)="isCollapsed ? openPopupSubMenu('approval', $event) : null" [attr.title]="'Approval'">
+            <span class="icon">
+              <img alt="ic-approval" src="assets/img/ic-approval.svg" />
+              <span class="collapsed-arrow-indicator" [class.open]="isCollapsed && popupSubMenu === 'approval'">›</span>
+            </span>
+            <span class="description">
+              Approval
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+          <div class="sub-menu collapse" id="submenuApproval">
+            @if (
+            checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV1") ||
+            checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV2") ||
+            checkMenu("APPROVAL-THRESHOLDSCORE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('APPROVAL-THRESHOLDSCORE-TASK-LV1') ||
+                    checkMenu('APPROVAL-THRESHOLDSCORE-TASK-LV2'))
+                      ? '/home/approval/threshold-score/task-list'
+                      : '/home/approval/threshold-score/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">Threshold Score</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-DATAGROUP-TASK-LV1") ||
+            checkMenu("APPROVAL-DATAGROUP-TASK-LV2") ||
+            checkMenu("APPROVAL-DATAGROUP-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    ((checkMenu('APPROVAL-DATAGROUP-TASK-LV1') ||
+                      checkMenu('APPROVAL-DATAGROUP-TASK-LV2')) &&
+                      checkMenu('APPROVAL-DATAGROUP-REQUESTED')) ||
+                    ((checkMenu('APPROVAL-DATAGROUP-TASK-LV1') ||
+                      checkMenu('APPROVAL-DATAGROUP-TASK-LV2')) &&
+                      !checkMenu('APPROVAL-DATAGROUP-REQUESTED'))
+                      ? '/home/approval/data-group/task-list'
+                      : '/home/approval/data-group/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">Data Group</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-RULE-TASK-LV1") ||
+            checkMenu("APPROVAL-RULE-TASK-LV2") ||
+            checkMenu("APPROVAL-RULE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  ((checkMenu('APPROVAL-RULE-TASK-LV1') ||
+                    checkMenu('APPROVAL-RULE-TASK-LV2')) &&
+                    checkMenu('APPROVAL-RULE-REQUESTED')) ||
+                  ((checkMenu('APPROVAL-RULE-TASK-LV1') ||
+                    checkMenu('APPROVAL-RULE-TASK-LV2')) &&
+                    !checkMenu('APPROVAL-RULE-REQUESTED'))
+                    ? '/home/approval/rule/task-list'
+                    : '/home/approval/rule/requested-list'
+                " class="nav-link">
+              <span class="description">Rule</span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-ROLE-TASK") ||
+            checkMenu("APPROVAL-ROLE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('APPROVAL-ROLE-TASK') &&
+                      checkMenu('APPROVAL-ROLE-REQUESTED')) ||
+                    (checkMenu('APPROVAL-ROLE-TASK') &&
+                      !checkMenu('APPROVAL-ROLE-REQUESTED'))
+                      ? '/home/approval/role/task-list'
+                      : '/home/approval/role/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">Role</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-FRAUDTYPE-TASK") ||
+            checkMenu("APPROVAL-FRAUDTYPE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('APPROVAL-FRAUDTYPE-TASK') &&
+                      checkMenu('APPROVAL-FRAUDTYPE-REQUESTED')) ||
+                    (checkMenu('APPROVAL-FRAUDTYPE-TASK') &&
+                      !checkMenu('APPROVAL-FRAUDTYPE-REQUESTED'))
+                      ? '/home/approval/fraud-type/task-list'
+                      : '/home/approval/fraud-type/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">Fraud Type</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-NOTES-TASK") ||
+            checkMenu("APPROVAL-NOTES-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('APPROVAL-NOTES-TASK') &&
+                      checkMenu('APPROVAL-NOTES-REQUESTED')) ||
+                    (checkMenu('APPROVAL-NOTES-TASK') &&
+                      !checkMenu('APPROVAL-NOTES-REQUESTED'))
+                      ? '/home/approval/notes/task-list'
+                      : '/home/approval/notes/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">Notes</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-BINNUMBER-TASK") ||
+            checkMenu("APPROVAL-BINNUMBER-REQUESTED")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('APPROVAL-BINNUMBER-TASK') &&
+                      checkMenu('APPROVAL-BINNUMBER-REQUESTED')) ||
+                    (checkMenu('APPROVAL-BINNUMBER-TASK') &&
+                      !checkMenu('APPROVAL-BINNUMBER-REQUESTED'))
+                      ? '/home/approval/bin/task-list'
+                      : '/home/approval/bin/requested-list'
+                  " class="nav-link">
+              <span class="icon">
+                <span class="description">BIN</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("APPROVAL-EMAILTEMPLATE-TASK") ||
+            checkMenu("APPROVAL-EMAILTEMPLATE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  (checkMenu('APPROVAL-EMAILTEMPLATE-TASK') &&
+                    checkMenu('APPROVAL-EMAILTEMPLATE-REQUESTED')) ||
+                  (checkMenu('APPROVAL-EMAILTEMPLATE-TASK') &&
+                    !checkMenu('APPROVAL-EMAILTEMPLATE-REQUESTED'))
+                    ? '/home/approval/email-template/task-list'
+                    : '/home/approval/email-template/requested-list'
+                " routerLink="/home/approval/email-template/task-list" class="nav-link">
+              <span class="description">Email Template</span>
+            </a>
+            }
+
+            @if (
+            checkMenu("APPROVAL-BLOCKUNBLOCK-TASK") ||
+            checkMenu("APPROVAL-BLOCKUNBLOCK-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  (checkMenu('APPROVAL-BLOCKUNBLOCK-TASK') &&
+                    checkMenu('APPROVAL-BLOCKUNBLOCK-REQUESTED')) ||
+                  (checkMenu('APPROVAL-BLOCKUNBLOCK-TASK') &&
+                    !checkMenu('APPROVAL-BLOCKUNBLOCK-REQUESTED'))
+                    ? '/home/approval/block-unblock-account/task-list'
+                    : '/home/approval/block-unblock-account/requested-list'
+                " class="nav-link">
+              <span class="description" [attr.title]="'Block/Unblock Account'">Block/Unblock Account</span>
+            </a>
+            }
+
+            @if (
+            checkMenu("APPROVAL-BLOCKUNBLOCKBALANCE-TASK") ||
+            checkMenu("APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  (checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-TASK') &&
+                    checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED')) ||
+                  (checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-TASK') &&
+                    !checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED'))
+                    ? '/home/approval/block-unblock-account-balance/task-list'
+                    : '/home/approval/block-unblock-account-balance/requested-list'
+                " class="nav-link">
+              <span class="description" [attr.title]="'Block/Unblock Account Balance'">Block/Unblock Account
+                Balance</span>
+            </a>
+            }
+
+            @if (
+            checkMenu("APPROVAL-SMC-TASK") ||
+            checkMenu("APPROVAL-SMC-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  (checkMenu('APPROVAL-SMC-TASK') &&
+                    checkMenu('APPROVAL-SMC-REQUESTED')) ||
+                  (checkMenu('APPROVAL-SMC-TASK') &&
+                    !checkMenu('APPROVAL-SMC-REQUESTED'))
+                    ? '/home/approval/smc/task-list'
+                    : '/home/approval/smc/requested-list'
+                " class="nav-link">
+              <span class="description">SMC</span>
+            </a>
+            }
+
+            @if (
+            checkMenu("APPROVAL-ALERTQUEUE-TASK-LV1") ||
+            checkMenu("APPROVAL-ALERTQUEUE-TASK-LV2") ||
+            checkMenu("APPROVAL-ALERTQUEUE-REQUESTED")
+            ) {
+            <a [routerLink]="
+                  ((checkMenu('APPROVAL-ALERTQUEUE-TASK-LV1') ||
+                    checkMenu('APPROVAL-ALERTQUEUE-TASK-LV2')) &&
+                    checkMenu('APPROVAL-ALERTQUEUE-REQUESTED')) ||
+                  ((checkMenu('APPROVAL-ALERTQUEUE-TASK-LV1') ||
+                    checkMenu('APPROVAL-ALERTQUEUE-TASK-LV2')) &&
+                    !checkMenu('APPROVAL-ALERTQUEUE-REQUESTED'))
+                    ? '/home/approval/alert-queue/task-list'
+                    : '/home/approval/alert-queue/requested-list'
+                " class="nav-link">
+              <span class="description" [attr.title]="'Alert Queue Management'">Alert Queue Management</span>
+            </a>
+            }
+          </div>
+        </div>
+        }
+        <a routerLink="/home/payment-id/task" class="nav-link nav-payment-id" [attr.title]="'Payment ID'">
+          <span class="icon">
+            <img alt="ic-payment-id" />
+          </span>
+          <span class="description">Payment ID</span>
+        </a>
+
+        @if (
+        checkMenu("MASTER-FRAUDTYPE-VIEW") ||
+        checkMenu("MASTER-FRAUDTYPE-CREATE") ||
+        checkMenu("MASTER-FRAUDTYPE-UPDATE") ||
+        checkMenu("MASTER-FRAUDTYPE-DELETE") ||
+        checkMenu("MASTER-NOTES-VIEW") ||
+        checkMenu("MASTER-NOTES-CREATE") ||
+        checkMenu("MASTER-NOTES-UPDATE") ||
+        checkMenu("MASTER-NOTES-DELETE") ||
+        checkMenu("MASTER-BINNUMBER-VIEW") ||
+        checkMenu("MASTER-BINNUMBER-CREATE") ||
+        checkMenu("MASTER-BINNUMBER-UPDATE") ||
+        checkMenu("MASTER-BINNUMBER-DELETE") ||
+        checkMenu("MASTER-EMAILTEMPLATE-VIEW") ||
+        checkMenu("MASTER-EMAILTEMPLATE-CREATE") ||
+        checkMenu("MASTER-EMAILTEMPLATE-UPDATE") ||
+        checkMenu("MASTER-EMAILTEMPLATE-DELETE")
+        ) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-data-master" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuDataMaster'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuDataMaster'"
+            (click)="isCollapsed ? openPopupSubMenu('dataMaster', $event) : null" [attr.title]="'Data Master'">
+            <span class="icon">
+              <img alt="ic-data-master" />
+              <span class="collapsed-arrow-indicator"
+                [class.open]="isCollapsed && popupSubMenu === 'dataMaster'">›</span>
+            </span>
+            <span class="description">
+              Data Master
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+
+          <div class="sub-menu collapse" id="submenuDataMaster">
+            @if (
+            checkMenu("MASTER-FRAUDTYPE-VIEW") ||
+            checkMenu("MASTER-FRAUDTYPE-CREATE") ||
+            checkMenu("MASTER-FRAUDTYPE-UPDATE") ||
+            checkMenu("MASTER-FRAUDTYPE-DELETE")
+            ) {
+            <a routerLink="/home/data-master/fraud-type" class="nav-link">
+              <span class="icon">
+                <span class="description">Fraud Type</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("MASTER-NOTES-VIEW") ||
+            checkMenu("MASTER-NOTES-CREATE") ||
+            checkMenu("MASTER-NOTES-UPDATE") ||
+            checkMenu("MASTER-NOTES-DELETE")
+            ) {
+            <a routerLink="/home/data-master/notes" class="nav-link">
+              <span class="icon">
+                <span class="description">Notes</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("MASTER-BINNUMBER-VIEW") ||
+            checkMenu("MASTER-BINNUMBER-CREATE") ||
+            checkMenu("MASTER-BINNUMBER-UPDATE") ||
+            checkMenu("MASTER-BINNUMBER-DELETE")
+            ) {
+            <a routerLink="/home/data-master/bin" class="nav-link">
+              <span class="icon">
+                <span class="description">BIN</span>
+              </span>
+            </a>
+            }
+            @if (
+            checkMenu("MASTER-EMAILTEMPLATE-VIEW") ||
+            checkMenu("MASTER-EMAILTEMPLATE-CREATE") ||
+            checkMenu("MASTER-EMAILTEMPLATE-UPDATE") ||
+            checkMenu("MASTER-EMAILTEMPLATE-DELETE")
+            ) {
+            <a routerLink="/home/data-master/email-template" class="nav-link">
+              <span class="description">Email Template</span>
+            </a>
+            }
+          </div>
+        </div>
+        }
+
+        @if (
+        checkMenu("ACTION-BLOCKUNBLOCK-UPLOAD") ||
+        checkMenu("ACTION-BLOCKUNBLOCKBALANCE-UPLOAD") ||
+        checkMenu("ACTION-BLOCKUNBLOCK-VIEW") ||
+        checkMenu("ACTION-BLOCKUNBLOCKBALANCE-VIEW")
+        ) {
+        <div class="nav-item-wrapper" [class.has-submenu]="true">
+          <a href="" class="nav-link nav-action" [attr.data-bs-toggle]="isCollapsed ? null : 'collapse'"
+            [attr.data-bs-target]="isCollapsed ? null : '#submenuAction'"
+            [attr.aria-expanded]="isCollapsed ? null : 'false'"
+            [attr.aria-controls]="isCollapsed ? null : 'submenuAction'"
+            (click)="isCollapsed ? openPopupSubMenu('action', $event) : null" [attr.title]="'Action'">
+            <span class="icon">
+              <img alt="ic-rule-mgmt" />
+              <span class="collapsed-arrow-indicator" [class.open]="isCollapsed && popupSubMenu === 'action'">›</span>
+            </span>
+            <span class="description">
+              Action
+              <img class="submenu-arrow" alt="ic-arrow" />
+            </span>
+          </a>
+
+          <div class="sub-menu collapse" id="submenuAction">
+            @if (
+            checkMenu("ACTION-BLOCKUNBLOCK-UPLOAD") ||
+            checkMenu("ACTION-BLOCKUNBLOCK-VIEW")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('ACTION-BLOCKUNBLOCK-UPLOAD') &&
+                      checkMenu('ACTION-BLOCKUNBLOCK-VIEW')) ||
+                    (checkMenu('ACTION-BLOCKUNBLOCK-UPLOAD') &&
+                      !checkMenu('ACTION-BLOCKUNBLOCK-VIEW'))
+                      ? '/home/action/block-unblock-account/upload'
+                      : '/home/action/block-unblock-account/requested'
+                  " class="nav-link">
+              <span class="description" [attr.title]="'Block/Unblock Account'">Block/Unblock Account</span>
+            </a>
+            }
+
+            @if (
+            checkMenu("ACTION-BLOCKUNBLOCKBALANCE-UPLOAD") ||
+            checkMenu("ACTION-BLOCKUNBLOCKBALANCE-VIEW")
+            ) {
+            <a [routerLink]="
+                    (checkMenu('ACTION-BLOCKUNBLOCKBALANCE-UPLOAD') &&
+                      checkMenu('ACTION-BLOCKUNBLOCKBALANCE-VIEW')) ||
+                    (checkMenu('ACTION-BLOCKUNBLOCKBALANCE-UPLOAD') &&
+                      !checkMenu('ACTION-BLOCKUNBLOCKBALANCE-VIEW'))
+                      ? '/home/action/block-unblock-account-balance/upload'
+                      : '/home/action/block-unblock-account-balance/requested'
+                  " class="nav-link">
+              <span class="description" [attr.title]="'Block/Unblock Account Balance'">Block/Unblock Account
+                Balance</span>
+            </a>
+            }
+
+            @if (checkMenu("ACTION-SMC-UPLOAD") || checkMenu("ACTION-SMC-VIEW")) {
+            <a [routerLink]="
+                    (checkMenu('ACTION-SMC-UPLOAD') &&
+                      checkMenu('ACTION-SMC-VIEW')) ||
+                    (checkMenu('ACTION-SMC-UPLOAD') &&
+                      !checkMenu('ACTION-SMC-VIEW'))
+                      ? '/home/action/smc/upload'
+                      : '/home/action/smc/requested'
+                  " class="nav-link">
+              <span class="description">SMC</span>
+            </a>
+            }
+          </div>
+        </div>
+        }
+
+        @if (
+        checkMenu("ALERTQUEUE-ALERTQUEUE-VIEW") ||
+        checkMenu("ALERTQUEUE-ALERTQUEUE-CREATE") ||
+        checkMenu("ALERTQUEUE-ALERTQUEUE-UPDATE") ||
+        checkMenu("ALERTQUEUE-ALERTQUEUE-DELETE")
+        ) {
+        <a routerLink="/home/alert-queue-management" class="nav-link nav-alert-queue"
+          [attr.title]="'Alert Queue Management'">
+          <span class="icon">
+            <img alt="ic-alert-queue" />
+          </span>
+          <span class="description">Alert Queue Management</span>
+        </a>
+        }
+      </div>
+
+      <a class="nav-link nav-link-logout" [attr.title]="'Expand/Collapse'" (click)="collapseClicked()">
+        <span class="icon">
+          <img alt="ic-logout" />
+        </span>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<div *ngIf="isCollapsed && popupSubMenu === 'action'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+
+  @if (
+  checkMenu("ACTION-BLOCKUNBLOCK-UPLOAD") ||
+  checkMenu("ACTION-BLOCKUNBLOCK-VIEW")
+  ) {
+  <a [routerLink]="
+          (checkMenu('ACTION-BLOCKUNBLOCK-UPLOAD') &&
+            checkMenu('ACTION-BLOCKUNBLOCK-VIEW')) ||
+          (checkMenu('ACTION-BLOCKUNBLOCK-UPLOAD') &&
+            !checkMenu('ACTION-BLOCKUNBLOCK-VIEW'))
+            ? '/home/action/block-unblock-account/upload'
+            : '/home/action/block-unblock-account/requested'
+        " class="nav-link">
+    <span class="description">Block/Unblock Account </span>
+  </a>
+  }
+
+  @if (
+  checkMenu("ACTION-BLOCKUNBLOCKBALANCE-UPLOAD") ||
+  checkMenu("ACTION-BLOCKUNBLOCKBALANCE-VIEW")
+  ) {
+  <a [routerLink]="
+          (checkMenu('ACTION-BLOCKUNBLOCKBALANCE-UPLOAD') &&
+            checkMenu('ACTION-BLOCKUNBLOCKBALANCE-VIEW')) ||
+          (checkMenu('ACTION-BLOCKUNBLOCKBALANCE-UPLOAD') &&
+            !checkMenu('ACTION-BLOCKUNBLOCKBALANCE-VIEW'))
+            ? '/home/action/block-unblock-account-balance/upload'
+            : '/home/action/block-unblock-account-balance/requested'
+        " class="nav-link">
+    <span class="description">Block/Unblock Account Balance</span>
+  </a>
+  }
+
+  @if (checkMenu("ACTION-SMC-UPLOAD") || checkMenu("ACTION-SMC-VIEW")) {
+  <a [routerLink]="
+          (checkMenu('ACTION-SMC-UPLOAD') &&
+            checkMenu('ACTION-SMC-VIEW')) ||
+          (checkMenu('ACTION-SMC-UPLOAD') &&
+            !checkMenu('ACTION-SMC-VIEW'))
+            ? '/home/action/smc/upload'
+            : '/home/action/smc/requested'
+        " class="nav-link">
+    <span class="description">SMC</span>
+  </a>
+  }
+</div>
+
+<div *ngIf="isCollapsed && popupSubMenu === 'alert'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+  @if (checkMenu("ALERTDETAIL-INQUIRY-")) {
+  <a routerLink="/home/alert/inquiry" class="nav-link">
+    <span class="icon">
+      <span class="description">Inquiry</span>
+    </span>
+  </a>
+  }
+</div>
+<div *ngIf="isCollapsed && popupSubMenu === 'rule'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+  @if (
+  checkMenu("RULEMANAGEMENT-DATAGROUP-VIEW") ||
+  checkMenu("RULEMANAGEMENT-DATAGROUP-CREATE") ||
+  checkMenu("RULEMANAGEMENT-DATAGROUP-UPDATE") ||
+  checkMenu("RULEMANAGEMENT-DATAGROUP-DELETE")
+  ) {
+  <a routerLink="/home/rule-management/data-group/current" class="nav-link">
+    <span class="icon">
+      <span class="description">Data Group</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("RULEMANAGEMENT-RULE-VIEW") ||
+  checkMenu("RULEMANAGEMENT-RULE-CREATE") ||
+  checkMenu("RULEMANAGEMENT-RULE-UPDATE") ||
+  checkMenu("RULEMANAGEMENT-RULE-DELETE")
+  ) {
+  <a routerLink="/home/rule-management/rule/current" class="nav-link">
+    <span class="icon">
+      <span class="description">Rule</span>
+    </span>
+  </a>
+  }
+</div>
+<div *ngIf="isCollapsed && popupSubMenu === 'mlm'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+  <a routerLink="/home/machine-learning/threshold-score/current" class="nav-link">
+    <span class="icon">
+      <span class="description">Threshold Score</span>
+    </span>
+  </a>
+</div>
+<div *ngIf="isCollapsed && popupSubMenu === 'approval'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+
+
+  @if (
+  checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV1") ||
+  checkMenu("APPROVAL-THRESHOLDSCORE-TASK-LV2") ||
+  checkMenu("APPROVAL-THRESHOLDSCORE-REQUESTED")
+  ) {
+  <a [routerLink]="
+          (checkMenu('APPROVAL-THRESHOLDSCORE-TASK-LV1') ||
+          checkMenu('APPROVAL-THRESHOLDSCORE-TASK-LV2'))
+            ? '/home/approval/threshold-score/task-list'
+            : '/home/approval/threshold-score/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">Threshold Score</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-DATAGROUP-TASK-LV1") ||
+  checkMenu("APPROVAL-DATAGROUP-TASK-LV2") ||
+  checkMenu("APPROVAL-DATAGROUP-REQUESTED")
+  ) {
+  <a [routerLink]="
+          ((checkMenu('APPROVAL-DATAGROUP-TASK-LV1') ||
+            checkMenu('APPROVAL-DATAGROUP-TASK-LV2')) &&
+            checkMenu('APPROVAL-DATAGROUP-REQUESTED')) ||
+          ((checkMenu('APPROVAL-DATAGROUP-TASK-LV1') ||
+            checkMenu('APPROVAL-DATAGROUP-TASK-LV2')) &&
+            !checkMenu('APPROVAL-DATAGROUP-REQUESTED'))
+            ? '/home/approval/data-group/task-list'
+            : '/home/approval/data-group/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">Data Group</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-RULE-TASK-LV1") ||
+  checkMenu("APPROVAL-RULE-TASK-LV2") ||
+  checkMenu("APPROVAL-RULE-REQUESTED")
+  ) {
+  <a [routerLink]="
+        ((checkMenu('APPROVAL-RULE-TASK-LV1') ||
+          checkMenu('APPROVAL-RULE-TASK-LV2')) &&
+          checkMenu('APPROVAL-RULE-REQUESTED')) ||
+        ((checkMenu('APPROVAL-RULE-TASK-LV1') ||
+          checkMenu('APPROVAL-RULE-TASK-LV2')) &&
+          !checkMenu('APPROVAL-RULE-REQUESTED'))
+          ? '/home/approval/rule/task-list'
+          : '/home/approval/rule/requested-list'
+      " class="nav-link">
+    <span class="description">Rule</span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-ROLE-TASK") ||
+  checkMenu("APPROVAL-ROLE-REQUESTED")
+  ) {
+  <a [routerLink]="
+          (checkMenu('APPROVAL-ROLE-TASK') &&
+            checkMenu('APPROVAL-ROLE-REQUESTED')) ||
+          (checkMenu('APPROVAL-ROLE-TASK') &&
+            !checkMenu('APPROVAL-ROLE-REQUESTED'))
+            ? '/home/approval/role/task-list'
+            : '/home/approval/role/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">Role</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-FRAUDTYPE-TASK") ||
+  checkMenu("APPROVAL-FRAUDTYPE-REQUESTED")
+  ) {
+  <a [routerLink]="
+          (checkMenu('APPROVAL-FRAUDTYPE-TASK') &&
+            checkMenu('APPROVAL-FRAUDTYPE-REQUESTED')) ||
+          (checkMenu('APPROVAL-FRAUDTYPE-TASK') &&
+            !checkMenu('APPROVAL-FRAUDTYPE-REQUESTED'))
+            ? '/home/approval/fraud-type/task-list'
+            : '/home/approval/fraud-type/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">Fraud Type</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-NOTES-TASK") ||
+  checkMenu("APPROVAL-NOTES-REQUESTED")
+  ) {
+  <a [routerLink]="
+          (checkMenu('APPROVAL-NOTES-TASK') &&
+            checkMenu('APPROVAL-NOTES-REQUESTED')) ||
+          (checkMenu('APPROVAL-NOTES-TASK') &&
+            !checkMenu('APPROVAL-NOTES-REQUESTED'))
+            ? '/home/approval/notes/task-list'
+            : '/home/approval/notes/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">Notes</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-BINNUMBER-TASK") ||
+  checkMenu("APPROVAL-BINNUMBER-REQUESTED")
+  ) {
+  <a [routerLink]="
+          (checkMenu('APPROVAL-BINNUMBER-TASK') &&
+            checkMenu('APPROVAL-BINNUMBER-REQUESTED')) ||
+          (checkMenu('APPROVAL-BINNUMBER-TASK') &&
+            !checkMenu('APPROVAL-BINNUMBER-REQUESTED'))
+            ? '/home/approval/bin/task-list'
+            : '/home/approval/bin/requested-list'
+        " class="nav-link">
+    <span class="icon">
+      <span class="description">BIN</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("APPROVAL-EMAILTEMPLATE-TASK") ||
+  checkMenu("APPROVAL-EMAILTEMPLATE-REQUESTED")
+  ) {
+  <a [routerLink]="
+        (checkMenu('APPROVAL-EMAILTEMPLATE-TASK') &&
+          checkMenu('APPROVAL-EMAILTEMPLATE-REQUESTED')) ||
+        (checkMenu('APPROVAL-EMAILTEMPLATE-TASK') &&
+          !checkMenu('APPROVAL-EMAILTEMPLATE-REQUESTED'))
+          ? '/home/approval/email-template/task-list'
+          : '/home/approval/email-template/requested-list'
+      " routerLink="/home/approval/email-template/task-list" class="nav-link">
+    <span class="description">Email Template</span>
+  </a>
+  }
+
+  @if (
+  checkMenu("APPROVAL-BLOCKUNBLOCK-TASK") ||
+  checkMenu("APPROVAL-BLOCKUNBLOCK-REQUESTED")
+  ) {
+  <a [routerLink]="
+        (checkMenu('APPROVAL-BLOCKUNBLOCK-TASK') &&
+          checkMenu('APPROVAL-BLOCKUNBLOCK-REQUESTED')) ||
+        (checkMenu('APPROVAL-BLOCKUNBLOCK-TASK') &&
+          !checkMenu('APPROVAL-BLOCKUNBLOCK-REQUESTED'))
+          ? '/home/approval/block-unblock-account/task-list'
+          : '/home/approval/block-unblock-account/requested-list'
+      " class="nav-link">
+    <span class="description" [attr.title]="'Block/Unblock Account'">Block/Unblock Account</span>
+  </a>
+  }
+
+  @if (
+  checkMenu("APPROVAL-BLOCKUNBLOCKBALANCE-TASK") ||
+  checkMenu("APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED")
+  ) {
+  <a [routerLink]="
+        (checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-TASK') &&
+          checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED')) ||
+        (checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-TASK') &&
+          !checkMenu('APPROVAL-BLOCKUNBLOCKBALANCE-REQUESTED'))
+          ? '/home/approval/block-unblock-account-balance/task-list'
+          : '/home/approval/block-unblock-account-balance/requested-list'
+      " class="nav-link">
+    <span class="description" [attr.title]="'Block/Unblock Account Balance'">Block/Unblock Account
+      Balance</span>
+  </a>
+  }
+
+  @if (
+  checkMenu("APPROVAL-SMC-TASK") ||
+  checkMenu("APPROVAL-SMC-REQUESTED")
+  ) {
+  <a [routerLink]="
+        (checkMenu('APPROVAL-SMC-TASK') &&
+          checkMenu('APPROVAL-SMC-REQUESTED')) ||
+        (checkMenu('APPROVAL-SMC-TASK') &&
+          !checkMenu('APPROVAL-SMC-REQUESTED'))
+          ? '/home/approval/smc/task-list'
+          : '/home/approval/smc/requested-list'
+      " class="nav-link">
+    <span class="description">SMC</span>
+  </a>
+  }
+
+  @if (
+  checkMenu("APPROVAL-ALERTQUEUE-TASK-LV1") ||
+  checkMenu("APPROVAL-ALERTQUEUE-TASK-LV2") ||
+  checkMenu("APPROVAL-ALERTQUEUE-REQUESTED")
+  ) {
+  <a [routerLink]="
+        ((checkMenu('APPROVAL-ALERTQUEUE-TASK-LV1') ||
+          checkMenu('APPROVAL-ALERTQUEUE-TASK-LV2')) &&
+          checkMenu('APPROVAL-ALERTQUEUE-REQUESTED')) ||
+        ((checkMenu('APPROVAL-ALERTQUEUE-TASK-LV1') ||
+          checkMenu('APPROVAL-ALERTQUEUE-TASK-LV2')) &&
+          !checkMenu('APPROVAL-ALERTQUEUE-REQUESTED'))
+          ? '/home/approval/alert-queue/task-list'
+          : '/home/approval/alert-queue/requested-list'
+      " class="nav-link">
+    <span class="description" [attr.title]="'Alert Queue Management'">Alert Queue Management</span>
+  </a>
+  }
+</div>
+<div *ngIf="isCollapsed && popupSubMenu === 'dataMaster'" class="sidebar-popup-menu"
+  [ngStyle]="{top: popupMenuTop + 'px', left: popupMenuLeft + 'px'}">
+  @if (
+  checkMenu("MASTER-FRAUDTYPE-VIEW") ||
+  checkMenu("MASTER-FRAUDTYPE-CREATE") ||
+  checkMenu("MASTER-FRAUDTYPE-UPDATE") ||
+  checkMenu("MASTER-FRAUDTYPE-DELETE")
+  ) {
+  <a routerLink="/home/data-master/fraud-type" class="nav-link">
+    <span class="icon">
+      <span class="description">Fraud Type</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("MASTER-NOTES-VIEW") ||
+  checkMenu("MASTER-NOTES-CREATE") ||
+  checkMenu("MASTER-NOTES-UPDATE") ||
+  checkMenu("MASTER-NOTES-DELETE")
+  ) {
+  <a routerLink="/home/data-master/notes" class="nav-link">
+    <span class="icon">
+      <span class="description">Notes</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("MASTER-BINNUMBER-VIEW") ||
+  checkMenu("MASTER-BINNUMBER-CREATE") ||
+  checkMenu("MASTER-BINNUMBER-UPDATE") ||
+  checkMenu("MASTER-BINNUMBER-DELETE")
+  ) {
+  <a routerLink="/home/data-master/bin" class="nav-link">
+    <span class="icon">
+      <span class="description">BIN</span>
+    </span>
+  </a>
+  }
+  @if (
+  checkMenu("MASTER-EMAILTEMPLATE-VIEW") ||
+  checkMenu("MASTER-EMAILTEMPLATE-CREATE") ||
+  checkMenu("MASTER-EMAILTEMPLATE-UPDATE") ||
+  checkMenu("MASTER-EMAILTEMPLATE-DELETE")
+  ) {
+  <a routerLink="/home/data-master/email-template" class="nav-link">
+    <span class="description">Email Template</span>
+  </a>
+  }
+</div>

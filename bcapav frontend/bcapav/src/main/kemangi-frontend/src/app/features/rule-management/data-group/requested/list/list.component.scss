@@ -1,0 +1,27 @@
+#approvalDateInput,
+#requestedDateInput {
+  border-radius: 6px;
+}
+
+.content-area {
+  background-color: #ffffff;
+  padding: 16px 16px 40px 16px;
+}
+
+.content-area.extended {
+  padding: 46px 16px 40px 16px;
+}
+
+.rule-relation {
+  color: #005caa;
+  text-decoration: underline;
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.btn-type-1 img {
+  margin-right: 8px;
+}

@@ -1,0 +1,769 @@
+/* ==========================================================================
+   General Layout & Typography
+   ========================================================================== */
+
+h3 {
+  color: #144E83;
+  font-weight: 700;
+}
+
+label {
+  font-size: small;
+  margin-top: 5px !important;
+}
+th {
+  font-weight: normal !important;
+}
+th.first-th {
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+}
+th.last-th {
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+}
+.report-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between !important;
+  width: 100%;
+  min-height: 65vh;
+  margin-top: 10px !important;
+  border-radius: 10px;
+}
+
+.report-left {
+  display: flex;
+  flex-direction: column;
+  width: 32.5%;
+  height: 100%;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.report-right {
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+
+/* ==========================================================================
+   Table Styles
+   ========================================================================== */
+
+table,
+.table-area,
+.table-scroll {
+  width: 100%;
+  border-bottom: none !important;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+#users-table {
+  min-width: 900px;
+  width: max-content;
+}
+
+thead {
+  border-radius: 5px;
+}
+
+th {
+  padding: 10px !important;
+  color: white;
+}
+
+td {
+  width: 50px;
+  padding: 10px !important;
+}
+
+#users-table td{
+  border-bottom: solid 1px #00335E;
+}
+
+.bottom-border-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bottom-border-table th,
+.bottom-border-table td {
+  border-bottom: 2px solid #144E83;
+}
+
+.bottom-border-table th {
+  font-weight: normal !important;
+}
+
+
+/* ==========================================================================
+   Button Styles
+   ========================================================================== */
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+}
+
+.main-btn,
+.arrow-btn {
+  margin-left: 10px;
+  background-color: #144E83;
+  color: white;
+}
+
+.arrow-btn {
+  width: 70px !important;
+  margin-left: 0;
+}
+
+.secondary-btn,
+.field-reset-btn {
+  background-color: #E6F3FF;
+  color: #005CAA;
+}
+
+.btn-date {
+  width: 25px !important;
+  padding: 0 !important;
+  background: none;
+  border: none;
+  box-shadow: none;
+  align-items: center;
+}
+
+.filter-btn {
+  min-width: 120px;
+  min-height: 50px;
+  color: #005CAA !important;
+  background-color: white;
+  border: solid 1px #005CAA;
+  border-radius: 24px;
+}
+
+.btn-filter {
+  padding: 10px !important;
+  font-size: 12px !important;
+  color: #005CAA !important;
+  border: 1px solid #005CAA !important;
+}
+
+.remove-filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-start !important;
+  width: 41.6px;
+  height: 48px;
+  min-width: 41.6px;
+  margin-top: 0 !important;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.remove-filter-button img {
+  width: 20px;
+  height: 20px;
+}
+
+
+/* ==========================================================================
+   Forms, Inputs & Wrappers
+   ========================================================================== */
+
+  
+.form-control,
+.input-wrapper-rule {
+  border: 1px solid #C2C2C2;
+}
+.input-wrapper-rule {
+  min-width: 220px;
+  max-width: 100%;
+  transition: min-width 0.2s, width 0.2s;
+}
+
+select.form-control {
+  appearance: auto;
+}
+
+select.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+select.form-control.is-invalid-field {
+  border-color: #dc3545 !important;
+  border-radius: 6px;
+  background-color: transparent !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.custom-select-wrapper select {
+  width: 100%;
+  padding-right: 36px;
+}
+.custom-select-arrow {
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  right: 14px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #888;
+  transform: translateY(-50%);
+}
+select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  /* background: transparent !important; <-- HAPUS INI */
+}
+
+.input-wrapper,
+.input-wrapper-rule {
+  position: relative;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-width: 120px;
+  min-height: 48px;
+  margin-bottom: 0 !important;
+}
+
+.input-wrapper input,
+.input-wrapper select.form-control {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 17px;
+  padding-right: 32px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.input-wrapper-left {
+  display: flex;
+  align-items: center;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 300px;
+  padding-right: 10px;
+  flex-shrink: 0;
+}
+
+.input-wrapper-left input {
+  width: fit-content;
+  min-width: 0;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+}
+
+.input-wrapper-right {
+  padding-right: 5px;
+}
+
+.icon,
+.input-icon,
+.input-icon-cst,
+.input-rule {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+.input-icon, .icon {
+  right: 7px;
+}
+.input-icon-cst, .input-rule{
+  right: 12px;
+}
+
+.icon {
+  position: static;
+  transform: none;
+  margin: auto;
+  align-items: center;
+}
+
+.input-icon-cst {
+  z-index: 3 !important;
+}
+
+.input-time {
+  max-width: 120px;
+}
+
+input.is-invalid-field {
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Untuk ng-select */
+::ng-deep .is-invalid-field .ng-select-container {
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+div.is-invalid-field,
+.handle-user-item-right.is-invalid-field,
+.input-wrapper-rule.is-invalid-field {
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.input-wrapper-rule.is-invalid-field .chip-dummy-input {
+  background-color: #FFDADA !important;
+}
+
+.cust-border-field .is-invalid-field {
+  border-color: #dc3545 !important;
+  background-color: #FFDADA !important;
+}
+
+
+
+.d-flex.flex-row,
+.d-flex.flex-row[style] {
+  align-items: flex-start !important;
+}
+
+.input-wrapper .text-danger,
+.input-wrapper .error-message {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  max-width: 220px;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #dc3545;
+  background: #fff;
+  white-space: normal;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.time-dash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  min-width: 20px;
+  margin: 0 4px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #144E83;
+}
+
+
+/* ==========================================================================
+   Chip / Tag Input Styles
+   ========================================================================== */
+
+.input-wrapper-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: auto;
+  min-width: 220px;
+  max-width: 100%;
+  min-height: 48px;
+  max-height: 120px;
+  padding: 0px 15px;
+  background: #fff;
+  border-radius: 8px;
+  overflow-y: auto;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper-rule:focus-within {
+  border-color: #144E83;
+  outline: none;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  // max-width: 140px;
+  margin: 0 4px 0 0;
+  padding: 0 8px;
+  font-size: 14px;
+  line-height: 32px;
+  color: #555555;
+  // background: #e6f3ff;
+  border-radius: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove-chip {
+  margin-left: 4px;
+  font-size: 16px;
+  color: #555555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip-dummy-input {
+  min-width: 30px;
+  max-width: 120px;
+  height: 32px;
+  padding: 0 !important;
+  font-size: 15px;
+  color: #C2C2C2;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  flex: 1 1 120px;
+  border: none !important;
+  transition: max-width 0.2s;
+}
+
+.chip-dummy-input.has-chip {
+  max-width: 25px !important;
+}
+
+/* ==========================================================================
+   Lists & Selectable Items
+   ========================================================================== */
+
+.dropdown-menu {
+  min-width: 850px;
+  max-height: 66vh;
+  padding: 20px !important;
+  top: 50px;
+  overflow-y: auto;
+  z-index: 500;
+}
+
+.user-item {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.user-item:hover {
+  background: #cae5fd;
+}
+
+.user-item.selected {
+  background: #C0E2FF;
+  color: black;
+  border-color: #C0E2FF;
+}
+
+.user-item.selected img {
+  filter: brightness(0) invert(1);
+}
+
+.handle-user-item {
+  min-height: 170px;
+  max-height: 170px;
+  overflow-y: scroll;
+}
+
+.handle-user-item-right {
+  min-height: 237px;
+  max-height: 237px;
+  overflow-y: scroll;
+}
+
+
+/* ==========================================================================
+   Miscellaneous
+   ========================================================================== */
+
+.result-desc-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100px !important;
+}
+
+.result-desc-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around !important;
+  width: 100%;
+}
+
+.submit-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
+}
+
+.span-like-table {
+  display: inline-block;
+  min-width: 165px !important;
+  font-weight: bold !important;
+}
+
+.span-like-table-right {
+  min-width: 100px !important;
+}
+
+.cust-border-field {
+  padding-right: 5px;
+  border: 1px solid #C2C2C2;
+  border-radius: 8px;
+}
+
+.seperate-field-sel {
+  width: 35%;
+}
+
+.search-field {
+  width: auto;
+  max-height: 45px !important;
+  margin: 10px !important;
+}
+
+.emp-field {
+  color: #C2C2C2;
+  background-color: #F6F6F6 !important;
+  border: 1px solid #DDDDDD;
+  padding: 0 12px !important;
+}
+
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+
+.custom-day.outside-day {
+  background-color: #bad3da !important;
+  opacity: 1 !important;
+  color: #99b4bc !important;
+  box-shadow: none !important;
+}
+.customDatepicker .ngb-dp-header {
+  width: 230px;
+}
+
+.customDatepicker .ngb-dp-month {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu.show {
+  width: 230px;
+}
+
+.customDatepicker .dropdown-menu {
+  will-change: unset !important;
+  transform: none !important;
+}
+.ngb-dp-popup, .ngb-datepicker-popup {
+  z-index: 9999 !important;
+}
+
+
+.ngb-dp-header {
+  display: block; /* JANGAN ADA INI */
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-group input {
+  flex: 1 1 auto;
+  padding-right: 40px;
+}
+
+.input-group-append {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-date {
+  width: 40px !important;
+  height: 40px !important;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  top: 0;
+  border-radius: 0 24px 24px 0;
+}
+
+.icon img {
+  width: 20px;
+  height: 20px;
+  // display: block;
+  margin: auto;
+}
+select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: transparent !important;
+}
+select::-ms-expand {
+  display: none !important;
+}
+.filter-summary-scroll {
+  min-height: 110px;
+  max-height: 110px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #c2c2c2 !important;
+}
+.filter-summary-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0 2px;
+}
+.filter-summary-pair {
+  width: 33.33%;
+  vertical-align: top;
+  padding: 5px !important;
+}
+
+.filter-pair-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0; 
+}
+
+.filter-summary-label {
+  flex: 0 0 40%;
+  max-width: 40%;
+  font-weight: bold;
+  font-size: 13px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 6px;
+}
+
+.filter-summary-value {
+  flex: 1 1 60%;
+  min-width: 0;
+  max-width: 60%;
+  font-size: 14px;
+  white-space: nowrap;  
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+.filter-summary-table td,
+.filter-summary-table th {
+  border-bottom: none !important;
+}
+.ng-option-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ng-option-check {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  filter: invert(1);
+}
+
+.tag-chip,
+.ng-select .tag-chip,
+.ng-select .ng-value .tag-chip {
+  background: #C0E2FF !important;
+  border-radius: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  margin: 0 4px 0 0 !important;
+  padding: 0 8px !important;
+  font-size: 14px !important;
+  white-space: nowrap !important;
+}
+
+::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 2px !important; /* Memberi sedikit jarak antar chip */
+  border: none !important;
+}
+
+::ng-deep .ng-dropdown-panel-items {
+  z-index: 99999 !important;
+}
+.input-wrapper,
+.custom-ng-select-wrapper {
+  pointer-events: auto !important;
+}
+.table-responsive-modal thead th {
+  position: sticky;
+  top: 0;
+  background: #144E83;
+  color: white;
+  z-index: 2;
+}
+
+.report-right, .table-area, .table-scroll {
+  position: relative;
+  z-index: 8;
+}

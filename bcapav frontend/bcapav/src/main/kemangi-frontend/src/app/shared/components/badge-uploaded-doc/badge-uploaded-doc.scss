@@ -1,0 +1,49 @@
+.uploaded-doc {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.uploaded-doc .doc-name {
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploaded-doc .doc-name,
+.uploaded-doc .doc-extension {
+  font-size: 14px;
+  line-height: 20px;
+  color: #555555;
+}
+
+.uploaded-doc .doc-name.type-i,
+.uploaded-doc .doc-extension.type-i {
+  font-size: 14px;
+  line-height: 20px;
+  color: #005caa;
+  text-decoration: underline;
+}
+
+.uploaded-doc .doc-name.type-ii,
+.uploaded-doc .doc-extension.type-ii {
+  font-size: 14px;
+  line-height: 20px;
+  color: #005caa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.uploaded-doc .doc-remove {
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

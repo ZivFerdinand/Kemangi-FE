@@ -1,0 +1,23 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-rule-form
+    [mode]="'UPDATE'"
+    [initDataForm]="details"
+    [dropdownProductGroup]="dropdownProductGroup"
+    [dropdownFunction]="dropdownRuleFunction"
+    [dropdownDataGroup]="dropdownDataGroup"
+    [dropdownOperator]="dropdownRuleOperator"
+    [dropdownPipelineType]="dropdownRulePipelineType"
+    [dropdownParameterType]="dropdownParameterType"
+    [dropdownPipeline]="dropdownPipeline"
+    [dropdownHistorical]="dropdownHistorical"
+    [dropdownEmailTemplate]="dropdownEmailTemplate"
+    [dropdownAb]="dropdownAb"
+    [dropdownRule]="dropdownRule"
+    (getDropdownSubRuleParameterType)="getDropdownSubRuleParameterType($event)"
+    (getDropdownPipeline)="getDropdownPipeline($event)"
+    (getDropdownEmailTemplate)="getDropdownEmailTemplate($event)"
+    (handleBackPage)="back($event)"
+    (handleSubmitDraft)="onSubmitDraft($event)"
+    (handleSubmit)="onSubmit($event)"
+  />
+</app-content-layout>

@@ -1,0 +1,119 @@
+.custom-day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0rem;
+  cursor: pointer;
+
+  &.outside {
+    color: var(--bs-secondary-color, #adb5bd);
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &.range {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+
+  &.faded {
+    background-color: rgba(var(--bs-primary-rgb), 0.4);
+  }
+
+  &.focused:not(.range) {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: -2px;
+  }
+
+  &.disabled {
+    color: #333333;
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: #c4c4c4;
+
+    &:hover,
+    &.faded,
+    &.range {
+      background-color: transparent;
+      color: #c4c4c4;
+    }
+  }
+}
+
+:host ::ng-deep .ngb-dp-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+:host ::ng-deep .ngb-dp-months {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.drp-wrapper {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.drp-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 100%;
+  padding: 12px 16px;
+  height: 48px;
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333333;
+  font-family: "BCASans", Arial, sans-serif !important;
+  text-align: left;
+  cursor: pointer;
+}
+
+.drp-toggle.drp-invalid {
+  border-color: #dc3545;
+  background-color: #ffdada;
+}
+
+.drp-placeholder {
+  color: #adb5bd;
+}
+
+.drp-toggle:hover {
+  border-color: #333333;
+}
+
+.drp-toggle-icon {
+  margin-left: auto;
+  transition: transform 0.15s ease-in-out;
+}
+
+.drp-popup {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  z-index: 1050;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 0rem;
+}
+
+.drp-wrapper.drp-disabled {
+  .drp-toggle {
+    cursor: not-allowed;
+    opacity: 1;
+    background-color: #f6f6f6;
+    color: #c2c2c2;
+    border-color: #ddd;
+
+    :hover {
+      border-color: #ddd;
+    }
+  }
+}

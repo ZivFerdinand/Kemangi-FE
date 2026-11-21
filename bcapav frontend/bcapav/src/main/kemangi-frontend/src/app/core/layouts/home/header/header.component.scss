@@ -1,0 +1,103 @@
+.app-header {
+  position: absolute;
+  top: 30px;
+  left: 200px;
+  right: 0;
+  width: calc(98% - 200px);
+  background-color: transparent;
+  z-index: 100;
+  padding-left: 80px;
+  justify-content: space-between;
+  transition: ease 0.25s;
+}
+
+.app-header.sidebar-collapsed {
+  left: 5px;
+  width: calc(98% - 5px);
+}
+
+.left-side-text {
+  color: #144e83;
+  font-size: 20px !important;
+  height: 24px !important;
+}
+
+.left-side-text>img {
+  height: 50px !important;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  height: 50px;
+  min-width: 250px;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  padding-right: 15px;
+}
+
+.app-header *:focus,
+.app-header *:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.app-header *:active {
+  border: none !important;
+  outline: none !important;
+}
+
+.bell-ring {
+  width: 35px;
+  padding: 7px;
+  margin-left: 7.5px;
+  margin-right: 10px;
+  border-radius: 20px;
+  background-color: #144e83;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 20px;
+  z-index: 10;
+  background: white;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  min-width: 180px;
+  border-radius: 10px;
+  padding: 0.5rem 0;
+}
+
+.user-info-area {
+  cursor: default !important;
+}
+
+.user-info-area>span {
+  font-size: 14px !important;
+  cursor: default;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  text-align: left;
+  color: #144e83;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: #cde4f8;
+}

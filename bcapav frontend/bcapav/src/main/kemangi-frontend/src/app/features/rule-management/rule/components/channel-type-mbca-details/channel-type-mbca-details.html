@@ -1,0 +1,135 @@
+@let tC = templateContent; @let aD=autoActionData;
+
+<h5 class="mb-24 action-type-form-title">MBCA</h5>
+
+<div class="form-item mb-24">
+  <label>Template Name</label>
+
+  <div class="channel-type--container">{{tC.template||''}}</div>
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Recipient</label>
+
+  <input
+    type="text"
+    class="form-control pr-5"
+    placeholder="Recipient"
+    disabled
+    [value]="tC.recipient"
+  />
+</div>
+
+<div class="auto-action-mbca-section mb-24">Notification Bar</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Title</label>
+
+  <input
+    type="text"
+    class="form-control pr-5"
+    placeholder="Title"
+    disabled
+    [value]="tC.mbnotifTitle"
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Body</label>
+
+  <input
+    type="text"
+    class="form-control pr-5"
+    placeholder="Body"
+    disabled
+    [value]="tC.mbnotifBody"
+  />
+</div>
+
+<div class="auto-action-mbca-section mb-24">Notification Detail</div>
+
+<div style="margin-bottom: 10px">Notification to Detail</div>
+<div class="d-flex mb-24">
+  <label class="custom-radio">
+    <input
+      type="radio"
+      name="option"
+      disabled
+      [value]="true"
+      [(ngModel)]="tC.mbnotifFlagAlert"
+    />
+    <span class="radio"></span>
+    Yes
+  </label>
+
+  <label class="custom-radio" style="margin-left: 24px">
+    <input
+      type="radio"
+      name="option"
+      disabled
+      [value]="false"
+      [(ngModel)]="tC.mbnotifFlagAlert"
+    />
+    <span class="radio"></span>
+    No
+  </label>
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Content</label>
+
+  <textarea
+    #autoContent
+    id="content"
+    class="form-control pr-5"
+    rows="15"
+    placeholder="Content"
+    style="height: 288px"
+    [value]="tC.mbnotifContent"
+    disabled
+  ></textarea>
+
+  <div
+    class="d-flex align-items-center form-group-custom mb-24"
+    style="margin-top: 12px"
+  >
+    <img
+      [src]="aD.limitFlag?'/assets/img/ic-checkbox-gray-checked.svg':'/assets/img/ic-checkbox-gray-unchecked.svg'"
+      alt="has-pipeline"
+    />
+
+    <label class="form-check-label" for="limit">Limit</label>
+  </div>
+</div>
+
+@if(aD.limitFlag){
+<ng-container>
+  <div class="d-flex justify-content-between align-items-start mb-24">
+    <div class="form-item" style="width: 48%">
+      <label>Key</label>
+
+      <div class="channel-type--container">{{aD.key||''}}</div>
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Threshold</label>
+
+      <div class="channel-type--container">{{aD.threshold||''}}</div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-start">
+    <div class="form-item" style="width: 48%">
+      <label>Period</label>
+
+      <div class="channel-type--container">{{aD.period||''}}</div>
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Unit</label>
+
+      <div class="channel-type--container">{{aD.unit||''}}</div>
+    </div>
+  </div>
+</ng-container>
+}

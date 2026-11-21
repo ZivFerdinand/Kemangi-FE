@@ -1,0 +1,233 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+      [isDisabledFn]="checkMenu"
+    ></app-custom-tab>
+  </div>
+
+  <div class="mb-24">
+    <app-block-unblock-requested-filter
+      [users]="users"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          action: actionTypeTpl,
+          fileName: fileNameTpl,
+          totalValidData: validTpl,
+          totalInvalidData: invalidTpl,
+          rejectionNote: rejectNoteTpl,
+          view: viewBtnTpl,
+          approvalStatus: approvalStat,
+          processStatus: processStat,
+          totalSuccessData: totalSuccessDataTpl,
+          totalFailedData: totalFailedDataTpl,
+          requesterName: requesterNameTpl,
+          requestDate: requestDateTpl,
+          approverName: approverNameTpl,
+          approvalDate: approvalDateTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #fileNameTpl let-row>
+  <button
+    type="button"
+    class="attachment-link--type-i truncate"
+    tooltipClass="custom-tooltip"
+    placement="start"
+    [ngbTooltip]="row.fileName"
+    (click)="handleDownload(row.id, row.fileName, null, null)"
+    container="body"
+  >
+    {{ row.fileName || "-" }}
+  </button>
+</ng-template>
+
+<ng-template #validTpl let-row>
+  @if (row.totalValidData && row.totalValidData > 0) {
+    <button
+      type="button"
+      class="attachment-link--type-i truncate"
+      (click)="handleDownload(row.id, row.fileName, true, null)"
+    >
+      {{ row.totalValidData }}
+    </button>
+  } @else {
+    {{ 0 }}
+  }
+</ng-template>
+
+<ng-template #invalidTpl let-row>
+  @if (row.totalInvalidData && row.totalInvalidData > 0) {
+    <button
+      type="button"
+      class="attachment-link--type-i truncate"
+      (click)="handleDownload(row.id, row.fileName, false, null)"
+    >
+      {{ row.totalInvalidData }}
+    </button>
+  } @else {
+    {{ 0 }}
+  }
+</ng-template>
+
+<ng-template #totalSuccessDataTpl let-row>
+  @if (row.totalSuccessData && row.totalSuccessData > 0) {
+    <button
+      type="button"
+      class="attachment-link--type-i truncate"
+      (click)="handleDownload(row.id, row.fileName, null, true)"
+    >
+      {{ row.totalSuccessData }}
+    </button>
+  } @else {
+    {{ row.totalSuccessData ?? "-" }}
+  }
+</ng-template>
+
+<ng-template #totalFailedDataTpl let-row>
+  @if (row.totalFailedData && row.totalFailedData > 0) {
+    <button
+      type="button"
+      class="attachment-link--type-i truncate"
+      (click)="handleDownload(row.id, row.fileName, null, false)"
+    >
+      {{ row.totalFailedData }}
+    </button>
+  } @else {
+    {{ row.totalFailedData ?? "-" }}
+  }
+</ng-template>
+
+<ng-template #rejectNoteTpl let-row>
+  <div class="truncate">
+    {{ row.rejectionNote || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    @if (row.processStatus === "IN_PROGRESS") {
+      <div class="action-buttons__item">
+        <img src="./assets/img/ic-eye-light-grey.svg" alt="view" />
+      </div>
+    } @else {
+      <a
+        [routerLink]="['/home/action/block-unblock-account/requested', row.id]"
+        class="action-buttons__item"
+      >
+        <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+      </a>
+    }
+  </div>
+</ng-template>
+
+<ng-template #approvalStat let-row>
+  <div
+    class="approval-status-label"
+    [class.approval-status-label--approved]="row.approvalStatus === 'APPROVED'"
+    [class.approval-status-label--rejected]="row.approvalStatus === 'REJECTED'"
+    [class.approval-status-label--pending]="row.approvalStatus === 'PENDING'"
+    [class.approval-status-label--draft]="row.approvalStatus === 'DRAFT'"
+  >
+    {{ row.approvalStatus ? (row.approvalStatus | capitalize) : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #processStat let-row>
+  @if (
+    row.processStatus === "REJECTED" || row.processStatus === "PENDING_APPROVAL"
+  ) {
+    <div>-</div>
+  } @else {
+    <div
+      class="process-status-label"
+      [class.process-status-label--done]="row.processStatus === 'DONE'"
+      [class.process-status-label--in-progress]="
+        row.processStatus === 'IN_PROGRESS'
+      "
+      [class.process-status-label--waiting]="row.processStatus === 'WAITING'"
+    >
+      {{
+        row.processStatus === "IN_PROGRESS"
+          ? "In Progress"
+          : row.processStatus
+            ? (row.processStatus | capitalize)
+            : "-"
+      }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #requestDateTpl let-row>
+  <div class="truncate">
+    {{ (row.requestDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approverNameTpl let-row let-column="column">
+  <div class="truncate">
+    {{ row.approverName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approvalDateTpl let-row>
+  <div class="truncate">
+    {{ (row.approvalDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #actionTypeTpl let-row let-i="index">
+  <div class="truncate">
+    {{ row.action }}
+  </div>
+</ng-template>

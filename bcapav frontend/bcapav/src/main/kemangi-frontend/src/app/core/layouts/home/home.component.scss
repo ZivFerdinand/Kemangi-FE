@@ -1,0 +1,25 @@
+.app-container {
+  padding-left: 80px !important;
+  background-color: #f0f9ff;
+  background-image: url("../../../../../public/assets/img/pavo-login-bg.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+.app-main {
+  display: flex;
+  width: 98%;
+}
+.app-main__outer {
+  padding-top: 100px;
+  transition: ease 0.25s;
+  margin-left: 200px;
+  width: calc(100% - 200px);
+}
+
+.app-main__outer.collapsed {
+  margin-left: 5px;
+  width: calc(100% - 5px);
+}

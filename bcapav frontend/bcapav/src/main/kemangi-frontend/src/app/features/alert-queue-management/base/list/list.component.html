@@ -1,0 +1,256 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div
+    class="d-flex align-items-center justify-content-between mb-24 position-relative"
+  >
+    <app-alert-queue-current-filter
+      [assignToUsers]="assignToUsers"
+      [users]="users"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="!createPermission"
+      (click)="navigateTo('/home/alert-queue-management/create')"
+      tooltipClass="custom-tooltip"
+      placement="start"
+      [ngbTooltip]="!createPermission ? `You don't have permission` : null"
+    >
+      <img src="/assets/img/ic-plus.svg" alt="add" /> Create New Alert Queue
+    </button>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          name: nameTpl,
+          description: descTpl,
+          action: actionBtnsTpl,
+          activeStatus: activeStatTpl,
+          assignTo: assignToTpl,
+          lastUpdatedDt: lastUpdatedDtTpl,
+          lastApproval1Dt: lastApproval1DtTpl,
+          lastApproval2Dt: lastApproval2DtTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #lastUpdatedDtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastUpdatedDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval1DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval1Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval2DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval2Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #nameTpl let-row>
+  <div class="truncate">{{ row.name ? row.name : "-" }}</div>
+</ng-template>
+
+<ng-template #descTpl let-row>
+  <div class="truncate">
+    {{ row.description ? row.description : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #activeStatTpl let-row>
+  <div
+    class="active-status-label"
+    [class.active-status-label--on]="row?.activeStatus"
+    [class.active-status-label--off]="!row?.activeStatus"
+  >
+    {{ row?.activeStatus ? "On" : "Off" }}
+  </div>
+</ng-template>
+
+<ng-template #actionBtnsTpl let-row>
+  <div class="action-buttons">
+    <a
+      [routerLink]="['/home/alert-queue-management/', row?.id]"
+      [queryParams]="{ from: 'current' }"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+
+    <!-- --//-- -->
+
+    @if (editPermission) {
+      @if (row.hasPendingRequest) {
+        <div
+          class="action-buttons__item"
+          style="margin: 0 8px"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Alert Queue has Pending Request'
+              : 'Loading ...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/alert-queue-management/', row?.id, 'edit']"
+          [queryParams]="{ from: 'current' }"
+          class="action-buttons__item"
+          style="margin: 0 8px"
+        >
+          <img src="./assets/img/ic-pen-blue.svg" alt="edit" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        style="margin: 0 8px"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+      </div>
+    }
+
+    <!-- /// -->
+
+    <!-- --//-- -->
+
+    @if (deletePermission) {
+      @if (row.hasPendingRequest) {
+        <div
+          class="action-buttons__item"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Alert Queue has Pending Request'
+              : 'Loading...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/alert-queue-management/', row?.id, 'delete']"
+          [queryParams]="{ from: 'current' }"
+          class="action-buttons__item"
+        >
+          <img src="./assets/img/ic-garbage-blue.svg" alt="delete" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #assignToTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <button
+      type="button"
+      class="action-buttons__item"
+      (click)="open(assignToContent, row.id)"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #assignToContent let-modal>
+  <div class="card no-border modal-assign-to-list-view">
+    <div class="d-flex align-items-center" style="margin-bottom: 26px">
+      <div class="fw-semibold">Assign To</div>
+    </div>
+
+    <app-sticky-table
+      [showPageSize]="false"
+      [showPageInfo]="true"
+      [columns]="columnsAssignTo"
+      [data]="tableDataAssignTo"
+      [pageInfo]="pageInfoAssignTo"
+      [pageQuery]="pageQueryAssignTo"
+      [initialPinnedLeft]="columnsAssignToPinned"
+      [cellTemplates]="{
+        no: noTplI,
+      }"
+      (pageChange)="handlePageAssignToChange($event)"
+      (sortChange)="handleSortAssignToChange($event.direction, $event.key)"
+    />
+
+    <div class="d-flex justify-content-end" style="margin-top: 24px">
+      <button
+        type="button"
+        class="btn-type-6 btn-dark-blue fw-bold"
+        (click)="close()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noTplI let-row let-i="index">
+  {{ (pageQueryAssignTo.page - 1) * pageQueryAssignTo.limit + i + 1 }}
+</ng-template>

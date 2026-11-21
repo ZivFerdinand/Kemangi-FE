@@ -1,0 +1,561 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-custom-tab
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="handleTabChange($event)"
+  ></app-custom-tab>
+  <div
+    class="d-flex align-items-center justify-content-between mb-24 position-relative"
+    style="margin-top: 10px"
+  >
+    <div>
+      <div class="d-flex flex-row align-items-start">
+        <button type="button" class="filter-btn" (click)="toggleFilter()">
+          <img src="/assets/img/ic-filter-blue.svg" alt="filter" />
+          <div class="name">Filter</div>
+        </button>
+      </div>
+
+      <form
+        class="card card--filter"
+        [style.display]="showFilter ? 'block' : 'none'"
+      >
+        <div class="filter-inputs">
+          <div class="filter-inputs-section">
+            <div class="form-group mb-24">
+              <label for="name">Model Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="filterBy().model_name"
+                (input)="updateFilter('model_name', $event.target.value)"
+                placeholder="Model Name"
+              />
+            </div>
+
+            <div class="form-group mb-24">
+              <label for="name">Model Description</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="filterBy().model_description"
+                (input)="updateFilter('model_description', $event.target.value)"
+                placeholder="Model Description"
+              />
+            </div>
+
+            <div class="form-item mb-24">
+              <label for="requesterId">Requested By</label>
+              <div class="ng-select-custom">
+                <ng-select
+                  #requesterSelect
+                  [items]="users"
+                  [minTermLength]="3"
+                  bindLabel="fullName"
+                  bindValue="userId"
+                  [multiple]="true"
+                  [hideSelected]="false"
+                  searchPlaceholder="Choose..."
+                  placeholder="Requested By"
+                  (change)="updateFilter('requester_id', $event)"
+                >
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <span class="ng-value-label"> {{ item?.fullName }} </span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                    /></span>
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex w-100 justify-content-between align-items-center"
+                    >
+                      <span>{{ item.fullName }}</span>
+                      <img
+                        [class.d-none]="
+                          !filterBy().requester_id.includes(item.userId)
+                        "
+                        src="assets/img/ic-check-black.svg"
+                        alt="selected"
+                      />
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <span class="custom-arrow">
+                  <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                </span>
+              </div>
+            </div>
+
+            @if (!this.taskLv1() && this.taskLv2()) {
+              <div class="form-item mb-24">
+                <label for="approver1Id">Reviewer 1 By</label>
+
+                <div class="ng-select-custom">
+                  <ng-select
+                    #approver1Select
+                    [items]="users"
+                    [minTermLength]="3"
+                    bindLabel="fullName"
+                    bindValue="userId"
+                    [multiple]="true"
+                    [hideSelected]="false"
+                    searchPlaceholder="Choose..."
+                    placeholder="Reviewer 1 By"
+                    (change)="updateFilter('reviewer_1_id', $event)"
+                  >
+                    <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                      <span class="ng-value-label">{{ item?.fullName }}</span>
+                      <span
+                        class="ng-value-icon right"
+                        (click)="clear(item)"
+                        aria-hidden="true"
+                        ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                      /></span>
+                    </ng-template>
+
+                    <ng-template ng-option-tmp let-item="item">
+                      <div
+                        class="d-flex w-100 justify-content-between align-items-center"
+                      >
+                        <span>{{ item.fullName }}</span>
+                        <img
+                          [class.d-none]="
+                            !filterBy().reviewer_1_id.includes(item.userId)
+                          "
+                          src="assets/img/ic-check-black.svg"
+                          alt="selected"
+                        />
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  <span class="custom-arrow">
+                    <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="filter-inputs-section">
+            <div class="form-group mb-24">
+              <label for="approverId">Product Type</label>
+              <div class="ng-select-custom">
+                <ng-select
+                  #productTypeSelect
+                  [items]="productTypeItemList"
+                  [minTermLength]="3"
+                  [multiple]="true"
+                  [hideSelected]="false"
+                  searchPlaceholder="Choose..."
+                  placeholder="Product Type"
+                  (change)="updateFilter('product_type', $event)"
+                >
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <span class="ng-value-label"> {{ item }}</span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                    /></span>
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex w-100 justify-content-between align-items-center"
+                    >
+                      <span>{{ item }}</span>
+                      <img
+                        [class.d-none]="!filterBy().product_type.includes(item)"
+                        src="assets/img/ic-check-black.svg"
+                        alt="selected"
+                      />
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <span class="custom-arrow">
+                  <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group mb-24">
+              <label for="status">Action Type</label>
+              <div class="ng-select-custom">
+                <ng-select
+                  #requestTypeSelect
+                  [items]="requestType"
+                  bindLabel="name"
+                  bindValue="id"
+                  [multiple]="false"
+                  [hideSelected]="false"
+                  searchPlaceholder="Choose..."
+                  placeholder="Action Type"
+                  (change)="updateFilter('request_type', $event?.id)"
+                >
+                  <ng-template ng-label-tmp let-item="item">
+                    {{ item.name }}
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex w-100 justify-content-between align-items-center"
+                    >
+                      <span>{{ item.name }}</span>
+                      <img
+                        [class.d-none]="filterBy().approval_status !== item.id"
+                        src="assets/img/ic-check-black.svg"
+                        alt="selected"
+                      />
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <span class="custom-arrow">
+                  <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                </span>
+              </div>
+            </div>
+
+            <div class="form-item mb-24">
+              <div>
+                <div class="customDatepicker">
+                  <input
+                    name="requestDatepicker"
+                    class="form-control input-border"
+                    ngbDatepicker
+                    #requestDatepicker="ngbDatepicker"
+                    [autoClose]="'outside'"
+                    (dateSelect)="onDateSelection($event, 'requestDate')"
+                    [displayMonths]="1"
+                    outsideDays="visible"
+                    [startDate]="fromDate"
+                    [maxDate]="maxDate"
+                    [dayTemplate]="tDate"
+                    placement="bottom"
+                    [positionTarget]="requestDate"
+                    hidden
+                  />
+                </div>
+
+                <div #requestDate class="form-item">
+                  <label for="requestedDateInput" class="label-medium"
+                    >Requested Date</label
+                  >
+                  <div
+                    class="input-group"
+                    style="cursor: pointer"
+                    (click)="requestDatepicker.toggle()"
+                  >
+                    <input
+                      id="requestedDateInput"
+                      class="form-control input-border event-disabled-no-fade"
+                      placeholder="dd-MMM-yy to dd-MMM-yy"
+                      readonly
+                      [value]="displayRequestedDate()"
+                    />
+                    <div class="input-group-append align-items-center">
+                      <button class="btn-date text-center" type="button">
+                        <span class="icon">
+                          <img
+                            style="margin: auto"
+                            alt="calendar"
+                            src="assets/img/ic-calendar.svg"
+                          />
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            @if (!this.taskLv1() && this.taskLv2()) {
+              <div #approvalDate class="form-group filter-approval">
+                <label for="approvalDateInput" class="label-medium"
+                  >Reviewer 1 Date</label
+                >
+                <div
+                  class="input-group"
+                  style="cursor: pointer"
+                  (click)="approvalDatepicker.toggle()"
+                >
+                  <input
+                    id="approvalDateInput"
+                    class="form-control input-border event-disabled-no-fade"
+                    placeholder="dd-mmm-yyyy to dd-mmm-yyyy"
+                    readonly
+                    [value]="displayApprovalDate()"
+                  />
+                  <div class="input-group-append align-items-center">
+                    <button class="btn-date text-center" type="button">
+                      <span class="icon">
+                        <img
+                          style="margin: auto"
+                          alt="calendar"
+                          src="assets/img/ic-calendar.svg"
+                        />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group mb-24">
+                <div>
+                  <div class="customDatepicker">
+                    <input
+                      name="approvalDatepicker"
+                      class="form-control input-border"
+                      ngbDatepicker
+                      #approvalDatepicker="ngbDatepicker"
+                      [autoClose]="'outside'"
+                      (dateSelect)="onDateSelection($event, 'approvalDate')"
+                      [displayMonths]="1"
+                      outsideDays="visible"
+                      [startDate]="reviewer1DateFrom"
+                      [maxDate]="maxDate"
+                      [dayTemplate]="tApprovalDate"
+                      placement="bottom"
+                      [positionTarget]="approvalDate"
+                      hidden
+                    />
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button
+            type="button"
+            class="btn-type-1 btn-light-blue me-3"
+            (click)="resetFilter()"
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            class="btn-type-1 btn-dark-blue"
+            (click)="handleFilter()"
+          >
+            Apply
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="content-area" [class.extended]="submitFilter">
+    @if (submitFilter) {
+      <div class="filter-info">
+        <div class="filter-info__title">Filtered by</div>
+
+        @for (key of objectKeys(filterBy()); track key) {
+          @if (isValidFilterValue(getFilterValue(key))) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ formatKey(key) }} :</div>
+              <div class="filter-info__content">
+                {{ getFilterValue(key) }}
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+
+    <app-sticky-table
+      [showPageSize]="false"
+      [showPageInfo]="true"
+      [columns]="columns"
+      [data]="tableData"
+      [pageInfo]="pageInfo"
+      [pageQuery]="pageQuery"
+      [initialPinnedLeft]="columnsPinned"
+      [cellTemplates]="{
+        no: noTpl,
+        modelName: modelNameTpl,
+        modelDescription: modelDescriptionTpl,
+        threshold: thresholdShowTpl,
+        requesterDate: requesterDateTpl,
+        approval1Date: approval1DateTpl,
+        view: actionBtnsTpl,
+        requestType: requestTypeTpl,
+      }"
+      (pageChange)="handlePageChange($event)"
+      (sortChange)="handleSortChange($event.direction, $event.key)"
+    />
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #noDetailsTpl let-row let-i="index">
+  {{
+    (pageParamsThresholdIdDetail.page - 1) * pageParamsThresholdIdDetail.limit +
+      i +
+      1
+  }}
+</ng-template>
+
+<ng-template #modelNameTpl let-row>
+  <div class="truncate">{{ row.modelName ? row.modelName : "-" }}</div>
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">{{ row.requesterName ? row.requesterName : "-" }}</div>
+</ng-template>
+
+<ng-template #approval1NameTpl let-row>
+  <div class="truncate">{{ row.approval1Name ? row.approval1Name : "-" }}</div>
+</ng-template>
+
+<ng-template #requesterDateTpl let-row>
+  <div class="truncate">
+    {{ (row.requesterDate | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #approval1DateTpl let-row>
+  <div class="truncate">
+    {{ (row.approval1Date | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #modelDescriptionTpl let-row>
+  {{ row.modelDescription | truncateOrDash: 50 }}
+</ng-template>
+
+<ng-template #descTpl let-row>
+  {{ row.description | truncateOrDash: 50 }}
+</ng-template>
+
+<ng-template #alertTpl let-row>
+  @if (row?.alert) {
+    <img src="./assets/img/ic-checkbox-gray-checked.svg" alt="alert" />
+  } @else {
+    <img src="./assets/img/ic-checkbox-gray-unchecked.svg" alt="alert" />
+  }
+</ng-template>
+
+<ng-template #thresholdShowTpl let-row let-i="index">
+  <div class="action-buttons">
+    <a
+      class="action-buttons__item w-100 text-decoration-underline"
+      style="cursor: pointer"
+      (click)="
+        openModal(
+          $event,
+          modalThresholdListView,
+          tableData[i]['thresholdDetails']
+        )
+      "
+    >
+      show
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #actionBtnsTpl let-row>
+  <div class="action-buttons">
+    <a
+      [routerLink]="['/home/approval/threshold-score/task-list/', row?.id]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #activeStatTpl let-row>
+  <div class="active-status-wrapper">
+    @if (row.activeStatus === true) {
+      <div class="active-status-label type-1 active-status-label--on">On</div>
+    } @else {
+      <div class="active-status-label type-1 active-status-label--off">Off</div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #tDate let-date let-focused="focused">
+  <span
+    class="custom-day"
+    [class.focused]="focused"
+    [class.range]="isRange(date, 'requestDate')"
+    [class.faded]="
+      isHovered(date, 'requestDate') || isInside(date, 'requestDate')
+    "
+    [class.outside-day]="outsideDay(date, 'requestDate')"
+    (mouseenter)="hoveredDate = date"
+    (mouseleave)="hoveredDate = null"
+  >
+    {{ date.day }}
+  </span>
+</ng-template>
+
+<ng-template #tApprovalDate let-approvalDate let-focused="focused">
+  <span
+    class="custom-day"
+    [class.focused]="focused"
+    [class.range]="isRange(approvalDate, 'approvalDate')"
+    [class.faded]="
+      isHovered(approvalDate, 'approvalDate') ||
+      isInside(approvalDate, 'approvalDate')
+    "
+    [class.outside-day]="outsideDay(approvalDate, 'approvalDate')"
+    (mouseenter)="hoveredDate = approvalDate"
+    (mouseleave)="hoveredDate = null"
+  >
+    {{ approvalDate.day }}
+  </span>
+</ng-template>
+
+<ng-template #modalThresholdListView let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="fw-semibold">Threshold</h5>
+  </div>
+  <div
+    class="modal-body d-flex flex-column justify-content-center align-items-center"
+    style="overflow-y: auto"
+  >
+    <app-table
+      [columns]="columnsThresholdIdDetail"
+      [data]="pagedThresholdIdDetail"
+      [pageInfo]="pageInfoThresholdIdDetail"
+      [pageParams]="pageParamsThresholdIdDetail"
+      [cellTemplates]="{
+        no: noDetailsTpl,
+        description: descTpl,
+        action: actionBtnsTpl,
+        alert: alertTpl,
+        activeStatus: activeStatTpl,
+        requestType: requestTypeTpl,
+      }"
+      (pageChange)="handlePageChangeThresholdId($event)"
+      [showPageInfo]="true"
+    ></app-table>
+  </div>
+  <div class="modal-footer justify-content-end">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined fw-semibold"
+      (click)="back(c)"
+    >
+      Back
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #requestTypeTpl let-row>
+  {{
+    row.requestType === "CREATE"
+      ? "NEW"
+      : row.requestType === "UPDATE"
+        ? "EDIT"
+        : row.requestType
+  }}
+</ng-template>

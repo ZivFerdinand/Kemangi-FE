@@ -1,0 +1,206 @@
+.content-area {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.btn-section {
+  padding: 24px 0 56px 0;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.me-40 {
+  margin-right: 40px;
+}
+
+.ms-36 {
+  margin-left: 36px;
+}
+
+thead {
+  width: 100%;
+}
+
+thead tr {
+  // background-color: #144e83;
+  border-bottom-color: #ffffff;
+  // height: 52px;
+  // width: 100% !important;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+}
+
+thead tr th {
+  background-color: #144e83;
+  border-bottom-color: #ffffff;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  // height: 100%;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  padding: 15px 12px;
+}
+
+thead tr th:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+thead tr th:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+tbody tr td {
+  border-bottom-color: #144e83;
+}
+
+/* Default state */
+.custom-checkbox {
+  border-radius: 2px !important;
+  border-width: 2px;
+  border-color: #144e83; /* outline color */
+  background-color: white;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+}
+
+/* On hover */
+.custom-checkbox:hover {
+  border-color: #144e83; /* hover outline color */
+}
+
+/* When focused */
+.custom-checkbox:focus {
+  box-shadow: 0 0 0 0.2rem rgba(20, 78, 131, 0.25);
+  border-color: #144e83;
+}
+
+/* When checked */
+.custom-checkbox:checked {
+  background-color: #144e83; /* checked color */
+  border-color: #144e83;
+}
+
+/* Optional: if you want the check icon to be white */
+.custom-checkbox:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3e%3cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox .form-check-label {
+  margin-left: 8px;
+}
+
+.form-group label {
+  color: #555555;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.form-control {
+  height: 48px;
+  border-color: #c2c2c2;
+  border-radius: 6px;
+}
+
+.menu-box {
+  padding-bottom: 40px;
+}
+
+.menu-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #144e83;
+  padding: 18px 12px;
+}
+
+.menu-title .text {
+  color: #144e83;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 0.5;
+}
+
+.table-menu {
+  width: 100%;
+}
+
+.table-menu__header {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 6px;
+  background-color: #144e83;
+  display: flex;
+  align-items: center;
+}
+
+.table-menu__header .table-menu__item {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ffffff;
+  min-width: 180px;
+}
+
+.table-menu__header .table-menu__item:first-child {
+  justify-content: start;
+}
+
+.table-menu__body .table-menu__item-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 12px;
+  border-bottom: 1px solid #144e83;
+}
+
+.table-menu__body .table-menu__item-row .table-menu__item-column {
+  min-width: 180px;
+  display: flex;
+  justify-content: center;
+}
+
+.table-menu__body .table-menu__item-row .table-menu__item-column:first-child {
+  justify-content: flex-start;
+}
+
+.content-detail {
+  height: 48px;
+  padding: 12px 16px 12px 0px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #121212;
+  line-height: 24px;
+}
+
+@media (max-width: 1010px) {
+  .table-menu__header .table-menu__item:first-child {
+    min-width: 180px;
+  }
+
+  .table-menu__header .table-menu__item {
+    min-width: 100px;
+    // max-width: 100px;
+  }
+
+  .table-menu__body .table-menu__item-row .table-menu__item-column:first-child {
+    min-width: 180px;
+  }
+
+  .table-menu__body .table-menu__item-row .table-menu__item-column {
+    min-width: 100px;
+  }
+}

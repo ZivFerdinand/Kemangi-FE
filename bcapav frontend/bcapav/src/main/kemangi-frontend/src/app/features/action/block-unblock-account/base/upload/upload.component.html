@@ -1,0 +1,150 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+      [isDisabledFn]="checkMenu"
+    ></app-custom-tab>
+  </div>
+
+  <section class="card no-border card-pavo-default-type-v mb-24">
+    <form [formGroup]="uploadForm">
+      <div class="form-item mb-3">
+        <label for="" style="margin-bottom: 16px">Action:</label>
+        <div class="d-flex">
+          <label class="custom-radio">
+            <input
+              type="radio"
+              name="option"
+              value="BLOCK"
+              formControlName="action"
+              [class.invalid]="
+                f['action']?.invalid &&
+                (f['action']?.dirty || f['action']?.touched)
+              "
+              (change)="toggleRadio()"
+            />
+            <span class="radio"></span>
+            Block
+          </label>
+
+          <label class="custom-radio" style="margin-left: 24px">
+            <input
+              type="radio"
+              name="option"
+              value="UNBLOCK"
+              formControlName="action"
+              [class.invalid]="
+                f['action']?.invalid &&
+                (f['action']?.dirty || f['action']?.touched)
+              "
+              (change)="toggleRadio()"
+            />
+            <span class="radio"></span>
+            Unblock
+          </label>
+        </div>
+
+        @if (
+          f["action"]?.invalid && (f["action"]?.dirty || f["action"]?.touched)
+        ) {
+          <div class="invalid-input">
+            @if (f["action"]?.errors?.["required"]) {
+              {{ errorMessageAction }}
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-item mb-3">
+        <label for="">Download Template</label>
+        <button
+          type="button"
+          class="block-btn download-type"
+          (click)="handleDownload()"
+        >
+          Download Template
+          <img
+            style="margin-left: 8px"
+            src="/assets/img/ic-download-ii-blue.svg"
+            alt="download"
+          />
+        </button>
+      </div>
+
+      <div class="form-item mb-3">
+        <label for="upload">Upload File</label>
+
+        <input
+          type="file"
+          #fileInput
+          hidden
+          (change)="onFileSelected($event)"
+          accept=".pdf,.xls,.xlsx"
+        />
+
+        <button
+          type="button"
+          class="block-btn upload-type"
+          (click)="fileInput.click()"
+          [disabled]="selectedFile"
+        >
+          Upload File
+          <img
+            style="margin-left: 8px"
+            src="/assets/img/ic-upload-ii-white.svg"
+            alt="upload"
+          />
+        </button>
+
+        @if (selectedFile) {
+          <div
+            class="d-flex flex-column"
+            style="margin-top: 12px; width: 300px"
+          >
+            @if (selectedFile) {
+              <app-badge-uploaded-doc
+                [originalName]="selectedFile.name"
+                [extension]="'.' + selectedFile.name.split('.')[1]"
+                [generatedName]="selectedFile.name"
+                (clearFile)="clearFile()"
+                (downloadFile)="downloadSelectedFile()"
+                [type]="'type-ii'"
+              />
+            }
+          </div>
+        }
+
+        <div class="upload-msg" [class.invalid]="errorMessageUpload">
+          {{
+            errorMessageUpload
+              ? errorMessageUpload
+              : "Max 5.000 records per file"
+          }}
+        </div>
+        <!-- <div class="upload-msg">Max 5.000 records per file</div> -->
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn-type-1 btn-white-outlined me-3"
+          [disabled]="!isFilled()"
+          (click)="handleDiscard()"
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          class="btn-type-5 btn-dark-blue"
+          [disabled]="uploadForm.invalid"
+          (click)="submit()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </section>
+</app-content-layout>

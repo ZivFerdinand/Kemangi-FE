@@ -1,0 +1,347 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="'Report'">
+    <div class="d-flex flex-row justify-content-between">
+      <div class="btn-group mt-0">
+        <a
+          (click)="toggleDropdown()"
+          class="p-0 btn d-flex align-items-center"
+
+        >
+          <div class="d-flex flex-row justify-content-center align-items-center filter-btn">
+            <img src="/assets/img/ic-filter.svg" alt="filter">
+            Filter
+          </div>
+        </a>
+        <div
+          class="card card--filter" style="max-width: 500px;"
+          [style.display]="isDropdownOpen ? 'block' : 'none'"
+        >
+          <form [formGroup]="reportForm" class="justify-content-center">
+            <label for="report-type">Report Type</label>
+            
+            <div class="ng-select-custom"  style="height: 48px !important;">
+              <ng-select
+                [items]="reportTypeList"
+                bindLabel="label"
+                bindValue="value"
+                [multiple]="false"                
+                [searchable]="false"             
+                placeholder="Choose"
+                formControlName="formReportType"
+                clearable="false"
+                [ngClass]="{
+                  'is-invalid-field': 
+                    !getFormControl('formReportType')?.value && (getFormControl('formReportType')?.touched || getFormControl('formReportType')?.dirty)
+                }"
+              >
+                <!-- DROPDOWN OPTION -->
+                <ng-template ng-option-tmp let-item="item">
+                  <div
+                    class="d-flex w-100 justify-content-between align-items-center"
+                  >
+                    <span>{{ item.label }}</span>
+                    <img
+                      *ngIf="getFormControl('formReportType')?.value === item.value"
+                      src="assets/img/ic-check-black.svg"
+                      alt="selected"
+                    />
+                  </div>
+                </ng-template>
+              </ng-select>
+              <span class="custom-arrow">
+                <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+              </span>
+            </div>
+            <div *ngIf="!getFormControl('formReportType')?.value && (getFormControl('formReportType')?.touched || getFormControl('formReportType')?.dirty)">
+                <label class="text-danger">Report Type is required</label>
+            </div>
+
+            <div *ngIf="formControls['formReportType'].value === 'user_activity'">
+              <div class="">
+                <div class="customDatePicker">
+                  <input
+                    name="requestDatepicker"
+                    class="form-control input-border"
+                    ngbDatepicker
+                    #requestDatepicker="ngbDatepicker"
+                    [autoClose]="'outside'"
+                    (dateSelect)="onDateSelection($event, 'requestDate')"
+                    [displayMonths]="1"
+                    outsideDays="visible"
+                    [startDate]="fromDate"
+                    [maxDate]="maxDate"
+                    [minDate]="minDate"
+                    [dayTemplate]="tDate"
+                    placement="bottom"
+                    [positionTarget]="requestDate"
+                    [container]="'body'"
+                    
+                    hidden
+                  />
+                </div>
+                <div #requestDate class="form-group filter-approval">
+                  <label for="requestedDateInput" class="label-medium"
+                    >Date</label>
+                  <div
+                    class="input-group"
+                    style="cursor: pointer"
+                    (click)="requestDatepicker.toggle()"
+                  >
+                    <input
+                      id="dateInput"
+                      class="form-control input-border event-disabled-no-fade"
+                      placeholder="dd-mmm-yyyy to dd-mmm-yyyy"
+                      readonly
+                      [value]="displayRequestedDate()"
+                      [ngClass]="{
+                        'is-invalid-field': 
+                          errorMsg != ''
+                      }"
+                    />
+                    <div class="input-group-append align-items-center">
+                      <button class="btn-date text-center" type="button">
+                        <span class="icon">
+                          <img
+                            style="margin: auto"
+                            alt="calendar"
+                            src="assets/img/ic-calendar.svg"
+                          />
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="errorMsg !== ''">
+                  <label class="text-danger">{{errorMsg}} </label>
+              </div>
+            </div>
+            
+            <div *ngIf="formControls['formReportType'].value === 'user_activity'">
+              <label>User ID - User Name</label>
+              <div class="ng-select-custom">
+                <ng-select
+                  [items]="userList"
+                  bindLabel="label"
+                  bindValue="userId"
+                  [multiple]="true"
+                  [searchable]="true"
+                  [closeOnSelect]="false"
+                  placeholder="User ID - User Name"
+                  formControlName="formReportUserSelect"
+                  [typeahead]="searchInput$"
+                  clearable="false"
+                  (search)="onUserSearch($event.term)"
+                >
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <span class="ng-value-label">
+                      {{ item?.label }}
+                    </span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                    /></span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex w-100 justify-content-between align-items-center"
+                    >
+                      <span>{{ item.label }}</span>
+                      <img
+                        [class.d-none]="
+                          !getFormControl('formReportUserSelect')?.value?.includes(item.userId)
+                        "
+                        src="assets/img/ic-check-black.svg"
+                        alt="selected"
+                      />
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <span class="custom-arrow">
+                  <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                </span>
+              </div>
+            </div>
+
+            <div *ngIf="formControls['formReportType'].value === 'user_activity'">
+              <label>Action</label>
+              <div class="ng-select-custom">
+                <ng-select
+                  [items]="actionList"
+                  bindLabel="label"
+                  bindValue="label"
+                  [multiple]="true"
+                  [searchable]="true"
+                  [closeOnSelect]="false"
+                  [hideSelected]="false"
+                  placeholder="Choose"
+                  formControlName="formReportActionSelect"
+                  clearable="false"
+                >
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <span class="ng-value-label">
+                      {{ item?.label }}
+                    </span>
+                    <span
+                      class="ng-value-icon right"
+                      (click)="clear(item)"
+                      aria-hidden="true"
+                      ><img src="/assets/img/ic-times-gray.svg" alt="clear"
+                    /></span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div
+                      class="d-flex w-100 justify-content-between align-items-center"
+                    >
+                      <span>{{ item.label }}</span>
+                      <img
+                        [class.d-none]="
+                          !getFormControl('formReportActionSelect')?.value?.includes(item.label)
+                        "
+                        src="assets/img/ic-check-black.svg"
+                        alt="selected"
+                      />
+                    </div>
+                  </ng-template>
+                </ng-select>
+                <span class="custom-arrow">
+                  <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+                </span>
+              </div>
+            </div>
+
+
+            <div class="submit-area mt-2" *ngIf="formControls['formReportType'].value">
+              <button class="btn btn-primary secondary-btn" (click)="resetReport()">Reset All</button>
+              <button class="btn btn-primary main-btn" (click)="applyReport()">Generate</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="isSubmitted">
+        <button class="btn btn-primary main-btn" (click)="downloadReport()" [disabled]="!canDownload || dataList.length === 0">
+          <span class="icon">
+              <img alt="ic-dwnld"  src="assets/img/ic-dwnld.svg">
+          </span>
+          Download
+        </button>
+      </div>
+    </div>
+    
+
+
+    <div class="report-area mt-0" style="position: relative;">
+
+      <div class="watermark-container"></div>
+      <div class="report-right">
+        <div class="table-area" *ngIf="isSubmitted">
+          <div class="result-desc-area"  style="margin-bottom: 40px;">
+            <div class="result-desc-left" >
+              <div style="margin-bottom: 4px;">Filtered by</div>
+              <div>
+                <div class="d-flex flex-row" >
+                  <!-- Kolom 1 -->
+                  <div class="d-flex flex-column" style="margin-right: 5px; min-width: 40%;">
+                    <!-- Date Row -->
+                    <div class="d-flex flex-row align-items-center">
+                      <div class="span-like-table">Date</div>
+                      <div>
+                        {{ ' : ' + formatDate(filterByFromDate) + formatDate(filterByToDate, true) }}
+                      </div>
+                    </div>
+                    <!-- User Row -->
+                    <div class="d-flex flex-row align-items-center" *ngIf="filterByUserOut">
+                      <div class="span-like-table">User ID - User Name</div>
+                      <div  class="filter-value-long" [title]="filterByUserOut">
+                        {{ 
+                          ' : ' + 
+                          filterByUserOut
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Kolom 2 -->
+                  <div class="d-flex flex-column" style="width: 40%;">
+                    <!-- Date Row -->
+                    <div class="d-flex flex-row align-items-center" *ngIf="filterByActionOut">
+                      <div class="span-like-table span-like-table-right">Action</div>
+                      <div  class="filter-value-long" [title]="filterByActionOut">
+                        {{
+                          ' : ' +
+                          filterByActionOut
+                        }}
+                      </div>
+                    </div>
+                    <!-- User Row -->
+                    <div class="d-flex flex-row align-items-center">
+                      <div class="span-like-table span-like-table-right">Total Data</div>
+                      <div >
+                        {{ 
+                          ' : ' +
+                          (( filterByTotalElements ?? 0 )).toLocaleString('id-ID')
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="color: #555555; margin-bottom: 40px;">
+            Please download to see all data
+          </div>
+          <div class="table-scroll">
+            <table summary="table finch"  id="users-table">
+              <thead>
+                <tr style="background-color: #144E83;"> 
+                  <th scope="col" style=" border-radius: 6px 0 0px 6px;" class="text-center">No<a>
+                  </a></th>
+                  <th scope="col" class="text-center">User ID<a>
+                  </a></th>
+                  <th scope="col" class="text-center">User Name<a>
+                  </a></th>
+                  <th scope="col" class="text-center">Date and Time<a>
+                  </a></th>
+                  <th scope="col" class="text-center">Action<a>
+                  </a></th>
+                  <th scope="col" style=" border-radius: 0px 6px 6px 0px;" class="text-center">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of dataList; let i= index">
+                  <td class="text-center">{{ i + 1 || "-" }}</td>
+                  <td class="text-center">{{ data.userId || "-" }}</td>
+                  <td class="text-center">{{ data.fullName  || "-"}}</td>
+                  <td class="text-center">{{ data.lastUpdatedDt || "-" }}</td>
+                  <td class="text-center">{{ data.action || "-" }}</td>
+                  <td class="text-center">{{ data.remark || "-" }}</td>
+                </tr>
+                <tr *ngIf="dataList.length == 0">
+                  <td colspan="7" class=" text-center not-available"> No data available </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</app-content-layout>
+
+<ng-template #tDate let-date let-focused="focused">
+  <span
+    class="custom-day"
+    [class.focused]="focused"
+    [class.range]="isRange(date, 'requestDate')"
+    [class.faded]="
+      isHovered(date, 'requestDate') || isInside(date, 'requestDate')
+    "
+    [class.outside-day]="outsideDay(date, 'requestDate')"
+    (mouseenter)="hoveredDate = date"
+    (mouseleave)="hoveredDate = null"
+  >
+    {{ date.day }}
+  </span>
+</ng-template>

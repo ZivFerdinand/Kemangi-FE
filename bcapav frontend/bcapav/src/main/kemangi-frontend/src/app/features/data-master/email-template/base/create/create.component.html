@@ -1,0 +1,9 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-email-form
+    [mode]="mode"
+    [productGroupList]="productGroupList"
+    [templateTypeList]="templateTypeList"
+    (handleBackPage)="back($event)"
+    (handleSubmit)="onSubmit($event)"
+  ></app-email-form>
+</app-content-layout>

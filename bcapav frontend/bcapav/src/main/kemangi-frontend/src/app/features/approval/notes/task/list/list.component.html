@@ -1,0 +1,80 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+      [isDisabledFn]="checkMenu"
+    ></app-custom-tab>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          note: noteTpl,
+          description: descriptionTpl,
+          requesterName: requesterNameTpl,
+          createdDt: createdDtTpl,
+          view: viewBtnTpl,
+          requestType: requestTypeTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #noteTpl let-row let-i="index">
+  <div class="truncate">{{ row.note }}</div>
+</ng-template>
+
+<ng-template #descriptionTpl let-row>
+  <div class="truncate">{{ row.description }}</div>
+</ng-template>
+
+<ng-template #viewBtnTpl let-row>
+  <div class="action-buttons justify-content-center">
+    <a
+      [routerLink]="['/home/approval/notes/task-list', row.apprId]"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #requestTypeTpl let-row>
+  {{
+    row.requestType === "CREATE"
+      ? "NEW"
+      : row.requestType === "UPDATE"
+        ? "EDIT"
+        : row.requestType
+  }}
+</ng-template>
+
+<ng-template #requesterNameTpl let-row>
+  <div class="truncate">
+    {{ row.requesterName || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #createdDtTpl let-row>
+  <div class="truncate">
+    {{ (row.createdDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>

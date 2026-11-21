@@ -1,0 +1,260 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <div class="mb-24">
+    <app-custom-tab
+      [tabs]="tabs"
+      [activeTab]="activeTab"
+      (tabChange)="handleTabChange($event)"
+    ></app-custom-tab>
+  </div>
+
+  <div
+    class="d-flex align-items-center justify-content-between mb-24 position-relative"
+  >
+    <app-rule-current-filter
+      [users]="users"
+      [rules]="rules"
+      (sendData)="
+        handleFilter({
+          filterBy: $event.filterBy,
+          filterDisplayTemp: $event.filterDisplayTemp,
+        })
+      "
+      (handleClearFilter)="resetFilter()"
+    />
+
+    <button
+      type="button"
+      class="btn-type-1 btn-dark-blue"
+      [disabled]="!createPermission"
+      (click)="navigateTo('/home/rule-management/rule/create')"
+      tooltipClass="custom-tooltip"
+      placement="start"
+      [ngbTooltip]="!createPermission ? `You don't have permission` : null"
+    >
+      <img src="/assets/img/ic-plus.svg" alt="add" /> Create New Rule
+    </button>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <div class="card no-border card-pavo-default-type-iii squared">
+      @if (submitFilter && visibleFilterInfo().length > 0) {
+        <div class="filter-info">
+          <div class="filter-info__title">Filtered by</div>
+
+          @for (item of visibleFilterInfo(); track item.label) {
+            <div class="filter-info__item">
+              <div class="filter-info__label">{{ item.label }} :</div>
+              <div class="filter-info__content">{{ item.value }}</div>
+            </div>
+          }
+        </div>
+      }
+      <app-sticky-table
+        [showPageSize]="false"
+        [showPageInfo]="true"
+        [columns]="columns"
+        [data]="tableData"
+        [pageInfo]="pageInfo"
+        [pageQuery]="pageQuery"
+        [initialPinnedLeft]="columnsPinned"
+        [cellTemplates]="{
+          no: noTpl,
+          ruleName: nameTpl,
+          ruleDescShort: descriptionTpl,
+          ruleStart: ruleStartTpl,
+          ruleEnd: ruleEndTpl,
+          action: actionBtnsTpl,
+          activeStatus: activeStatusTpl,
+          lastUpdatedDt: lastUpdatedDtTpl,
+          lastApproval1Dt: lastApproval1DtTpl,
+          lastApproval2Dt: lastApproval2DtTpl,
+        }"
+        (pageChange)="handlePageChange($event)"
+        (sortChange)="handleSortChange($event.direction, $event.key)"
+      />
+    </div>
+  </div>
+</app-content-layout>
+
+<ng-template #noTpl let-row let-i="index">
+  {{ (pageQuery.page - 1) * pageQuery.limit + i + 1 }}
+</ng-template>
+
+<ng-template #lastUpdatedDtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastUpdatedDt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval1DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval1Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #lastApproval2DtTpl let-row>
+  <div class="truncate">
+    {{ (row.lastApproval2Dt | date: "dd-MMM-yyyy HH:mm:ss") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #ruleStartTpl let-row>
+  <div class="truncate">
+    {{ (row.ruleStart | date: "dd-MMM-yyyy") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #ruleEndTpl let-row>
+  <div class="truncate">
+    {{ (row.ruleEnd | date: "dd-MMM-yyyy") || "-" }}
+  </div>
+</ng-template>
+
+<ng-template #nameTpl let-row>
+  <div class="truncate">{{ row.ruleName ? row.ruleName : "-" }}</div>
+</ng-template>
+
+<ng-template #descriptionTpl let-row>
+  <div class="truncate">
+    {{ row.ruleDescShort ? row.ruleDescShort : "-" }}
+  </div>
+</ng-template>
+
+<ng-template #activeStatusTpl let-row>
+  <div
+    class="active-status-label"
+    [class.active-status-label--on]="row?.activeStatus"
+    [class.active-status-label--off]="!row?.activeStatus"
+  >
+    {{ row?.activeStatus ? "On" : "Off" }}
+  </div>
+</ng-template>
+
+<ng-template #actionBtnsTpl let-row>
+  <div class="action-buttons">
+    <a
+      [routerLink]="['/home/rule-management/rule', row?.id]"
+      [queryParams]="{ from: 'expired-soon' }"
+      class="action-buttons__item"
+    >
+      <img src="./assets/img/ic-eye-blue.svg" alt="view" />
+    </a>
+
+    <!-- --//-- -->
+
+    @if (editPermission) {
+      @if (
+        row.hasPendingRequest ||
+        row.hasPendingDraft ||
+        row.hasRelatedPendingDataGroup ||
+        row.hasRelatedPendingEmailTemplate
+      ) {
+        <div
+          class="action-buttons__item"
+          style="margin: 0 8px"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Rule has Pending Request'
+              : row?.hasPendingDraft
+                ? 'Rule has Draft Request'
+                : row?.hasRelatedPendingDataGroup &&
+                    row?.hasRelatedPendingEmailTemplate
+                  ? 'Rule has pending data group and Email Template request'
+                  : row?.hasRelatedPendingDataGroup
+                    ? 'Rule has pending data group request'
+                    : row?.hasRelatedPendingEmailTemplate
+                      ? 'Rule has pending email template request'
+                      : 'Loading ...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/rule-management/rule', row?.id, 'edit']"
+          [queryParams]="{ from: 'expired-soon' }"
+          class="action-buttons__item"
+          style="margin: 0 8px"
+        >
+          <img src="./assets/img/ic-pen-blue.svg" alt="edit" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        style="margin: 0 8px"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-pen-gray.svg" alt="edit" />
+      </div>
+    }
+
+    <!-- /// -->
+
+    <!-- --//-- -->
+
+    @if (deletePermission) {
+      @if (row.hasPendingRequest || row.hasPendingDraft) {
+        <div
+          class="action-buttons__item"
+          tooltipClass="custom-tooltip"
+          placement="start"
+          [ngbTooltip]="
+            row?.hasPendingRequest
+              ? 'Rule has Pending Request'
+              : row?.hasPendingDraft
+                ? 'Rule has Draft Request'
+                : 'Loading...'
+          "
+          container="body"
+        >
+          <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/home/rule-management/rule', row?.id, 'delete']"
+          [queryParams]="{ from: 'expired-soon' }"
+          class="action-buttons__item"
+        >
+          <img src="./assets/img/ic-garbage-blue.svg" alt="delete" />
+        </a>
+      }
+    } @else {
+      <div
+        class="action-buttons__item"
+        tooltipClass="custom-tooltip"
+        placement="start"
+        ngbTooltip="You don't have permission"
+        container="body"
+      >
+        <img src="./assets/img/ic-garbage-gray.svg" alt="delete" />
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #activeStatNewTpl let-row>
+  <div class="active-status-wrapper" style="min-width: 81px">
+    <div
+      class="active-status-label"
+      [class.active-status-label--on]="row?.active_status"
+      [class.active-status-label--off]="!row?.active_status"
+    >
+      {{ row?.active_status ? "Active" : "Inactive" }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #ruleEndTpl let-row>
+  {{
+    (row.ruleEnd | date: "dd-MMM-yyyy") ||
+      (row.ruleStart | date: "dd-MMM-yyyy") ||
+      "-"
+  }}
+</ng-template>

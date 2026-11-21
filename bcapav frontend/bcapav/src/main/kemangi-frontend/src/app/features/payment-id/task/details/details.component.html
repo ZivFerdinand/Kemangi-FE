@@ -1,0 +1,66 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  <app-payment-id-details-info [data]="details"></app-payment-id-details-info>
+  <div class="card no-border payment-id-products">
+    @if (details?.productList.includes("Account")) {
+      <payment-details-product
+        [failedCount]="details?.actionAccountFailedCount ?? 0"
+        [name]="productAccount.name"
+        [columns]="productAccount.columns"
+        [tableData]="productAccount.tableData"
+        [pageInfo]="productAccount.pageInfo"
+        (handleData)="handleProduct('account', $event)"
+      ></payment-details-product>
+    }
+
+    <!-- === -->
+
+    @if (
+      details?.productList.includes("Credit Card") ||
+      details?.productList.includes("Credit")
+    ) {
+      <payment-details-product
+        [failedCount]="details?.actionCreditCardFailedCount ?? 0"
+        [name]="productCC.name"
+        [columns]="productCC.columns"
+        [tableData]="productCC.tableData"
+        [pageInfo]="productCC.pageInfo"
+        (handleData)="handleProduct('cc', $event)"
+      ></payment-details-product>
+    }
+
+    <!-- === -->
+
+    @if (details?.productList.includes("Sakuku")) {
+      <payment-details-product
+        [failedCount]="details?.actionSakukuFailedCount ?? 0"
+        [name]="productSakuku.name"
+        [columns]="productSakuku.columns"
+        [tableData]="productSakuku.tableData"
+        [pageInfo]="productSakuku.pageInfo"
+        (handleData)="handleProduct('sakuku', $event)"
+      ></payment-details-product>
+    }
+    <div></div>
+    <div class="full-width">
+      <div class="history-header mb-24">
+        <h2 class="history-title">History</h2>
+      </div>
+      <div>
+        <app-table
+          [columns]="columnsHistory"
+          [data]="dataHistory"
+          [showPageInfo]="true"
+        />
+      </div>
+    </div>
+  </div>
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

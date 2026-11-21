@@ -1,0 +1,223 @@
+<h5 class="mb-24 action-type-form-title">SMS</h5>
+
+<div class="form-item mb-24">
+  <label>Template ID</label>
+
+  <div class="ng-select-custom">
+    <ng-select
+      [items]="dropdownSmsTemplate"
+      bindLabel="smsTemplateId"
+      bindValue="smsId"
+      [multiple]="false"
+      [hideSelected]="false"
+      searchPlaceholder="Choose..."
+      placeholder="Template ID"
+      [(ngModel)]="autoActionData.templateId"
+      (change)="updateValue('smsTemplateId',$event)"
+      #templateIdModel="ngModel"
+      required
+      [class.is-invalid]="
+                  templateIdModel?.invalid &&
+                  ( templateIdModel?.dirty ||
+                    templateIdModel?.touched)
+                "
+      [disabled]="mode==='VIEW'"
+    >
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.smsTemplateId }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <span>{{ item.smsTemplateId }}</span>
+          <img
+            [class.d-none]="
+                      autoActionData.templateId !== item.smsId
+                    "
+            src="assets/img/ic-check-black.svg"
+            alt="selected"
+          />
+        </div>
+      </ng-template>
+    </ng-select>
+    <span class="custom-arrow">
+      <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+    </span>
+  </div>
+
+  @if(templateIdModel.invalid && templateIdModel.touched){
+  <div class="invalid-input">Template ID is required</div>
+  }
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Operation ID</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="Operation ID"
+    [value]="selectedTemplate.smsOperationType"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Division</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="Division"
+    [value]="selectedTemplate.smsDivision"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">To</label>
+
+  <input
+    type="text"
+    class="form-control pr-5 disabled"
+    placeholder="To"
+    [value]="selectedTemplate.recipient"
+    disabled
+  />
+</div>
+
+<div class="form-item mb-24">
+  <label class="disabled">Content</label>
+
+  <textarea
+    #autoContent
+    id="content"
+    class="form-control pr-5"
+    rows="15"
+    placeholder="Content"
+    style="height: 288px"
+    disabled
+    [value]="selectedTemplate.template"
+  ></textarea>
+
+  <div
+    class="form-check d-flex align-items-center form-group-custom mb-24"
+    style="margin-top: 12px"
+  >
+    <input
+      id="limit"
+      class="form-check-input custom-checkbox"
+      type="checkbox"
+      [checked]="autoActionData.limitFlag"
+      (change)="updateValue('limit', $event.target.checked)"
+      [disabled]="mode==='VIEW'"
+    />
+
+    <label class="form-check-label" for="limit">Limit</label>
+  </div>
+</div>
+
+@if(autoActionData.limitFlag){
+<ng-container>
+  <div class="d-flex justify-content-between align-items-start mb-24">
+    <div class="form-item" style="width: 48%">
+      <label>Key</label>
+
+      <div class="ng-select-custom">
+        <ng-select
+          [items]="dropdownParameter"
+          bindLabel="parameterValue"
+          bindValue="parameterValue"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Key"
+          [(ngModel)]="autoActionData.key"
+          (change)="updateValue('key',$event.parameterValue)"
+          [disabled]="mode==='VIEW'"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.parameterValue }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.parameterValue}}</span>
+              <img
+                [class.d-none]="
+                      autoActionData.key !== item.parameterValue
+                    "
+                src="assets/img/ic-check-black.svg"
+                alt="selected"
+              />
+            </div>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Threshold</label>
+
+      <input
+        type="text"
+        class="form-control pr-5"
+        placeholder="Threshold"
+        [value]="autoActionData.threshold"
+        (change)="updateValue('threshold',$event.target.value)"
+        [disabled]="mode==='VIEW'"
+      />
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-start">
+    <div class="form-item" style="width: 48%">
+      <label>Period</label>
+
+      <input
+        type="number"
+        class="form-control pr-5"
+        placeholder="Period"
+        [value]="autoActionData.period"
+        (change)="updateValue('period',$event.target.value)"
+        [disabled]="mode==='VIEW'"
+      />
+    </div>
+
+    <div class="form-item" style="width: 48%">
+      <label>Unit</label>
+
+      <div class="ng-select-custom">
+        <ng-select
+          [items]="timeUnits"
+          [multiple]="false"
+          [hideSelected]="false"
+          searchPlaceholder="Choose..."
+          placeholder="Unit"
+          [(ngModel)]="autoActionData.unit"
+          (change)="updateValue('unit',$event)"
+          bindValue="value"
+          [disabled]="mode==='VIEW'"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.label }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              class="d-flex w-100 justify-content-between align-items-center"
+            >
+              <span>{{ item.label }}</span>
+            </div>
+          </ng-template>
+        </ng-select>
+        <span class="custom-arrow">
+          <img src="./assets/img/ic-arrow-down-gray.svg" alt="down" />
+        </span>
+      </div>
+    </div>
+  </div>
+</ng-container>
+}

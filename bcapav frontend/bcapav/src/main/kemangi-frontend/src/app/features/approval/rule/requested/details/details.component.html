@@ -1,0 +1,36 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (details.requestType === "UPDATE" && ref !== "before") {
+    <button
+      class="btn-type-1 btn-dark-blue fw-bold mb-24"
+      type="button"
+      (click)="openTab()"
+    >
+      <img
+        src="assets/img/ic-open-new-tab.svg"
+        alt="open new tab"
+        style="margin-right: 8px"
+      />Before
+    </button>
+  }
+
+  <app-rule-appr-details-type-i
+    [ref]="ref"
+    [data]="details"
+    [prevData]="prevDetails"
+    [dropdownRuleFunction]="dropdownRuleFunction"
+    [dropdownDataGroup]="dropdownDataGroup"
+    [dropdownRuleOperator]="dropdownRuleOperator"
+    [dropdownHistorical]="dropdownHistorical"
+    [type]="pageType"
+  />
+
+  <section class="d-flex align-items-center justify-content-end btn-section">
+    <button
+      type="button"
+      class="btn-type-1 btn-white-outlined"
+      (click)="back()"
+    >
+      Back
+    </button>
+  </section>
+</app-content-layout>

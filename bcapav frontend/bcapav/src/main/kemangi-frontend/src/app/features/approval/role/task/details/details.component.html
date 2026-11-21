@@ -1,0 +1,24 @@
+<app-content-layout [breadcrumb]="breadcrumb" [title]="pageTitle">
+  @if (details()?.requestType === "UPDATE") {
+    <app-edit-role-approval
+      [rawMenuList]="rawMenuList()"
+      [details]="details()"
+      [prevDetails]="prevDetails()"
+      [pageType]="'task list'"
+      [back]="back.bind(this)"
+      [approve]="handleApprove.bind(this)"
+      [reject]="handleReject.bind(this)"
+    />
+  }
+
+  @if (details()?.requestType !== "UPDATE") {
+    <app-default-role-approval
+      [rawMenuList]="rawMenuList()"
+      [details]="details()"
+      [pageType]="'task list'"
+      [back]="back.bind(this)"
+      [approve]="handleApprove.bind(this)"
+      [reject]="handleReject.bind(this)"
+    />
+  }
+</app-content-layout>

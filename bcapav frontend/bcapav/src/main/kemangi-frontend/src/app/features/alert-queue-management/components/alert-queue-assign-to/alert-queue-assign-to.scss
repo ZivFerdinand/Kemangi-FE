@@ -1,0 +1,48 @@
+.btn-type-1.btn-assign-to {
+  background: #e6f3ff;
+  color: #005caa;
+  border: none;
+  width: 125px;
+  font-weight: 700;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal-assign-to {
+  padding: 24px;
+}
+
+.assign-to-filter-wrapper {
+  width: 100%;
+  display: grid;
+  // align-items: flex-end;
+  // justify-content: space-between;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+}
+
+.filter-box {
+  width: 100%;
+}
+
+.search-assign-to-box {
+  align-self: end;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 48px 95px;
+  gap: 8px;
+}
+
+.search-btn {
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #144e83;
+}

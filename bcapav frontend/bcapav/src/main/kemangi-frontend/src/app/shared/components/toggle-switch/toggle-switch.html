@@ -1,0 +1,36 @@
+<div class="toggle-wrapper">
+  @if(disabled&&styleType==='type-i'){
+  <div
+    class="toggle"
+    [class.checked]="checked"
+    [class.disabled]="disabled"
+    [class.type-i]="disabled&&styleType==='type-i'"
+    [attr.aria-checked]="checked"
+    role="switch"
+    (click)="toggle()"
+    placement="end"
+    tooltipClass="custom-tooltip"
+    [ngbTooltip]="tooltipMessage"
+  >
+    <div class="track">
+      <div class="knob"></div>
+      <div class="state-text">{{ checked ? "On" : "Off" }}</div>
+    </div>
+  </div>
+  } @else {
+  <div
+    class="toggle"
+    [class.checked]="checked"
+    [class.disabled]="disabled"
+    [class.type-i]="disabled&&styleType==='type-i'"
+    [attr.aria-checked]="checked"
+    role="switch"
+    (click)="toggle()"
+  >
+    <div class="track">
+      <div class="knob"></div>
+      <div class="state-text">{{ checked ? "On" : "Off" }}</div>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,13 @@
+<div class="detail-rule-tab">
+  <div class="detail-rule-tab__track" #scrollArea>
+    @for (tab of tabs; track tab.value; let i = $index) {
+    <div
+      class="detail-rule-tab__tab-item"
+      [class.active]="activeTab === tab.value"
+      (click)="selectTab(tab.value)"
+    >
+      {{ tab.label }}
+    </div>
+    }
+  </div>
+</div>
